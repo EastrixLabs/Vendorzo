@@ -41,7 +41,6 @@ import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import {
   Sheet,
@@ -207,7 +206,7 @@ export default function POSPage() {
   // ============================================================================
 
   const OrderPanel = () => (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full min-h-0 flex-col">
       {/* Header */}
       <div className="flex items-center justify-between border-b p-4">
         <div>
@@ -248,7 +247,7 @@ export default function POSPage() {
       </div>
 
       {/* Cart Items */}
-      <ScrollArea className="flex-1 p-3">
+      <div className="flex-1 min-h-0 overflow-auto p-3">
         {cart.length === 0 ? (
           <div className="flex h-full flex-col items-center justify-center py-12 text-center">
             <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
@@ -273,7 +272,7 @@ export default function POSPage() {
             ))}
           </div>
         )}
-      </ScrollArea>
+      </div>
 
       {/* Totals */}
       <div className="border-t bg-muted/30 p-4">
@@ -323,7 +322,7 @@ export default function POSPage() {
   // ============================================================================
 
   const ProductsPanel = () => (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full min-h-0 flex-col">
       {/* Search Bar with View Toggle */}
       <div className="border-b p-3 md:p-4">
         <div className="flex items-center gap-3">
@@ -352,7 +351,7 @@ export default function POSPage() {
       </div>
 
       {/* Products Grid/List */}
-      <ScrollArea className="flex-1 p-3 md:p-4">
+      <div className="flex-1 min-h-0 overflow-auto p-3 md:p-4">
         <div
           key={viewMode}
           className={
@@ -383,7 +382,7 @@ export default function POSPage() {
             </p>
           </div>
         )}
-      </ScrollArea>
+      </div>
     </div>
   );
 
@@ -395,7 +394,7 @@ export default function POSPage() {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <div className="flex h-screen flex-col overflow-hidden">
+        <div className="flex h-screen min-h-0 flex-col overflow-hidden">
           {/* Top Bar */}
           <header className="flex h-16 items-center justify-between border-b bg-background px-4 lg:px-6">
             {/* Left side - Sidebar trigger and mobile menu */}
@@ -495,10 +494,10 @@ export default function POSPage() {
           </header>
 
           {/* Main POS Layout */}
-          <div className="flex flex-1 overflow-hidden">
+          <div className="flex flex-1 min-h-0 overflow-hidden">
             {/* Products Section */}
             <div
-              className={`flex-1 overflow-hidden ${
+              className={`flex-1 min-h-0 overflow-hidden ${
                 mobileTab !== "products" ? "hidden md:flex" : "flex"
               } flex-col`}
             >
@@ -506,13 +505,13 @@ export default function POSPage() {
             </div>
 
             {/* Order Panel - Desktop */}
-            <div className="hidden md:flex w-80 lg:w-96 border-l flex-col bg-background">
+            <div className="hidden md:flex w-80 lg:w-96 border-l min-h-0 flex-col bg-background">
               <OrderPanel />
             </div>
 
             {/* Mobile Cart View */}
             <div
-              className={`flex-1 overflow-hidden md:hidden ${
+              className={`flex-1 min-h-0 overflow-hidden md:hidden ${
                 mobileTab === "cart" ? "flex" : "hidden"
               } flex-col`}
             >
