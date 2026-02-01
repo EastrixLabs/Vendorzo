@@ -32,7 +32,6 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { AppSidebar } from "@/components/pos";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
@@ -49,7 +48,7 @@ export default function ProductsPage() {
       <AppSidebar />
       <SidebarInset>
         <div className="flex h-screen flex-col overflow-hidden">
-          <header className="flex h-14 items-center justify-between border-b bg-background px-4 lg:px-6">
+          <header className="flex h-16 items-center justify-between border-b bg-background px-4 lg:px-6">
             <div className="flex items-center gap-2">
               <SidebarTrigger className="hidden md:flex" />
               <h1 className="text-lg font-semibold">Products</h1>
@@ -113,7 +112,7 @@ export default function ProductsPage() {
             </Sheet>
           </header>
 
-          <ScrollArea className="flex-1">
+          <div className="flex-1 overflow-auto">
             <div className="p-4 lg:p-6 space-y-6">
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between">
@@ -167,7 +166,7 @@ export default function ProductsPage() {
                 </CardContent>
               </Card>
             </div>
-          </ScrollArea>
+          </div>
         </div>
       </SidebarInset>
     </SidebarProvider>

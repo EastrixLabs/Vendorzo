@@ -27,14 +27,14 @@ export default function SettingsPage() {
       <AppSidebar />
       <SidebarInset>
         <div className="flex h-screen flex-col overflow-hidden">
-          <header className="flex h-14 items-center justify-between border-b bg-background px-4 lg:px-6">
+          <header className="flex h-16 items-center justify-between border-b bg-background px-4 lg:px-6">
             <div className="flex items-center gap-2">
               <SidebarTrigger className="hidden md:flex" />
               <h1 className="text-lg font-semibold">Settings</h1>
             </div>
           </header>
 
-          <div className="flex-1 overflow-y-auto">
+          <div className="flex-1 overflow-auto">
             <div className="p-4 lg:p-6 space-y-6">
               {/* Appearance */}
               <Card>

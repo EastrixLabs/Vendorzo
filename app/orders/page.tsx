@@ -27,7 +27,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { AppSidebar } from "@/components/pos";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
@@ -44,14 +43,14 @@ export default function OrdersPage() {
       <AppSidebar />
       <SidebarInset>
         <div className="flex h-screen flex-col overflow-hidden">
-          <header className="flex h-14 items-center justify-between border-b bg-background px-4 lg:px-6">
+          <header className="flex h-16 items-center justify-between border-b bg-background px-4 lg:px-6">
             <div className="flex items-center gap-2">
               <SidebarTrigger className="hidden md:flex" />
               <h1 className="text-lg font-semibold">Orders</h1>
             </div>
           </header>
 
-          <ScrollArea className="flex-1">
+          <div className="flex-1 overflow-auto">
             <div className="p-4 lg:p-6 space-y-6">
               <Card>
                 <CardHeader>
@@ -147,7 +146,7 @@ export default function OrdersPage() {
                 </CardContent>
               </Card>
             </div>
-          </ScrollArea>
+          </div>
         </div>
       </SidebarInset>
     </SidebarProvider>

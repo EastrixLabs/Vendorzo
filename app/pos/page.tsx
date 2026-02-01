@@ -147,6 +147,12 @@ export default function POSPage() {
   const [isHeldOrdersOpen, setIsHeldOrdersOpen] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
 
+  React.useEffect(() => {
+    if (activeCategory !== "all" && viewMode !== "grid") {
+      setViewMode("grid");
+    }
+  }, [activeCategory, viewMode]);
+
   const addToCart = (product: Product) => {
     setCart((prev) => {
       const existing = prev.find((item) => item.id === product.id);
@@ -330,7 +336,9 @@ export default function POSPage() {
               className="pl-9 h-10"
             />
           </div>
-          <ViewToggle viewMode={viewMode} onViewModeChange={setViewMode} />
+          {activeCategory === "all" && (
+            <ViewToggle viewMode={viewMode} onViewModeChange={setViewMode} />
+          )}
         </div>
       </div>
 
@@ -345,11 +353,14 @@ export default function POSPage() {
 
       {/* Products Grid/List */}
       <ScrollArea className="flex-1 p-3 md:p-4">
-        <div className={
+        <div
+          key={viewMode}
+          className={
           viewMode === "grid"
             ? "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3"
             : "flex flex-col gap-2"
-        }>
+          }
+        >
           {filteredProducts.map((product) => (
             <ProductCard
               key={product.id}
@@ -386,7 +397,7 @@ export default function POSPage() {
       <SidebarInset>
         <div className="flex h-screen flex-col overflow-hidden">
           {/* Top Bar */}
-          <header className="flex h-14 items-center justify-between border-b bg-background px-4 lg:px-6">
+          <header className="flex h-16 items-center justify-between border-b bg-background px-4 lg:px-6">
             {/* Left side - Sidebar trigger and mobile menu */}
             <div className="flex items-center gap-2">
               <SidebarTrigger className="hidden md:flex" />

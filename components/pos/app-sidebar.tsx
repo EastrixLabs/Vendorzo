@@ -11,7 +11,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import {
   Sidebar,
   SidebarContent,
@@ -67,28 +66,21 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {navItems.map((item) => {
-                const content = (
-                  <SidebarMenuButton
-                    render={<Link href={item.href} />}
-                    isActive={isActive(item.href)}
-                  >
-                    <item.icon className="size-4" />
-                    <span>{item.label}</span>
-                  </SidebarMenuButton>
-                );
-
                 return (
                   <SidebarMenuItem key={item.label}>
-                    {isCollapsed ? (
-                      <Tooltip>
-                        <TooltipTrigger render={content} />
-                        <TooltipContent side="right" align="center">
-                          {item.label}
-                        </TooltipContent>
-                      </Tooltip>
-                    ) : (
-                      content
-                    )}
+                    <SidebarMenuButton
+                      render={<Link href={item.href} />}
+                      isActive={isActive(item.href)}
+                      title={item.label}
+                      className={
+                        isActive(item.href)
+                          ? "bg-sidebar-accent text-sidebar-accent-foreground font-semibold"
+                          : ""
+                      }
+                    >
+                      <item.icon className="size-4" />
+                      <span>{item.label}</span>
+                    </SidebarMenuButton>
                   </SidebarMenuItem>
                 );
               })}

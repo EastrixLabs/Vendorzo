@@ -22,6 +22,7 @@ export function ViewToggle({ viewMode, onViewModeChange }: ViewToggleProps) {
           "rounded-md",
           viewMode === "grid" && "bg-background shadow-sm"
         )}
+        aria-pressed={viewMode === "grid"}
       >
         <LayoutGrid className="size-4" />
       </Button>
@@ -34,6 +35,7 @@ export function ViewToggle({ viewMode, onViewModeChange }: ViewToggleProps) {
           "rounded-md",
           viewMode === "list" && "bg-background shadow-sm"
         )}
+        aria-pressed={viewMode === "list"}
       >
         <List className="size-4" />
       </Button>

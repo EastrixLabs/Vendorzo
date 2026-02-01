@@ -19,7 +19,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import {
   ChartContainer,
@@ -43,7 +42,7 @@ const retentionData = [
   { name: "New", value: 38 },
 ];
 
-const COLORS = ["hsl(var(--primary))", "hsl(var(--muted-foreground))"];
+const COLORS = ["hsl(var(--chart-1))", "hsl(var(--chart-2))"];
 
 export default function AnalyticsPage() {
   const [granularity, setGranularity] = React.useState("monthly");
@@ -53,7 +52,7 @@ export default function AnalyticsPage() {
       <AppSidebar />
       <SidebarInset>
         <div className="flex h-screen flex-col overflow-hidden">
-          <header className="flex h-14 items-center justify-between border-b bg-background px-4 lg:px-6">
+          <header className="flex h-16 items-center justify-between border-b bg-background px-4 lg:px-6">
             <div className="flex items-center gap-2">
               <SidebarTrigger className="hidden md:flex" />
               <h1 className="text-lg font-semibold">Analytics</h1>
@@ -64,7 +63,7 @@ export default function AnalyticsPage() {
             </Button>
           </header>
 
-          <ScrollArea className="flex-1">
+          <div className="flex-1 overflow-auto">
             <div className="p-4 lg:p-6 space-y-6">
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between">
@@ -102,16 +101,31 @@ export default function AnalyticsPage() {
                 <CardContent>
                   <ChartContainer
                     config={{
-                      actual: { label: "Actual", color: "hsl(var(--primary))" },
-                      forecast: { label: "Forecast", color: "hsl(var(--muted-foreground))" },
+                      actual: { label: "Actual", color: "hsl(var(--chart-1))" },
+                      forecast: { label: "Forecast", color: "hsl(var(--chart-2))" },
                     }}
                   >
                     <LineChart data={trendData}>
                       <CartesianGrid vertical={false} />
                       <XAxis dataKey="month" tickLine={false} axisLine={false} />
                       <ChartTooltip content={<ChartTooltipContent />} />
-                      <Line type="monotone" dataKey="actual" stroke="var(--color-actual)" strokeWidth={2} />
-                      <Line type="monotone" dataKey="forecast" stroke="var(--color-forecast)" strokeWidth={2} strokeDasharray="4 4" />
+                      <Line
+                        type="monotone"
+                        dataKey="actual"
+                        stroke="var(--color-actual)"
+                        strokeWidth={2.5}
+                        dot={{ r: 2, strokeWidth: 0, fill: "var(--color-actual)" }}
+                        activeDot={{ r: 4 }}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="forecast"
+                        stroke="var(--color-forecast)"
+                        strokeWidth={2}
+                        strokeDasharray="6 4"
+                        dot={{ r: 2, strokeWidth: 0, fill: "var(--color-forecast)" }}
+                        activeDot={{ r: 4 }}
+                      />
                     </LineChart>
                   </ChartContainer>
                 </CardContent>
@@ -123,7 +137,12 @@ export default function AnalyticsPage() {
                     <CardTitle>Customer Retention</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <ChartContainer config={{ value: { label: "Rate" } }}>
+                    <ChartContainer
+                      config={{
+                        returning: { label: "Returning", color: "hsl(var(--chart-1))" },
+                        new: { label: "New", color: "hsl(var(--chart-2))" },
+                      }}
+                    >
                       <RePieChart>
                         <ChartTooltip content={<ChartTooltipContent />} />
                         <Pie
@@ -164,7 +183,7 @@ export default function AnalyticsPage() {
                 </Card>
               </div>
             </div>
-          </ScrollArea>
+          </div>
         </div>
       </SidebarInset>
     </SidebarProvider>

@@ -17,7 +17,7 @@ export function CategoryFilter({
 }: CategoryFilterProps) {
   return (
     <ScrollArea className="w-full">
-      <div className="flex gap-2 pb-2">
+      <div className="flex gap-2">
         {categories.map((category) => (
           <button
             type="button"
