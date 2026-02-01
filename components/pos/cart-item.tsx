@@ -4,6 +4,15 @@ import { Plus, Minus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { CartItem as CartItemType } from "./types";
 
+const categoryTone: Record<string, string> = {
+  coffee: "bg-amber-100 text-amber-900 dark:bg-amber-900/30 dark:text-amber-200",
+  food: "bg-red-100 text-red-900 dark:bg-red-900/30 dark:text-red-200",
+  sandwich: "bg-yellow-100 text-yellow-900 dark:bg-yellow-900/30 dark:text-yellow-200",
+  dessert: "bg-pink-100 text-pink-900 dark:bg-pink-900/30 dark:text-pink-200",
+  drinks: "bg-cyan-100 text-cyan-900 dark:bg-cyan-900/30 dark:text-cyan-200",
+  meals: "bg-emerald-100 text-emerald-900 dark:bg-emerald-900/30 dark:text-emerald-200",
+};
+
 interface CartItemRowProps {
   item: CartItemType;
   onUpdateQuantity: (id: string, quantity: number) => void;
@@ -13,7 +22,7 @@ interface CartItemRowProps {
 export function CartItemRow({ item, onUpdateQuantity, onRemove }: CartItemRowProps) {
   return (
     <div className="group flex items-center gap-3 rounded-xl bg-muted/40 p-3 transition-colors hover:bg-muted/60">
-      <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${item.color}`}>
+      <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${categoryTone[item.category] || "bg-muted text-foreground"}`}>
         <span className="text-lg">
           {item.category === "coffee" && "☕"}
           {item.category === "food" && "🍕"}

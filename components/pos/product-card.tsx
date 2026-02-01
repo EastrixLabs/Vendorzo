@@ -4,6 +4,15 @@ import { Plus, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Product, ViewMode } from "./types";
 
+const categoryTone: Record<string, string> = {
+  coffee: "bg-amber-100 text-amber-900 dark:bg-amber-900/30 dark:text-amber-200",
+  food: "bg-red-100 text-red-900 dark:bg-red-900/30 dark:text-red-200",
+  sandwich: "bg-yellow-100 text-yellow-900 dark:bg-yellow-900/30 dark:text-yellow-200",
+  dessert: "bg-pink-100 text-pink-900 dark:bg-pink-900/30 dark:text-pink-200",
+  drinks: "bg-cyan-100 text-cyan-900 dark:bg-cyan-900/30 dark:text-cyan-200",
+  meals: "bg-emerald-100 text-emerald-900 dark:bg-emerald-900/30 dark:text-emerald-200",
+};
+
 interface ProductCardProps {
   product: Product;
   onAdd: (product: Product) => void;
@@ -18,8 +27,7 @@ export function ProductCard({ product, onAdd, viewMode = "grid" }: ProductCardPr
       type="button"
       onClick={() => onAdd(product)}
       className={cn(
-        "group relative flex border border-border/50 transition-all duration-200 hover:shadow-lg hover:border-primary/20 active:scale-[0.98] text-left w-full overflow-hidden",
-        product.color,
+        "group relative flex border border-border/60 bg-card transition-all duration-200 hover:shadow-lg hover:border-primary/20 active:scale-[0.98] text-left w-full overflow-hidden",
         isGrid 
           ? "flex-col rounded-2xl p-3 sm:p-4 aspect-square" 
           : "flex-row items-center rounded-xl p-3 gap-3"
@@ -48,7 +56,8 @@ export function ProductCard({ product, onAdd, viewMode = "grid" }: ProductCardPr
 
       {/* Icon */}
       <div className={cn(
-        "flex items-center justify-center rounded-xl bg-background/60 backdrop-blur-sm shrink-0",
+        "flex items-center justify-center rounded-xl shrink-0",
+        categoryTone[product.category] || "bg-muted text-foreground",
         isGrid 
           ? "h-12 w-12 sm:h-14 sm:w-14 mx-auto mb-2" 
           : "h-10 w-10"

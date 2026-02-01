@@ -5,7 +5,6 @@ export interface Product {
   price: number;
   category: string;
   image?: string;
-  color: string;
   popular?: boolean;
   discount?: number;
 }

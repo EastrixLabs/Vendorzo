@@ -10,6 +10,8 @@ import {
   LogOut,
 } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import {
   Sidebar,
   SidebarContent,
@@ -37,7 +39,13 @@ const navItems = [
 
 export function AppSidebar() {
   const { state } = useSidebar();
+  const pathname = usePathname();
   const isCollapsed = state === "collapsed";
+
+  const isActive = (href: string) => {
+    if (href === "/") return pathname === href;
+    return pathname === href || pathname.startsWith(`${href}/`);
+  };
 
   return (
     <Sidebar collapsible="icon">
@@ -58,14 +66,32 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {navItems.map((item) => (
-                <SidebarMenuItem key={item.label}>
-                  <SidebarMenuButton render={<Link href={item.href} />} tooltip={item.label}>
+              {navItems.map((item) => {
+                const content = (
+                  <SidebarMenuButton
+                    render={<Link href={item.href} />}
+                    isActive={isActive(item.href)}
+                  >
                     <item.icon className="size-4" />
                     <span>{item.label}</span>
                   </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+                );
+
+                return (
+                  <SidebarMenuItem key={item.label}>
+                    {isCollapsed ? (
+                      <Tooltip>
+                        <TooltipTrigger render={content} />
+                        <TooltipContent side="right" align="center">
+                          {item.label}
+                        </TooltipContent>
+                      </Tooltip>
+                    ) : (
+                      content
+                    )}
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

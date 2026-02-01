@@ -36,6 +36,7 @@ import {
   LogOut,
 } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -105,30 +106,30 @@ const categories: Category[] = [
 ];
 
 const products: Product[] = [
-  { id: "1", name: "Espresso Shot", price: 2.50, category: "coffee", color: "bg-amber-100 dark:bg-amber-900/20", popular: true },
-  { id: "2", name: "Cappuccino", price: 4.50, category: "coffee", color: "bg-amber-50 dark:bg-amber-800/20", popular: true },
-  { id: "3", name: "Café Latte", price: 4.75, category: "coffee", color: "bg-orange-50 dark:bg-orange-900/20" },
-  { id: "4", name: "Mocha Delight", price: 5.25, category: "coffee", color: "bg-yellow-50 dark:bg-yellow-900/20" },
-  { id: "5", name: "Cold Brew", price: 4.00, category: "coffee", color: "bg-stone-100 dark:bg-stone-800/20", popular: true },
-  { id: "6", name: "Margherita Pizza", price: 12.99, category: "food", color: "bg-red-50 dark:bg-red-900/20", popular: true },
-  { id: "7", name: "Pepperoni Pizza", price: 14.99, category: "food", color: "bg-rose-50 dark:bg-rose-900/20" },
-  { id: "8", name: "BBQ Chicken Pizza", price: 15.99, category: "food", color: "bg-orange-50 dark:bg-orange-900/20" },
-  { id: "9", name: "Club Sandwich", price: 8.99, category: "sandwich", color: "bg-yellow-50 dark:bg-yellow-900/20", popular: true },
-  { id: "10", name: "BLT Sandwich", price: 7.99, category: "sandwich", color: "bg-amber-50 dark:bg-amber-900/20" },
-  { id: "11", name: "Grilled Cheese", price: 6.99, category: "sandwich", color: "bg-yellow-100 dark:bg-yellow-800/20" },
-  { id: "12", name: "Chocolate Cake", price: 5.99, category: "dessert", color: "bg-pink-50 dark:bg-pink-900/20" },
-  { id: "13", name: "Cheesecake", price: 6.50, category: "dessert", color: "bg-rose-50 dark:bg-rose-900/20", popular: true },
-  { id: "14", name: "Ice Cream Sundae", price: 4.99, category: "dessert", color: "bg-pink-100 dark:bg-pink-800/20" },
-  { id: "15", name: "Fresh Lemonade", price: 3.50, category: "drinks", color: "bg-yellow-100 dark:bg-yellow-800/20" },
-  { id: "16", name: "Iced Tea", price: 2.99, category: "drinks", color: "bg-amber-100 dark:bg-amber-800/20" },
-  { id: "17", name: "Orange Juice", price: 3.99, category: "drinks", color: "bg-orange-100 dark:bg-orange-800/20", popular: true },
-  { id: "18", name: "Smoothie Bowl", price: 8.99, category: "drinks", color: "bg-purple-50 dark:bg-purple-900/20" },
-  { id: "19", name: "Grilled Salmon", price: 18.99, category: "meals", color: "bg-cyan-50 dark:bg-cyan-900/20" },
-  { id: "20", name: "Beef Steak", price: 24.99, category: "meals", color: "bg-red-100 dark:bg-red-800/20", popular: true },
-  { id: "21", name: "Caesar Salad", price: 9.99, category: "meals", color: "bg-green-50 dark:bg-green-900/20" },
-  { id: "22", name: "Pasta Alfredo", price: 13.99, category: "meals", color: "bg-yellow-50 dark:bg-yellow-900/20" },
-  { id: "23", name: "Veggie Wrap", price: 7.49, category: "sandwich", color: "bg-emerald-50 dark:bg-emerald-900/20" },
-  { id: "24", name: "Americano", price: 3.25, category: "coffee", color: "bg-stone-50 dark:bg-stone-900/20" },
+  { id: "1", name: "Espresso Shot", price: 2.50, category: "coffee", popular: true },
+  { id: "2", name: "Cappuccino", price: 4.50, category: "coffee", popular: true },
+  { id: "3", name: "Café Latte", price: 4.75, category: "coffee" },
+  { id: "4", name: "Mocha Delight", price: 5.25, category: "coffee" },
+  { id: "5", name: "Cold Brew", price: 4.00, category: "coffee", popular: true },
+  { id: "6", name: "Margherita Pizza", price: 12.99, category: "food", popular: true },
+  { id: "7", name: "Pepperoni Pizza", price: 14.99, category: "food" },
+  { id: "8", name: "BBQ Chicken Pizza", price: 15.99, category: "food" },
+  { id: "9", name: "Club Sandwich", price: 8.99, category: "sandwich", popular: true },
+  { id: "10", name: "BLT Sandwich", price: 7.99, category: "sandwich" },
+  { id: "11", name: "Grilled Cheese", price: 6.99, category: "sandwich" },
+  { id: "12", name: "Chocolate Cake", price: 5.99, category: "dessert" },
+  { id: "13", name: "Cheesecake", price: 6.50, category: "dessert", popular: true },
+  { id: "14", name: "Ice Cream Sundae", price: 4.99, category: "dessert" },
+  { id: "15", name: "Fresh Lemonade", price: 3.50, category: "drinks" },
+  { id: "16", name: "Iced Tea", price: 2.99, category: "drinks" },
+  { id: "17", name: "Orange Juice", price: 3.99, category: "drinks", popular: true },
+  { id: "18", name: "Smoothie Bowl", price: 8.99, category: "drinks" },
+  { id: "19", name: "Grilled Salmon", price: 18.99, category: "meals" },
+  { id: "20", name: "Beef Steak", price: 24.99, category: "meals", popular: true },
+  { id: "21", name: "Caesar Salad", price: 9.99, category: "meals" },
+  { id: "22", name: "Pasta Alfredo", price: 13.99, category: "meals" },
+  { id: "23", name: "Veggie Wrap", price: 7.49, category: "sandwich" },
+  { id: "24", name: "Americano", price: 3.25, category: "coffee" },
 ];
 
 // ============================================================================
@@ -136,6 +137,7 @@ const products: Product[] = [
 // ============================================================================
 
 export default function POSPage() {
+  const pathname = usePathname();
   const [cart, setCart] = useState<CartItem[]>([]);
   const [activeCategory, setActiveCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
@@ -286,69 +288,14 @@ export default function POSPage() {
         </div>
 
         {/* Payment Button */}
-        <Dialog open={isPaymentOpen} onOpenChange={setIsPaymentOpen}>
-          <DialogTrigger
-            render={
-              <Button
-                className="mt-4 w-full h-12 text-base font-semibold gap-2"
-                disabled={cart.length === 0}
-              />
-            }
-          >
-            <Wallet className="size-5" />
-            Charge ${total.toFixed(2)}
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-lg" showCloseButton={true}>
-            <DialogHeader>
-              <DialogTitle>Complete Payment</DialogTitle>
-              <DialogDescription>
-                Total amount: ${total.toFixed(2)}
-              </DialogDescription>
-            </DialogHeader>
-
-            <div className="space-y-3 py-4">
-              <PaymentMethodCard
-                icon={<CreditCard className="size-5" />}
-                label="Credit / Debit Card"
-                sublabel="Visa, Mastercard, Amex"
-                selected={paymentMethod === "card"}
-                onClick={() => setPaymentMethod("card")}
-              />
-              <PaymentMethodCard
-                icon={<Banknote className="size-5" />}
-                label="Cash"
-                sublabel="Pay with cash"
-                selected={paymentMethod === "cash"}
-                onClick={() => setPaymentMethod("cash")}
-              />
-              <PaymentMethodCard
-                icon={<QrCode className="size-5" />}
-                label="QR Code / Mobile Pay"
-                sublabel="Apple Pay, Google Pay, etc."
-                selected={paymentMethod === "qr"}
-                onClick={() => setPaymentMethod("qr")}
-              />
-            </div>
-
-            <DialogFooter className="gap-2">
-              <Button variant="outline" onClick={() => setIsPaymentOpen(false)}>
-                Cancel
-              </Button>
-              <Button
-                className="gap-2"
-                disabled={!paymentMethod}
-                onClick={() => {
-                  setIsPaymentOpen(false);
-                  clearCart();
-                  setPaymentMethod("");
-                }}
-              >
-                <Receipt className="size-4" />
-                Complete Sale
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <Button
+          className="mt-4 w-full h-12 text-base font-semibold gap-2"
+          disabled={cart.length === 0}
+          onClick={() => setIsPaymentOpen(true)}
+        >
+          <Wallet className="size-5" />
+          Charge ${total.toFixed(2)}
+        </Button>
 
         {/* Secondary Actions */}
         <div className="mt-3 grid grid-cols-2 gap-2">
@@ -461,7 +408,7 @@ export default function POSPage() {
                   <nav className="space-y-1 p-2">
                     {[
                       { icon: <Home className="size-5" />, label: "Dashboard", href: "/dashboard" },
-                      { icon: <LayoutGrid className="size-5" />, label: "POS", href: "/pos", active: true },
+                      { icon: <LayoutGrid className="size-5" />, label: "POS", href: "/pos" },
                       { icon: <Package className="size-5" />, label: "Products", href: "/products" },
                       { icon: <Receipt className="size-5" />, label: "Orders", href: "/orders" },
                       { icon: <BarChart3 className="size-5" />, label: "Analytics", href: "/analytics" },
@@ -473,7 +420,7 @@ export default function POSPage() {
                           <Link
                             href={item.href}
                             className={`flex items-center gap-3 w-full rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
-                              item.active
+                              pathname === item.href
                                 ? "bg-primary text-primary-foreground"
                                 : "text-muted-foreground hover:bg-muted hover:text-foreground"
                             }`}
@@ -596,7 +543,11 @@ export default function POSPage() {
                   <Link
                     key={item.label}
                     href={item.href}
-                    className="flex items-center gap-3 w-full rounded-xl px-4 py-3 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+                    className={`flex items-center gap-3 w-full rounded-xl px-4 py-3 text-sm font-medium transition-colors ${
+                      pathname === item.href
+                        ? "bg-muted text-foreground"
+                        : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                    }`}
                   >
                     {item.icon}
                     <span>{item.label}</span>
@@ -620,8 +571,62 @@ export default function POSPage() {
           cartCount={cartItemCount}
         />
 
-        {/* Held Orders Drawer */}
-        <Drawer open={isHeldOrdersOpen} onOpenChange={setIsHeldOrdersOpen}>
+      {/* Payment Dialog */}
+      <Dialog open={isPaymentOpen} onOpenChange={setIsPaymentOpen}>
+        <DialogContent className="sm:max-w-lg" showCloseButton={true}>
+          <DialogHeader>
+            <DialogTitle>Complete Payment</DialogTitle>
+            <DialogDescription>
+              Total amount: ${total.toFixed(2)}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-3 py-4">
+            <PaymentMethodCard
+              icon={<CreditCard className="size-5" />}
+              label="Credit / Debit Card"
+              sublabel="Visa, Mastercard, Amex"
+              selected={paymentMethod === "card"}
+              onClick={() => setPaymentMethod("card")}
+            />
+            <PaymentMethodCard
+              icon={<Banknote className="size-5" />}
+              label="Cash"
+              sublabel="Pay with cash"
+              selected={paymentMethod === "cash"}
+              onClick={() => setPaymentMethod("cash")}
+            />
+            <PaymentMethodCard
+              icon={<QrCode className="size-5" />}
+              label="QR Code / Mobile Pay"
+              sublabel="Apple Pay, Google Pay, etc."
+              selected={paymentMethod === "qr"}
+              onClick={() => setPaymentMethod("qr")}
+            />
+          </div>
+
+          <DialogFooter className="gap-2">
+            <Button variant="outline" onClick={() => setIsPaymentOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              className="gap-2"
+              disabled={!paymentMethod}
+              onClick={() => {
+                setIsPaymentOpen(false);
+                clearCart();
+                setPaymentMethod("");
+              }}
+            >
+              <Receipt className="size-4" />
+              Complete Sale
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Held Orders Drawer */}
+      <Drawer open={isHeldOrdersOpen} onOpenChange={setIsHeldOrdersOpen}>
           <DrawerContent>
             <DrawerHeader>
               <DrawerTitle>Held Orders</DrawerTitle>
