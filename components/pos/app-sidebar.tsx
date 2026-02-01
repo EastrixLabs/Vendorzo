@@ -5,11 +5,11 @@ import {
   LayoutGrid,
   Package,
   Receipt,
-  Users,
   BarChart3,
   Settings,
   LogOut,
 } from "lucide-react";
+import Link from "next/link";
 import {
   Sidebar,
   SidebarContent,
@@ -27,13 +27,12 @@ import {
 import { Button } from "@/components/ui/button";
 
 const navItems = [
-  { icon: Home, label: "Dashboard", active: false },
-  { icon: LayoutGrid, label: "POS", active: true },
-  { icon: Package, label: "Products", active: false },
-  { icon: Receipt, label: "Orders", active: false },
-  { icon: Users, label: "Customers", active: false },
-  { icon: BarChart3, label: "Analytics", active: false },
-  { icon: Settings, label: "Settings", active: false },
+  { icon: Home, label: "Dashboard", href: "/dashboard" },
+  { icon: LayoutGrid, label: "POS", href: "/pos" },
+  { icon: Package, label: "Products", href: "/products" },
+  { icon: Receipt, label: "Orders", href: "/orders" },
+  { icon: BarChart3, label: "Analytics", href: "/analytics" },
+  { icon: Settings, label: "Settings", href: "/settings" },
 ];
 
 export function AppSidebar() {
@@ -61,10 +60,7 @@ export function AppSidebar() {
             <SidebarMenu>
               {navItems.map((item) => (
                 <SidebarMenuItem key={item.label}>
-                  <SidebarMenuButton
-                    isActive={item.active}
-                    tooltip={item.label}
-                  >
+                  <SidebarMenuButton render={<Link href={item.href} />} tooltip={item.label}>
                     <item.icon className="size-4" />
                     <span>{item.label}</span>
                   </SidebarMenuButton>

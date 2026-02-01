@@ -35,6 +35,7 @@ import {
   Wallet,
   LogOut,
 } from "lucide-react";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -459,19 +460,18 @@ export default function POSPage() {
                   </SheetHeader>
                   <nav className="space-y-1 p-2">
                     {[
-                      { icon: <Home className="size-5" />, label: "Dashboard" },
-                      { icon: <LayoutGrid className="size-5" />, label: "POS", active: true },
-                      { icon: <Package className="size-5" />, label: "Products" },
-                      { icon: <Receipt className="size-5" />, label: "Orders" },
-                      { icon: <Users className="size-5" />, label: "Customers" },
-                      { icon: <BarChart3 className="size-5" />, label: "Analytics" },
-                      { icon: <Settings className="size-5" />, label: "Settings" },
+                      { icon: <Home className="size-5" />, label: "Dashboard", href: "/dashboard" },
+                      { icon: <LayoutGrid className="size-5" />, label: "POS", href: "/pos", active: true },
+                      { icon: <Package className="size-5" />, label: "Products", href: "/products" },
+                      { icon: <Receipt className="size-5" />, label: "Orders", href: "/orders" },
+                      { icon: <BarChart3 className="size-5" />, label: "Analytics", href: "/analytics" },
+                      { icon: <Settings className="size-5" />, label: "Settings", href: "/settings" },
                     ].map((item) => (
                       <SheetClose
                         key={item.label}
                         render={
-                          <button
-                            type="button"
+                          <Link
+                            href={item.href}
                             className={`flex items-center gap-3 w-full rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
                               item.active
                                 ? "bg-primary text-primary-foreground"
@@ -587,22 +587,21 @@ export default function POSPage() {
             >
               <div className="p-4 space-y-2">
                 {[
-                  { icon: <Home className="size-5" />, label: "Dashboard" },
-                  { icon: <Package className="size-5" />, label: "Products" },
-                  { icon: <Users className="size-5" />, label: "Customers" },
-                  { icon: <BarChart3 className="size-5" />, label: "Analytics" },
-                  { icon: <Settings className="size-5" />, label: "Settings" },
-                  { icon: <HelpCircle className="size-5" />, label: "Help & Support" },
+                  { icon: <Home className="size-5" />, label: "Dashboard", href: "/dashboard" },
+                  { icon: <Package className="size-5" />, label: "Products", href: "/products" },
+                  { icon: <BarChart3 className="size-5" />, label: "Analytics", href: "/analytics" },
+                  { icon: <Settings className="size-5" />, label: "Settings", href: "/settings" },
+                  { icon: <HelpCircle className="size-5" />, label: "Help & Support", href: "/settings" },
                 ].map((item) => (
-                  <button
-                    type="button"
+                  <Link
                     key={item.label}
+                    href={item.href}
                     className="flex items-center gap-3 w-full rounded-xl px-4 py-3 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
                   >
                     {item.icon}
                     <span>{item.label}</span>
                     <ChevronRight className="size-4 ml-auto" />
-                  </button>
+                  </Link>
                 ))}
                 <Separator className="my-4" />
                 <button type="button" className="flex items-center gap-3 w-full rounded-xl px-4 py-3 text-sm font-medium text-destructive hover:bg-destructive/10 transition-colors">
