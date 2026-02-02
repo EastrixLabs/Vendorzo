@@ -25,7 +25,6 @@ import {
   SidebarSeparator,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const navItems = [
@@ -50,15 +49,15 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
       {/* Header with Logo */}
-      <SidebarHeader className="px-4 py-6 group-data-[collapsible=icon]:px-3 group-data-[collapsible=icon]:py-4">
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-primary text-primary-foreground font-black text-xl shadow-lg shadow-primary/20">
+      <SidebarHeader className="px-2 py-6 group-data-[collapsible=icon]:px-2 group-data-[collapsible=icon]:py-4">
+        <div className="flex w-full items-center gap-2 group-data-[collapsible=icon]:justify-center">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground font-black text-xl shadow-xs shadow-primary/20">
             V
           </div>
           {!isCollapsed && (
             <div className="flex flex-col">
               <span className="font-bold text-lg leading-none tracking-tight">Vendorzo</span>
-              <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold">Pro POS</span>
+              <span className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Modern POS</span>
             </div>
           )}
         </div>
@@ -66,21 +65,21 @@ export function AppSidebar() {
 
       {/* Navigation */}
       <SidebarContent className="px-2 group-data-[collapsible=icon]:px-2">
+        <SidebarSeparator className="mb-2 self-center" />
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu className="gap-2">
+            <SidebarMenu className="gap-2 group-data-[collapsible=icon]:items-center">
               {navItems.map((item) => {
                 const active = isActive(item.href);
                 return (
                   <SidebarMenuItem key={item.label}>
                     <SidebarMenuButton
-                      render={<Link href={item.href} />}
+                      render={<Link href={item.href} title={item.label} />}
                       isActive={active}
-                      tooltip={isCollapsed ? item.label : undefined}
                       className={cn(
-                        "transition-all duration-200",
+                        "transition-all duration-200 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:[&>span]:hidden",
                         active
-                          ? "bg-primary text-primary-foreground shadow-md shadow-primary/10 hover:bg-primary hover:text-primary-foreground"
+                          ? "bg-primary text-primary-foreground shadow-xs shadow-primary/10 hover:bg-primary hover:text-primary-foreground"
                           : "hover:bg-sidebar-accent/50"
                       )}
                     >
@@ -96,24 +95,31 @@ export function AppSidebar() {
       </SidebarContent>
 
       {/* Footer with User */}
-      <SidebarFooter className="p-4 group-data-[collapsible=icon]:p-3">
-        <SidebarSeparator className="mb-4" />
-        <SidebarMenu>
+      <SidebarFooter className="p-2 group-data-[collapsible=icon]:p-2">
+        <SidebarSeparator className="mb-2 self-center" />
+        <SidebarMenu className="group-data-[collapsible=icon]:items-center">
           <SidebarMenuItem>
-            <SidebarMenuButton tooltip="John Doe - Cashier" className="h-auto py-2">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-500 text-white text-xs font-bold shadow-sm">
+            <SidebarMenuButton
+              tooltip={isCollapsed ? "John Doe - Cashier" : undefined}
+              className="h-auto py-2 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
+            >
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-violet-500 text-white text-xs font-bold shadow-xs">
                 JD
               </div>
-              {!isCollapsed && (
-                <div className="flex flex-col items-start ml-1">
-                  <span className="text-sm font-bold leading-none">John Doe</span>
-                  <span className="text-xs text-muted-foreground mt-1">Cashier</span>
-                </div>
-              )}
+              <div className={cn(
+                "flex flex-col items-start ml-1",
+                isCollapsed && "hidden"
+              )}>
+                <span className="text-sm font-bold leading-none">John Doe</span>
+                <span className="text-xs text-muted-foreground mt-1">Cashier</span>
+              </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton tooltip="Sign Out" className="text-destructive hover:bg-destructive/10 hover:text-destructive mt-1 transition-colors">
+            <SidebarMenuButton
+              tooltip={isCollapsed ? "Sign Out" : undefined}
+              className="text-destructive hover:bg-destructive/10 hover:text-destructive mt-1 transition-colors group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:[&>span]:hidden"
+            >
               <LogOut className="size-5" />
               <span className="font-medium">Sign Out</span>
             </SidebarMenuButton>
