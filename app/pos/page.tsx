@@ -1,7 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { createClient } from "@/lib/supabase/client";
 import {
   Search,
   ShoppingCart,
@@ -104,7 +105,8 @@ const categories: Category[] = [
   { id: "meals", name: "Meals", icon: <UtensilsCrossed className="size-4" /> },
 ];
 
-const products: Product[] = [
+// Hardcoded fallback products (used when Supabase fetch fails or returns empty)
+const fallbackProducts: Product[] = [
   { id: "1", name: "Espresso Shot", price: 2.50, category: "coffee", popular: true },
   { id: "2", name: "Cappuccino", price: 4.50, category: "coffee", popular: true },
   { id: "3", name: "Café Latte", price: 4.75, category: "coffee" },
@@ -135,8 +137,25 @@ const products: Product[] = [
 // MAIN POS PAGE
 // ============================================================================
 
+const supabase = createClient();
+
 export default function POSPage() {
   const pathname = usePathname();
+  const [products, setProducts] = useState<Product[]>(fallbackProducts);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Fetch products from Supabase
+  useEffect(() => {
+    async function fetchProducts() {
+      setIsLoading(true);
+      const { data, error } = await supabase.from("products").select("*");
+      if (!error && data && data.length > 0) {
+        setProducts(data as Product[]);
+      }
+      setIsLoading(false);
+    }
+    fetchProducts();
+  }, []);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [activeCategory, setActiveCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
