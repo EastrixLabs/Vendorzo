@@ -1,5 +1,5 @@
-import PosPage from "./pos/page";
+import { ComponentExample } from "@/components/component-example";
 
 export default function Page() {
-  return <PosPage />;
+  return <ComponentExample />;
 }
