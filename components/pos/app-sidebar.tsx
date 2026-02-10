@@ -17,6 +17,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
+  SidebarTrigger,
 } from "@/components/ui/sidebar"
 import { sidebarItems } from "@/components/pos/mock-data"
 
@@ -27,20 +28,30 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon" className="border-r">
       <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              size="lg"
-              tooltip="Vendorzo POS"
-              onClick={() => router.push("/dashboard")}
-            >
-              <div className="bg-primary text-primary-foreground flex size-7 items-center justify-center rounded-md">
-                <Store className="size-4" />
-              </div>
-              <span className="font-semibold">Vendorzo POS</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+        <div className="group-data-[collapsible=icon]:items-center flex flex-col gap-2">
+          <div className="group-data-[collapsible=icon]:justify-center flex items-center gap-2">
+            <SidebarMenu className="flex-1">
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  size="lg"
+                  tooltip="Vendorzo POS"
+                  onClick={() => router.push("/dashboard")}
+                  className="group-data-[collapsible=icon]:size-10 group-data-[collapsible=icon]:justify-center"
+                >
+                  <div className="bg-primary text-primary-foreground flex size-7 items-center justify-center rounded-md">
+                    <Store className="size-4" />
+                  </div>
+                  <span className="group-data-[collapsible=icon]:hidden font-semibold">
+                    Vendorzo POS
+                  </span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+            <SidebarTrigger className="group-data-[collapsible=icon]:hidden shrink-0" />
+          </div>
+
+          <SidebarTrigger className="hidden group-data-[collapsible=icon]:inline-flex" />
+        </div>
       </SidebarHeader>
 
       <SidebarContent>

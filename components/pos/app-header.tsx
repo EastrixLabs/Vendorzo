@@ -28,14 +28,10 @@ import {
   InputGroupInput,
   InputGroupText,
 } from "@/components/ui/input-group"
-import { SidebarTrigger } from "@/components/ui/sidebar"
-
 export function AppHeader() {
   return (
     <header className="bg-background/95 supports-backdrop-filter:backdrop-blur-xs sticky top-0 z-20 border-b">
       <div className="flex h-14 items-center gap-3 px-4 md:px-6">
-        <SidebarTrigger className="shrink-0" />
-
         <InputGroup className="max-w-xl">
           <InputGroupAddon>
             <InputGroupText>
