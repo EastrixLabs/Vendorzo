@@ -17,6 +17,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
+  SidebarSeparator,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 import { sidebarItems } from "@/components/pos/mock-data"
@@ -24,10 +25,11 @@ import { sidebarItems } from "@/components/pos/mock-data"
 export function AppSidebar() {
   const pathname = usePathname()
   const router = useRouter()
+  const [primaryItem, ...secondaryItems] = sidebarItems
 
   return (
     <Sidebar collapsible="icon" className="border-r">
-      <SidebarHeader>
+      <SidebarHeader className="group-data-[collapsible=icon]:pt-4">
         <div className="group-data-[collapsible=icon]:items-center flex flex-col gap-2">
           <div className="group-data-[collapsible=icon]:justify-center flex items-center gap-2">
             <SidebarMenu className="flex-1">
@@ -36,10 +38,10 @@ export function AppSidebar() {
                   size="lg"
                   tooltip="Vendorzo POS"
                   onClick={() => router.push("/dashboard")}
-                  className="group-data-[collapsible=icon]:size-10 group-data-[collapsible=icon]:justify-center"
+                  className="h-12 group-data-[collapsible=icon]:mx-auto group-data-[collapsible=icon]:size-12 group-data-[collapsible=icon]:justify-center"
                 >
                   <div className="bg-primary text-primary-foreground flex size-7 items-center justify-center rounded-md">
-                    <Store className="size-4" />
+                    <Store className="size-7" />
                   </div>
                   <span className="group-data-[collapsible=icon]:hidden font-semibold">
                     Vendorzo POS
@@ -50,16 +52,39 @@ export function AppSidebar() {
             <SidebarTrigger className="group-data-[collapsible=icon]:hidden shrink-0" />
           </div>
 
-          <SidebarTrigger className="hidden group-data-[collapsible=icon]:inline-flex" />
+          <SidebarTrigger className="hidden group-data-[collapsible=icon]:mx-auto group-data-[collapsible=icon]:inline-flex" />
         </div>
       </SidebarHeader>
 
-      <SidebarContent>
+      <SidebarContent className="group-data-[collapsible=icon]:items-center">
         <SidebarGroup>
           <SidebarGroupLabel>Main Menu</SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
-              {sidebarItems.map((item) => {
+            <SidebarSeparator className="my-2" />
+
+            <SidebarMenu className="group-data-[collapsible=icon]:items-center">
+              {primaryItem ? (
+                <SidebarMenuItem key={primaryItem.title}>
+                  <SidebarMenuButton
+                    isActive={
+                      pathname === primaryItem.href ||
+                      pathname.startsWith(`${primaryItem.href}/`)
+                    }
+                    tooltip={primaryItem.title}
+                    onClick={() => router.push(primaryItem.href)}
+                    className="h-12 group-data-[collapsible=icon]:mx-auto group-data-[collapsible=icon]:!size-12 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:gap-0 group-data-[collapsible=icon]:!px-0"
+                  >
+                    <primaryItem.icon className="size-7" />
+                    <span className="group-data-[collapsible=icon]:hidden">
+                      {primaryItem.title}
+                    </span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ) : null}
+            </SidebarMenu>
+
+            <SidebarMenu className="group-data-[collapsible=icon]:items-center">
+              {secondaryItems.map((item) => {
                 const isActive =
                   pathname === item.href || pathname.startsWith(`${item.href}/`)
 
@@ -69,9 +94,12 @@ export function AppSidebar() {
                       isActive={isActive}
                       tooltip={item.title}
                       onClick={() => router.push(item.href)}
+                      className="h-12 group-data-[collapsible=icon]:mx-auto group-data-[collapsible=icon]:!size-12 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:gap-0 group-data-[collapsible=icon]:!px-0"
                     >
-                      <item.icon className="size-4" />
-                      <span>{item.title}</span>
+                      <item.icon className="size-7" />
+                      <span className="group-data-[collapsible=icon]:hidden">
+                        {item.title}
+                      </span>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 )
