@@ -2,7 +2,8 @@
 
 import { usePathname } from "next/navigation"
 import { useRouter } from "next/navigation"
-import { Clock3, CreditCard, LogOut, Settings, Store, UserCircle } from "lucide-react"
+import { Clock3, CreditCard, LogOut, Settings, UserCircle } from "lucide-react"
+import { Brand } from "@/components/brand"
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
@@ -50,7 +51,7 @@ export function AppSidebar() {
                   onClick={() => router.push("/dashboard")}
                   className="h-12 gap-2 group-data-[collapsible=icon]:mx-auto group-data-[collapsible=icon]:!size-12 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:gap-0 group-data-[collapsible=icon]:!px-0"
                 >
-                  <Store className="size-7" />
+                  <Brand className="size-7" alt="Vendorzo" />
                   <span className="group-data-[collapsible=icon]:hidden font-extrabold">
                     Vendorzo
                   </span>
