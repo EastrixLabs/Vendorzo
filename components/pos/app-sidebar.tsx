@@ -2,9 +2,20 @@
 
 import { usePathname } from "next/navigation"
 import { useRouter } from "next/navigation"
-import { Clock3, Store } from "lucide-react"
+import { Clock3, CreditCard, LogOut, Settings, Store, UserCircle } from "lucide-react"
 
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import {
   Sidebar,
   SidebarContent,
@@ -25,12 +36,11 @@ import { sidebarItems } from "@/components/pos/mock-data"
 export function AppSidebar() {
   const pathname = usePathname()
   const router = useRouter()
-  const [primaryItem, ...secondaryItems] = sidebarItems
 
   return (
     <Sidebar collapsible="icon" className="border-r">
-      <SidebarHeader className="group-data-[collapsible=icon]:pt-4">
-        <div className="group-data-[collapsible=icon]:items-center flex flex-col gap-2">
+      <SidebarHeader className="pt-3 pb-1 group-data-[collapsible=icon]:pt-3 group-data-[collapsible=icon]:pb-1">
+        <div className="group-data-[collapsible=icon]:items-center flex flex-col gap-1">
           <div className="group-data-[collapsible=icon]:justify-center flex items-center gap-2">
             <SidebarMenu className="flex-1">
               <SidebarMenuItem>
@@ -38,53 +48,32 @@ export function AppSidebar() {
                   size="lg"
                   tooltip="Vendorzo POS"
                   onClick={() => router.push("/dashboard")}
-                  className="h-12 group-data-[collapsible=icon]:mx-auto group-data-[collapsible=icon]:size-12 group-data-[collapsible=icon]:justify-center"
+                  className="h-12 gap-2 group-data-[collapsible=icon]:mx-auto group-data-[collapsible=icon]:!size-12 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:gap-0 group-data-[collapsible=icon]:!px-0"
                 >
-                  <div className="bg-primary text-primary-foreground flex size-7 items-center justify-center rounded-md">
-                    <Store className="size-7" />
-                  </div>
-                  <span className="group-data-[collapsible=icon]:hidden font-semibold">
-                    Vendorzo POS
+                  <Store className="size-7" />
+                  <span className="group-data-[collapsible=icon]:hidden font-extrabold">
+                    Vendorzo
                   </span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
-            <SidebarTrigger className="group-data-[collapsible=icon]:hidden shrink-0" />
+            <SidebarTrigger className="group-data-[collapsible=icon]:hidden shrink-0 size-12 [&_svg]:size-7" />
           </div>
 
-          <SidebarTrigger className="hidden group-data-[collapsible=icon]:mx-auto group-data-[collapsible=icon]:inline-flex" />
+          <SidebarTrigger className="hidden group-data-[collapsible=icon]:mx-auto group-data-[collapsible=icon]:inline-flex size-12 [&_svg]:size-7" />
         </div>
       </SidebarHeader>
 
       <SidebarContent className="group-data-[collapsible=icon]:items-center">
-        <SidebarGroup>
-          <SidebarGroupLabel>Main Menu</SidebarGroupLabel>
+        <SidebarGroup className="pt-0">
           <SidebarGroupContent>
-            <SidebarSeparator className="my-2" />
+            <SidebarGroupLabel className="group-data-[collapsible=icon]:hidden">
+              Main Menu
+            </SidebarGroupLabel>
+            <SidebarSeparator className="my-1 group-data-[collapsible=icon]:mx-auto group-data-[collapsible=icon]:w-8" />
 
-            <SidebarMenu className="group-data-[collapsible=icon]:items-center">
-              {primaryItem ? (
-                <SidebarMenuItem key={primaryItem.title}>
-                  <SidebarMenuButton
-                    isActive={
-                      pathname === primaryItem.href ||
-                      pathname.startsWith(`${primaryItem.href}/`)
-                    }
-                    tooltip={primaryItem.title}
-                    onClick={() => router.push(primaryItem.href)}
-                    className="h-12 group-data-[collapsible=icon]:mx-auto group-data-[collapsible=icon]:!size-12 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:gap-0 group-data-[collapsible=icon]:!px-0"
-                  >
-                    <primaryItem.icon className="size-7" />
-                    <span className="group-data-[collapsible=icon]:hidden">
-                      {primaryItem.title}
-                    </span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ) : null}
-            </SidebarMenu>
-
-            <SidebarMenu className="group-data-[collapsible=icon]:items-center">
-              {secondaryItems.map((item) => {
+            <SidebarMenu className="group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:gap-2">
+              {sidebarItems.map((item) => {
                 const isActive =
                   pathname === item.href || pathname.startsWith(`${item.href}/`)
 
@@ -110,17 +99,91 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter>
-        <div className="bg-muted/50 rounded-md border p-2 text-xs group-data-[collapsible=icon]:hidden">
-          <div className="mb-1 flex items-center justify-between">
-            <div className="flex items-center gap-1.5 font-medium">
-              <Clock3 className="size-3.5" />
-              Current Shift
+        <div className="space-y-2 group-data-[collapsible=icon]:hidden">
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={<Button variant="ghost" className="h-11 w-full justify-start px-2" />}
+            >
+              <Avatar size="sm">
+                <AvatarFallback>KC</AvatarFallback>
+              </Avatar>
+              <div className="flex min-w-0 flex-col text-left">
+                <span className="truncate text-sm font-medium">Kurt</span>
+                <span className="text-muted-foreground truncate text-xs">Store Admin</span>
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-52 !shadow-xs">
+              <DropdownMenuGroup>
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <UserCircle className="size-4" />
+                  Profile
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <CreditCard className="size-4" />
+                  Billing
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Settings className="size-4" />
+                  Settings
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem variant="destructive">
+                <LogOut className="size-4" />
+                Logout
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <div className="bg-muted/50 rounded-md border p-2 text-xs">
+            <div className="mb-1 flex items-center justify-between">
+              <div className="flex items-center gap-1.5 font-medium">
+                <Clock3 className="size-3.5" />
+                Current Shift
+              </div>
+              <Badge variant="secondary" className="h-5 px-1.5 text-[10px]">
+                Active
+              </Badge>
             </div>
-            <Badge variant="secondary" className="h-5 px-1.5 text-[10px]">
-              Active
-            </Badge>
+            <p className="text-muted-foreground">08:00 - 16:00</p>
           </div>
-          <p className="text-muted-foreground">08:00 - 16:00</p>
+        </div>
+
+        <div className="hidden group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center">
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={<Button variant="ghost" className="size-12 rounded-xl p-0" />}
+            >
+              <Avatar>
+                <AvatarFallback>KC</AvatarFallback>
+              </Avatar>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-52 !shadow-xs">
+              <DropdownMenuGroup>
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <UserCircle className="size-4" />
+                  Profile
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <CreditCard className="size-4" />
+                  Billing
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Settings className="size-4" />
+                  Settings
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem variant="destructive">
+                <LogOut className="size-4" />
+                Logout
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </SidebarFooter>
       <SidebarRail />

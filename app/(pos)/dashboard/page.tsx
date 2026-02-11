@@ -1,9 +1,10 @@
 "use client"
 
+import { type ColumnDef } from "@tanstack/react-table"
 import { DollarSign, Package, Receipt, Users } from "lucide-react"
 
+import { metricCards, orderHistory, type Order } from "@/components/pos/mock-data"
 import { PageHeading } from "@/components/pos/page-heading"
-import { metricCards, orderHistory } from "@/components/pos/mock-data"
 import { Badge } from "@/components/ui/badge"
 import {
   Card,
@@ -12,16 +13,43 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
+import { DataTable } from "@/components/ui/data-table"
 
 const statIcons = [DollarSign, Receipt, Package, Users]
+
+const columns: ColumnDef<Order>[] = [
+  {
+    accessorKey: "id",
+    header: "Order",
+    cell: ({ row }) => <span className="font-medium">{row.original.id}</span>,
+  },
+  {
+    accessorKey: "customer",
+    header: "Customer",
+  },
+  {
+    accessorKey: "items",
+    header: "Items",
+  },
+  {
+    accessorKey: "payment",
+    header: "Payment",
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
+    cell: ({ row }) => (
+      <Badge variant={row.original.status === "Completed" ? "secondary" : "outline"}>
+        {row.original.status}
+      </Badge>
+    ),
+  },
+  {
+    accessorKey: "total",
+    header: () => <div className="text-right">Total</div>,
+    cell: ({ row }) => <div className="text-right">${row.original.total.toFixed(2)}</div>,
+  },
+]
 
 export default function DashboardPage() {
   return (
@@ -60,36 +88,7 @@ export default function DashboardPage() {
           <CardDescription>Latest transactions from the active shift.</CardDescription>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Order</TableHead>
-                <TableHead>Customer</TableHead>
-                <TableHead>Items</TableHead>
-                <TableHead>Payment</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Total</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {orderHistory.slice(0, 5).map((order) => (
-                <TableRow key={order.id}>
-                  <TableCell className="font-medium">{order.id}</TableCell>
-                  <TableCell>{order.customer}</TableCell>
-                  <TableCell>{order.items}</TableCell>
-                  <TableCell>{order.payment}</TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={order.status === "Completed" ? "secondary" : "outline"}
-                    >
-                      {order.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-right">${order.total.toFixed(2)}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          <DataTable columns={columns} data={orderHistory.slice(0, 5)} />
         </CardContent>
       </Card>
     </div>

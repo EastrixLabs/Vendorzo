@@ -2,26 +2,11 @@
 
 import {
   Bell,
-  CreditCard,
-  LogOut,
   Search,
-  Settings,
-  User,
-  UserCircle,
 } from "lucide-react"
 
 import { ThemeToggle } from "@/components/pos/theme-toggle"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import {
   InputGroup,
   InputGroupAddon,
@@ -47,44 +32,6 @@ export function AppHeader() {
           </Button>
 
           <ThemeToggle />
-
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              render={<Button variant="ghost" className="h-9 px-2" />}
-            >
-              <Avatar size="sm">
-                <AvatarFallback>KC</AvatarFallback>
-              </Avatar>
-              <span className="hidden text-sm font-medium sm:inline">Kurt</span>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-52 !shadow-xs">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <DropdownMenuItem>
-                  <UserCircle className="size-4" />
-                  Profile
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <CreditCard className="size-4" />
-                  Billing
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Settings className="size-4" />
-                  Settings
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <User className="size-4" />
-                Switch Account
-              </DropdownMenuItem>
-              <DropdownMenuItem variant="destructive">
-                <LogOut className="size-4" />
-                Sign out
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
       </div>
     </header>

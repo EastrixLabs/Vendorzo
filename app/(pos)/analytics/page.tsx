@@ -1,5 +1,6 @@
 "use client"
 
+import { type ColumnDef } from "@tanstack/react-table"
 import {
   Area,
   AreaChart,
@@ -44,6 +45,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { DataTable, DataTableRowAction } from "@/components/ui/data-table"
 import {
   ChartContainer,
   ChartLegend,
@@ -110,6 +112,61 @@ const radialConfig = {
     color: "var(--chart-5)",
   },
 } satisfies ChartConfig
+
+type AnalyticsRow = {
+  metric: string
+  category: "Revenue" | "Sales" | "Operations"
+  value: number
+}
+
+const analyticsColumns: ColumnDef<AnalyticsRow>[] = [
+  {
+    accessorKey: "metric",
+    header: "Metric",
+  },
+  {
+    accessorKey: "category",
+    header: "Category",
+  },
+  {
+    accessorKey: "value",
+    header: () => <div className="text-right">Value</div>,
+    cell: ({ row }) => <div className="text-right">{row.original.value}</div>,
+  },
+  {
+    id: "row-actions",
+    header: () => <div className="text-right">Actions</div>,
+    cell: ({ row }) => (
+      <DataTableRowAction
+        label={row.original.metric}
+        items={[{ label: "Inspect Trend" }, { label: "Export Metric" }]}
+      />
+    ),
+  },
+]
+
+const analyticsTableData: AnalyticsRow[] = [
+  {
+    metric: "Weekly Revenue Peak",
+    category: "Revenue",
+    value: Math.max(...areaData.map((point) => point.revenue)),
+  },
+  {
+    metric: "Best Selling Product Qty",
+    category: "Sales",
+    value: Math.max(...barData.map((point) => point.qty)),
+  },
+  {
+    metric: "Highest Hourly Tickets",
+    category: "Operations",
+    value: Math.max(...lineData.map((point) => point.tickets)),
+  },
+  {
+    metric: "Top Category Share",
+    category: "Sales",
+    value: Math.max(...pieData.map((point) => point.value)),
+  },
+]
 
 export default function AnalyticsPage() {
   return (
@@ -276,6 +333,28 @@ export default function AnalyticsPage() {
           </CardContent>
         </Card>
       </div>
+
+      <Card className="mt-4">
+        <CardHeader>
+          <CardTitle>Analytics Data Table</CardTitle>
+          <CardDescription>Compact KPI snapshot for quick comparison.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <DataTable
+            columns={analyticsColumns}
+            data={analyticsTableData}
+            searchKey="metric"
+            searchPlaceholder="Search metric..."
+            filterKey="category"
+            filterLabel="Category"
+            filterOptions={[
+              { label: "Revenue", value: "Revenue" },
+              { label: "Sales", value: "Sales" },
+              { label: "Operations", value: "Operations" },
+            ]}
+          />
+        </CardContent>
+      </Card>
     </div>
   )
 }

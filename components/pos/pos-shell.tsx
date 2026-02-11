@@ -1,6 +1,6 @@
 "use client"
 
-import { ReactNode } from "react"
+import { ReactNode, useEffect, useState } from "react"
 
 import { AppHeader } from "@/components/pos/app-header"
 import { AppSidebar } from "@/components/pos/app-sidebar"
@@ -11,8 +11,20 @@ type PosShellProps = {
 }
 
 export function PosShell({ children }: PosShellProps) {
+  const [open, setOpen] = useState(true)
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 1100px)")
+    const applyState = () => setOpen(!mediaQuery.matches)
+
+    applyState()
+    mediaQuery.addEventListener("change", applyState)
+
+    return () => mediaQuery.removeEventListener("change", applyState)
+  }, [])
+
   return (
-    <SidebarProvider defaultOpen>
+    <SidebarProvider open={open} onOpenChange={setOpen}>
       <AppSidebar />
       <SidebarInset>
         <AppHeader />

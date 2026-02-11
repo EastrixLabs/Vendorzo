@@ -131,17 +131,15 @@ export default function PosPage() {
                 setActiveCategory(value as (typeof categories)[number])
               }
             >
-              <TabsList variant="line" className="h-auto flex-wrap gap-2 p-0">
-                {categories.map((category) => (
-                  <TabsTrigger
-                    key={category}
-                    value={category}
-                    className="rounded-full border border-border px-3 py-1 text-xs"
-                  >
-                    {category}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
+              <ScrollArea className="w-full whitespace-nowrap">
+                <TabsList variant="line" className="h-9 w-max min-w-full justify-start pr-6">
+                  {categories.map((category) => (
+                    <TabsTrigger key={category} value={category}>
+                      {category}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </ScrollArea>
             </Tabs>
           </CardHeader>
 
