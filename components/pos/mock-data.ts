@@ -9,7 +9,6 @@ import {
   Radar,
   Receipt,
   Sandwich,
-  Settings,
   ShoppingCart,
   Soup,
   type LucideIcon,
@@ -76,11 +75,6 @@ export const sidebarItems: SidebarItem[] = [
     title: "Analytics",
     href: "/analytics",
     icon: ChartBar,
-  },
-  {
-    title: "Settings",
-    href: "/settings",
-    icon: Settings,
   },
 ]
 

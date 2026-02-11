@@ -103,7 +103,14 @@ export function AppSidebar() {
         <div className="space-y-2 group-data-[collapsible=icon]:hidden">
           <DropdownMenu>
             <DropdownMenuTrigger
-              render={<Button variant="ghost" className="h-11 w-full justify-start px-2" />}
+              render={
+                <Button
+                  variant="ghost"
+                  className="h-11 w-full justify-start px-2"
+                  title="Account & settings"
+                  aria-label="Open account menu"
+                />
+              }
             >
               <Avatar size="sm">
                 <AvatarFallback>KC</AvatarFallback>
@@ -125,7 +132,7 @@ export function AppSidebar() {
                   <CreditCard className="size-4" />
                   Billing
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push("/settings")}>
                   <Settings className="size-4" />
                   Settings
                 </DropdownMenuItem>
@@ -155,7 +162,14 @@ export function AppSidebar() {
         <div className="hidden group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center">
           <DropdownMenu>
             <DropdownMenuTrigger
-              render={<Button variant="ghost" className="size-12 rounded-xl p-0" />}
+              render={
+                <Button
+                  variant="ghost"
+                  className="size-12 rounded-xl p-0"
+                  title="Account & settings"
+                  aria-label="Open account menu"
+                />
+              }
             >
               <Avatar>
                 <AvatarFallback>KC</AvatarFallback>
@@ -173,7 +187,7 @@ export function AppSidebar() {
                   <CreditCard className="size-4" />
                   Billing
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push("/settings")}>
                   <Settings className="size-4" />
                   Settings
                 </DropdownMenuItem>
