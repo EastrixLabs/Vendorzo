@@ -32,6 +32,11 @@ import {
   SidebarSeparator,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 import { sidebarItems } from "@/components/pos/mock-data"
 
 export function AppSidebar() {
@@ -102,24 +107,28 @@ export function AppSidebar() {
       <SidebarFooter>
         <div className="space-y-2 group-data-[collapsible=icon]:hidden">
           <DropdownMenu>
-            <DropdownMenuTrigger
-              render={
-                <Button
-                  variant="ghost"
-                  className="h-11 w-full justify-start px-2"
-                  title="Account & settings"
-                  aria-label="Open account menu"
-                />
-              }
-            >
-              <Avatar size="sm">
-                <AvatarFallback>KC</AvatarFallback>
-              </Avatar>
-              <div className="flex min-w-0 flex-col text-left">
-                <span className="truncate text-sm font-medium">Kurt</span>
-                <span className="text-muted-foreground truncate text-xs">Store Admin</span>
-              </div>
-            </DropdownMenuTrigger>
+            <Tooltip>
+              <TooltipTrigger render={<span className="block w-full" />}>
+                <DropdownMenuTrigger
+                  render={
+                    <Button
+                      variant="ghost"
+                      className="h-11 w-full justify-start px-2"
+                      aria-label="Open account menu"
+                    />
+                  }
+                >
+                  <Avatar size="sm">
+                    <AvatarFallback>KC</AvatarFallback>
+                  </Avatar>
+                  <div className="flex min-w-0 flex-col text-left">
+                    <span className="truncate text-sm font-medium">Kurt</span>
+                    <span className="text-muted-foreground truncate text-xs">Store Admin</span>
+                  </div>
+                </DropdownMenuTrigger>
+              </TooltipTrigger>
+              <TooltipContent side="top">Account &amp; settings</TooltipContent>
+            </Tooltip>
             <DropdownMenuContent align="end" className="w-52 !shadow-xs">
               <DropdownMenuGroup>
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
@@ -161,20 +170,24 @@ export function AppSidebar() {
 
         <div className="hidden group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center">
           <DropdownMenu>
-            <DropdownMenuTrigger
-              render={
-                <Button
-                  variant="ghost"
-                  className="size-12 rounded-xl p-0"
-                  title="Account & settings"
-                  aria-label="Open account menu"
-                />
-              }
-            >
-              <Avatar>
-                <AvatarFallback>KC</AvatarFallback>
-              </Avatar>
-            </DropdownMenuTrigger>
+            <Tooltip>
+              <TooltipTrigger render={<span className="inline-flex" />}>
+                <DropdownMenuTrigger
+                  render={
+                    <Button
+                      variant="ghost"
+                      className="size-12 rounded-xl p-0"
+                      aria-label="Open account menu"
+                    />
+                  }
+                >
+                  <Avatar>
+                    <AvatarFallback>KC</AvatarFallback>
+                  </Avatar>
+                </DropdownMenuTrigger>
+              </TooltipTrigger>
+              <TooltipContent side="right">Account &amp; settings</TooltipContent>
+            </Tooltip>
             <DropdownMenuContent align="end" className="w-52 !shadow-xs">
               <DropdownMenuGroup>
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>

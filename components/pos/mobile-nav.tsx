@@ -50,12 +50,12 @@ export function MobileNav() {
     { title: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { title: "POS", href: "/pos", icon: ShoppingCart },
     { title: "Orders", href: "/orders", icon: Receipt },
-    { title: "Products", href: "/products", icon: Package },
     { title: "More", icon: Ellipsis, kind: "more" },
   ]
 
   // Everything else lives in the "More" sheet.
   const moreItems: NavItem[] = [
+    { title: "Products", href: "/products", icon: Package },
     { title: "Analytics", href: "/analytics", icon: ChartBar },
   ]
 
@@ -85,37 +85,22 @@ export function MobileNav() {
           "pb-[calc(env(safe-area-inset-bottom)+12px)]"
         )}
       >
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-background/70 to-transparent" />
-
         <div className="mx-auto w-full max-w-md px-3">
           <div
             className={cn(
               "relative isolate pointer-events-auto",
               "supports-backdrop-filter:backdrop-blur-2xl backdrop-blur-2xl",
-              "bg-background/55 dark:bg-background/35",
+              "bg-background/60 dark:bg-background/30",
+              "saturate-150",
+              "shadow-sm",
+              "rounded-2xl",
               "border border-border/50",
-              "shadow-[0_20px_55px_-28px_rgba(0,0,0,0.45)]",
-              "rounded-[28px]"
+              // Liquid-glass edge treatment (no gradients)
+              "ring-1 ring-white/12 dark:ring-white/10",
+              "after:pointer-events-none after:absolute after:inset-0 after:rounded-2xl after:ring-1 after:ring-black/5 dark:after:ring-white/6"
             )}
           >
-            {/* Liquid highlight */}
-            <div
-              aria-hidden="true"
-              className={cn(
-                "pointer-events-none absolute inset-0 rounded-[28px]",
-                "bg-gradient-to-b from-white/30 via-white/10 to-white/0",
-                "dark:from-white/14 dark:via-white/6"
-              )}
-            />
-            <div
-              aria-hidden="true"
-              className={cn(
-                "pointer-events-none absolute -inset-px rounded-[29px]",
-                "ring-1 ring-white/15 dark:ring-white/10"
-              )}
-            />
-
-            <ul className="relative grid grid-cols-5 px-2 py-2">
+            <ul className="relative grid grid-cols-4 gap-2 px-3 py-2">
               {primary.map((item) => {
                 const active =
                   item.kind === "more"
@@ -139,7 +124,7 @@ export function MobileNav() {
                       }}
                       className={cn(
                         "group relative flex w-full max-w-[86px] flex-col items-center justify-center",
-                        "rounded-2xl px-2 py-2",
+                        "rounded-2xl p-2.5",
                         "transition duration-200",
                         "focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring",
                         "active:scale-[0.98]"
@@ -149,7 +134,7 @@ export function MobileNav() {
                       <span
                         aria-hidden="true"
                         className={cn(
-                          "absolute inset-x-1 top-1 bottom-1 rounded-2xl",
+                          "absolute inset-0 rounded-2xl",
                           "transition duration-200",
                           active
                             ? "bg-foreground/8 dark:bg-foreground/12"
