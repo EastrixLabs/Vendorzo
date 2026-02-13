@@ -153,19 +153,6 @@ export function AppSidebar() {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-
-          <div className="bg-muted/50 rounded-md border p-2 text-xs">
-            <div className="mb-1 flex items-center justify-between">
-              <div className="flex items-center gap-1.5 font-medium">
-                <Clock3 className="size-3.5" />
-                Current Shift
-              </div>
-              <Badge variant="secondary" className="h-5 px-1.5 text-[10px]">
-                Active
-              </Badge>
-            </div>
-            <p className="text-muted-foreground">08:00 - 16:00</p>
-          </div>
         </div>
 
         <div className="hidden group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center">

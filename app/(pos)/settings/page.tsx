@@ -1,8 +1,9 @@
 "use client"
 
-import { Bell, CreditCard, Settings, ShieldCheck } from "lucide-react"
+import { Bell, CreditCard, Paintbrush, Settings, ShieldCheck } from "lucide-react"
 
 import { PageHeading } from "@/components/pos/page-heading"
+import { ThemeToggle } from "@/components/pos/theme-toggle"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import {
@@ -27,6 +28,25 @@ export default function SettingsPage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
+              <Paintbrush className="size-4" />
+              Appearance
+            </CardTitle>
+            <CardDescription>Choose how Vendorzo should look.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="flex items-center justify-between rounded-md border p-3">
+              <div>
+                <p className="text-sm font-medium">Theme mode</p>
+                <p className="text-muted-foreground text-xs">Light, dark, or follow your system preference</p>
+              </div>
+              <ThemeToggle />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
               <CreditCard className="size-4" />
               Checkout Preferences
             </CardTitle>
@@ -39,7 +59,7 @@ export default function SettingsPage() {
                 <SelectTrigger className="w-full">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="!shadow-xs">
+                <SelectContent className="shadow-xs!">
                   <SelectItem value="card">Card</SelectItem>
                   <SelectItem value="cash">Cash</SelectItem>
                   <SelectItem value="wallet">Wallet</SelectItem>
