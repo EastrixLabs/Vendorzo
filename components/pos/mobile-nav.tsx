@@ -13,19 +13,20 @@ import {
   Package,
   Receipt,
   UserCircle,
+  X,
   type LucideIcon,
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet"
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer"
 
 type NavItem = {
   title: string
@@ -53,7 +54,7 @@ export function MobileNav() {
     { title: "More", icon: Ellipsis, kind: "more" },
   ]
 
-  // Everything else lives in the "More" sheet.
+  // Everything else lives in the "More" drawer.
   const moreItems: NavItem[] = [
     { title: "Products", href: "/products", icon: Package },
     { title: "Analytics", href: "/analytics", icon: ChartBar },
@@ -123,7 +124,7 @@ export function MobileNav() {
                         }
                       }}
                       className={cn(
-                        "group relative flex w-full max-w-[86px] flex-col items-center justify-center",
+                        "group relative flex w-full max-w-21.5 flex-col items-center justify-center",
                         "rounded-2xl p-2.5",
                         "transition duration-200",
                         "focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring",
@@ -144,7 +145,7 @@ export function MobileNav() {
 
                       <item.icon
                         className={cn(
-                          "relative z-10 size-[22px] transition duration-200",
+                          "relative z-10 size-5.5 transition duration-200",
                           active
                             ? "text-foreground"
                             : "text-muted-foreground group-hover:text-foreground"
@@ -169,23 +170,36 @@ export function MobileNav() {
         </div>
       </nav>
 
-      {/* More sheet */}
-      <Sheet open={moreOpen} onOpenChange={setMoreOpen}>
-        <SheetContent
-          side="bottom"
-          showCloseButton
+      {/* More drawer */}
+      <Drawer open={moreOpen} onOpenChange={setMoreOpen}>
+        <DrawerContent
           className={cn(
             "supports-backdrop-filter:backdrop-blur-2xl backdrop-blur-2xl",
             "bg-background/70 dark:bg-background/55",
             "border-t border-border/60",
             "rounded-t-3xl",
-            "!shadow-xs"
+            "shadow-xs!"
           )}
         >
-          <SheetHeader className="pb-2">
-            <SheetTitle>More</SheetTitle>
-            <SheetDescription>Extra pages and account actions.</SheetDescription>
-          </SheetHeader>
+          <DrawerHeader className="pb-2 px-4">
+            <div className="text-left">
+              <DrawerTitle>More</DrawerTitle>
+              <DrawerDescription>Extra pages and account actions.</DrawerDescription>
+            </div>
+
+            <div className="absolute right-4 top-4">
+              <DrawerClose asChild>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon-sm"
+                  aria-label="Close more menu"
+                >
+                  <X className="size-4" />
+                </Button>
+              </DrawerClose>
+            </div>
+          </DrawerHeader>
 
           <div className="grid gap-2 px-4 pb-2">
             {moreItems.map((item) => (
@@ -229,13 +243,8 @@ export function MobileNav() {
             ))}
           </div>
 
-          <SheetFooter className="pt-0">
-            <div className="text-muted-foreground text-xs">
-              Tip: Swipe up for more space; tap outside to close.
-            </div>
-          </SheetFooter>
-        </SheetContent>
-      </Sheet>
+        </DrawerContent>
+      </Drawer>
     </>
   )
 }
