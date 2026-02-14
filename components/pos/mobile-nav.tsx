@@ -66,7 +66,7 @@ export function MobileNav() {
     href?: string
     variant?: "default" | "destructive"
   }> = [
-    { title: "Profile", icon: UserCircle },
+    { title: "Profile", icon: UserCircle, href: "/profile" },
     { title: "Billing", icon: CreditCard },
     { title: "Settings", icon: Settings, href: "/settings" },
     { title: "Logout", icon: LogOut, variant: "destructive" },

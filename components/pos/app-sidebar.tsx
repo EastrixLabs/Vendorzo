@@ -2,11 +2,10 @@
 
 import { usePathname } from "next/navigation"
 import { useRouter } from "next/navigation"
-import { Clock3, CreditCard, LogOut, Settings, UserCircle } from "lucide-react"
+import { CreditCard, LogOut, Settings, UserCircle } from "lucide-react"
 import { Brand } from "@/components/brand"
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -133,7 +132,7 @@ export function AppSidebar() {
               <DropdownMenuGroup>
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push("/profile")}>
                   <UserCircle className="size-4" />
                   Profile
                 </DropdownMenuItem>
@@ -179,7 +178,7 @@ export function AppSidebar() {
               <DropdownMenuGroup>
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push("/profile")}>
                   <UserCircle className="size-4" />
                   Profile
                 </DropdownMenuItem>
