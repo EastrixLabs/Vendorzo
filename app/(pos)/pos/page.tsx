@@ -358,7 +358,6 @@ export default function PosPage() {
 
       <PosFloatingDock
         totalItems={totalItems}
-        lineItems={cart.length}
         subtotal={subtotal}
         tax={tax}
         total={total}

@@ -27,7 +27,6 @@ type PosFloatingDockCartLine = {
 
 type PosFloatingDockProps = {
   totalItems: number
-  lineItems: number
   subtotal: number
   tax: number
   total: number
@@ -56,7 +55,6 @@ function RedItemBadge({ count }: { count: number }) {
 
 export function PosFloatingDock({
   totalItems,
-  lineItems,
   subtotal,
   tax,
   total,
@@ -158,14 +156,10 @@ export function PosFloatingDock({
             </DrawerHeader>
 
             <div className="space-y-2.5 px-4 pb-3">
-              <div className="grid grid-cols-2 gap-1.5">
+              <div className="grid grid-cols-3 gap-1.5">
                 <div className="rounded-lg border border-border/70 bg-background/55 px-3 py-2">
                   <p className="text-muted-foreground text-sm">Items</p>
                   <p className="text-base font-semibold">{totalItems}</p>
-                </div>
-                <div className="rounded-lg border border-border/70 bg-background/55 px-3 py-2">
-                  <p className="text-muted-foreground text-sm">Lines</p>
-                  <p className="text-base font-semibold">{lineItems}</p>
                 </div>
                 <div className="rounded-lg border border-border/70 bg-background/55 px-3 py-2">
                   <p className="text-muted-foreground text-sm">Subtotal</p>
@@ -299,14 +293,10 @@ export function PosFloatingDock({
           </div>
 
           <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
-            <div className="grid flex-1 grid-cols-2 gap-2 sm:grid-cols-4">
+            <div className="grid flex-1 grid-cols-3 gap-2">
               <div className="rounded-lg border border-border/70 bg-background/55 px-3 py-2">
                 <p className="text-muted-foreground text-sm">Items</p>
                 <p className="text-base font-semibold">{totalItems}</p>
-              </div>
-              <div className="rounded-lg border border-border/70 bg-background/55 px-3 py-2">
-                <p className="text-muted-foreground text-sm">Lines</p>
-                <p className="text-base font-semibold">{lineItems}</p>
               </div>
               <div className="rounded-lg border border-border/70 bg-background/55 px-3 py-2">
                 <p className="text-muted-foreground text-sm">Subtotal</p>
