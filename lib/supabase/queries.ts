@@ -78,6 +78,19 @@ export type CartLine = {
   price: number
 }
 
+function getErrorMessage(error: unknown) {
+  if (error instanceof Error && error.message) return error.message
+  if (
+    typeof error === "object" &&
+    error !== null &&
+    "message" in error &&
+    typeof (error as { message?: unknown }).message === "string"
+  ) {
+    return (error as { message: string }).message
+  }
+  return "Unknown error"
+}
+
 export async function createOrder(
   cart: CartLine[],
   payment: "Card" | "Cash" | "Wallet",
@@ -103,7 +116,9 @@ export async function createOrder(
     .select()
     .single()
 
-  if (orderError) throw orderError
+  if (orderError) {
+    throw new Error(`Failed to create order: ${getErrorMessage(orderError)}`)
+  }
 
   // 2. Insert order items
   const orderItems = cart.map((item) => ({
@@ -118,31 +133,41 @@ export async function createOrder(
     .from("order_items")
     .insert(orderItems)
 
-  if (itemsError) throw itemsError
+  if (itemsError) {
+    throw new Error(`Failed to create order items: ${getErrorMessage(itemsError)}`)
+  }
 
-  // 3. Decrement stock for each product  
+  // 3. Decrement stock for each product
   for (const item of cart) {
-    await supabase().rpc("decrement_stock", { 
-      product_id: item.id, 
-      qty: item.qty 
-    }).then(({ error }) => {
-      // Fallback: if RPC doesn't exist, do a manual update
-      if (error) {
-        return supabase()
-          .from("products")
-          .select("stock")
-          .eq("id", item.id)
-          .single()
-          .then(({ data }) => {
-            if (data) {
-              return supabase()
-                .from("products")
-                .update({ stock: Math.max(0, data.stock - item.qty) })
-                .eq("id", item.id)
-            }
-          })
-      }
-    })
+    const { data: product, error: productError } = await supabase()
+      .from("products")
+      .select("stock")
+      .eq("id", item.id)
+      .single()
+
+    if (productError) {
+      throw new Error(
+        `Failed to fetch stock for ${item.name}: ${getErrorMessage(productError)}`
+      )
+    }
+
+    const currentStock = Number(product?.stock ?? 0)
+    if (currentStock < item.qty) {
+      throw new Error(
+        `Insufficient stock for ${item.name}. Available: ${currentStock}, requested: ${item.qty}`
+      )
+    }
+
+    const { error: stockUpdateError } = await supabase()
+      .from("products")
+      .update({ stock: currentStock - item.qty })
+      .eq("id", item.id)
+
+    if (stockUpdateError) {
+      throw new Error(
+        `Failed to update stock for ${item.name}: ${getErrorMessage(stockUpdateError)}`
+      )
+    }
   }
 
   return order as DbOrder

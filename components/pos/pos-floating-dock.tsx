@@ -33,6 +33,7 @@ type PosFloatingDockProps = {
   cartLines: PosFloatingDockCartLine[]
   onClearCart?: () => void
   onCheckout?: () => void
+  checkoutLoading?: boolean
   className?: string
 }
 
@@ -61,6 +62,7 @@ export function PosFloatingDock({
   cartLines,
   onClearCart,
   onCheckout,
+  checkoutLoading = false,
   className,
 }: PosFloatingDockProps) {
   const { isMobile, open } = useSidebar()
@@ -241,12 +243,13 @@ export function PosFloatingDock({
               </Button>
               <Button
                 onClick={() => {
+                  if (checkoutLoading) return
                   setMobileCartOpen(false)
                   onCheckout?.()
                 }}
-                disabled={isCartEmpty}
+                disabled={isCartEmpty || checkoutLoading}
               >
-                Checkout
+                {checkoutLoading ? "Processing..." : "Checkout"}
                 <ArrowRight className="size-4" />
               </Button>
             </DrawerFooter>
@@ -318,8 +321,12 @@ export function PosFloatingDock({
                 <RotateCcw className="size-4" />
                 Clear
               </Button>
-              <Button className="h-10" onClick={onCheckout} disabled={isCartEmpty}>
-                Checkout
+              <Button
+                className="h-10"
+                onClick={onCheckout}
+                disabled={isCartEmpty || checkoutLoading}
+              >
+                {checkoutLoading ? "Processing..." : "Checkout"}
                 <ArrowRight className="size-4" />
               </Button>
             </div>

@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { toast } from "sonner"
 import {
   FileText,
   Grid2x2,
@@ -34,13 +35,28 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { Label } from "@/components/ui/label"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Skeleton } from "@/components/ui/skeleton"
-import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 const taxRate = 0.085
+
+function getErrorDetails(error: unknown) {
+  if (error instanceof Error) {
+    return { message: error.message, stack: error.stack }
+  }
+
+  if (typeof error === "object" && error !== null) {
+    const message =
+      "message" in error && typeof error.message === "string"
+        ? error.message
+        : JSON.stringify(error)
+
+    return { message }
+  }
+
+  return { message: String(error) }
+}
 
 export default function PosPage() {
   const [activeCategory, setActiveCategory] =
@@ -51,6 +67,12 @@ export default function PosPage() {
   const [cart, setCart] = React.useState<{ id: string; name: string; qty: number; price: number }[]>([])
   const [receiptOpen, setReceiptOpen] = React.useState(false)
   const [checkoutLoading, setCheckoutLoading] = React.useState(false)
+  const [lastReceipt, setLastReceipt] = React.useState<{
+    lines: { id: string; name: string; qty: number; price: number }[]
+    subtotal: number
+    tax: number
+    total: number
+  } | null>(null)
 
   React.useEffect(() => {
     fetchProducts()
@@ -97,20 +119,42 @@ export default function PosPage() {
 
   const handleCheckout = React.useCallback(async () => {
     if (cart.length === 0) return
+
+    const receiptSnapshot = {
+      lines: [...cart],
+      subtotal,
+      tax,
+      total,
+    }
+
+    setLastReceipt(receiptSnapshot)
+    setReceiptOpen(true)
     setCheckoutLoading(true)
+
     try {
       await createOrder(cart, "Card")
       setCart([])
-      setReceiptOpen(true)
+
       // Refresh products to get updated stock
       const rows = await fetchProducts()
       setProducts(rows.map(toProduct))
+
+      toast.success("Checkout completed")
     } catch (err) {
-      console.error("Checkout failed:", err)
+      const details = getErrorDetails(err)
+      toast.error("Checkout not saved", {
+        description: details.message,
+      })
     } finally {
       setCheckoutLoading(false)
     }
-  }, [cart])
+  }, [cart, subtotal, tax, total])
+
+  const receiptLines = lastReceipt?.lines ?? cart
+  const receiptSubtotal = lastReceipt?.subtotal ?? subtotal
+  const receiptTax = lastReceipt?.tax ?? tax
+  const receiptTotal = lastReceipt?.total ?? total
+  const receiptIsEmpty = receiptLines.length === 0
 
   return (
     <div className="pb-44 md:pb-44">
@@ -164,7 +208,7 @@ export default function PosPage() {
                     <TabsTrigger
                       key={category}
                       value={category}
-                      className="!flex-none rounded-lg px-3.5 text-sm data-active:bg-background data-active:text-foreground"
+                      className="flex-none! rounded-lg px-3.5 text-sm data-active:bg-background data-active:text-foreground"
                     >
                       {category}
                     </TabsTrigger>
@@ -319,7 +363,15 @@ export default function PosPage() {
         </Card>
       </div>
 
-      <Dialog open={receiptOpen} onOpenChange={setReceiptOpen}>
+      <Dialog
+        open={receiptOpen}
+        onOpenChange={(open) => {
+          setReceiptOpen(open)
+          if (!open) {
+            setLastReceipt(null)
+          }
+        }}
+      >
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
@@ -335,13 +387,13 @@ export default function PosPage() {
               <p className="text-muted-foreground text-xs">Order #POS-4582</p>
             </div>
 
-            {cartIsEmpty ? (
+            {receiptIsEmpty ? (
               <p className="text-muted-foreground text-center text-xs">
                 No items in cart yet.
               </p>
             ) : (
               <div className="space-y-1">
-                {cart.map((item) => (
+                {receiptLines.map((item) => (
                   <div key={item.id} className="flex justify-between gap-2">
                     <span>
                       {item.qty} x {item.name}
@@ -355,21 +407,21 @@ export default function PosPage() {
             <div className="space-y-1 border-t pt-2">
               <div className="flex justify-between text-xs">
                 <span>Subtotal</span>
-                <span>${subtotal.toFixed(2)}</span>
+                <span>${receiptSubtotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-xs">
                 <span>Tax</span>
-                <span>${tax.toFixed(2)}</span>
+                <span>${receiptTax.toFixed(2)}</span>
               </div>
               <div className="flex justify-between font-semibold">
                 <span>Total</span>
-                <span>${total.toFixed(2)}</span>
+                <span>${receiptTotal.toFixed(2)}</span>
               </div>
             </div>
           </div>
 
           <DialogFooter showCloseButton>
-            <Button disabled={cartIsEmpty}>
+            <Button disabled={receiptIsEmpty || checkoutLoading}>
               <ReceiptText className="size-4" />
               Print Mock Receipt
             </Button>
@@ -385,6 +437,7 @@ export default function PosPage() {
         cartLines={cart}
         onClearCart={clearCart}
         onCheckout={handleCheckout}
+        checkoutLoading={checkoutLoading}
       />
     </div>
   )
