@@ -5,7 +5,6 @@ import {
   Search,
 } from "lucide-react"
 
-import { ThemeToggle } from "@/components/pos/theme-toggle"
 import { Button } from "@/components/ui/button"
 import {
   InputGroup,
@@ -30,8 +29,6 @@ export function AppHeader() {
           <Button variant="outline" size="icon-sm" aria-label="Notifications">
             <Bell className="size-4" />
           </Button>
-
-          <ThemeToggle />
         </div>
       </div>
     </header>

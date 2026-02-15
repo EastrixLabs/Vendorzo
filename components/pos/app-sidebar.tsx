@@ -2,11 +2,10 @@
 
 import { usePathname } from "next/navigation"
 import { useRouter } from "next/navigation"
-import { Clock3, CreditCard, LogOut, Settings, UserCircle } from "lucide-react"
+import { CreditCard, LogOut, Settings, UserCircle } from "lucide-react"
 import { Brand } from "@/components/brand"
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -133,7 +132,7 @@ export function AppSidebar() {
               <DropdownMenuGroup>
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push("/profile")}>
                   <UserCircle className="size-4" />
                   Profile
                 </DropdownMenuItem>
@@ -153,19 +152,6 @@ export function AppSidebar() {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-
-          <div className="bg-muted/50 rounded-md border p-2 text-xs">
-            <div className="mb-1 flex items-center justify-between">
-              <div className="flex items-center gap-1.5 font-medium">
-                <Clock3 className="size-3.5" />
-                Current Shift
-              </div>
-              <Badge variant="secondary" className="h-5 px-1.5 text-[10px]">
-                Active
-              </Badge>
-            </div>
-            <p className="text-muted-foreground">08:00 - 16:00</p>
-          </div>
         </div>
 
         <div className="hidden group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center">
@@ -192,7 +178,7 @@ export function AppSidebar() {
               <DropdownMenuGroup>
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push("/profile")}>
                   <UserCircle className="size-4" />
                   Profile
                 </DropdownMenuItem>

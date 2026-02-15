@@ -2,19 +2,16 @@
 
 import * as React from "react"
 import {
-  ArrowRight,
-  CirclePause,
   FileText,
   Grid2x2,
   List,
-  PackageSearch,
   PackageX,
   Plus,
   ReceiptText,
   ShoppingCart,
-  Trash2,
 } from "lucide-react"
 
+import { PosFloatingDock } from "@/components/pos/pos-floating-dock"
 import { PageHeading } from "@/components/pos/page-heading"
 import { cartItems, categories, products, type Product } from "@/components/pos/mock-data"
 import { Badge } from "@/components/ui/badge"
@@ -37,14 +34,6 @@ import {
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -56,7 +45,7 @@ export default function PosPage() {
     React.useState<(typeof categories)[number]>("All")
   const [viewMode, setViewMode] = React.useState<"grid" | "list">("grid")
   const [showLoading, setShowLoading] = React.useState(false)
-  const [selectedProduct, setSelectedProduct] = React.useState<Product | null>(null)
+  const [cart, setCart] = React.useState(() => cartItems.map((item) => ({ ...item })))
   const [receiptOpen, setReceiptOpen] = React.useState(false)
 
   const filteredProducts =
@@ -64,12 +53,39 @@ export default function PosPage() {
       ? products
       : products.filter((product) => product.category === activeCategory)
 
-  const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.qty, 0)
+  const addToCart = React.useCallback((product: Product) => {
+    setCart((previousCart) => {
+      const existingItem = previousCart.find((item) => item.id === product.id)
+      if (existingItem) {
+        return previousCart.map((item) =>
+          item.id === product.id ? { ...item, qty: item.qty + 1 } : item
+        )
+      }
+
+      return [
+        ...previousCart,
+        {
+          id: product.id,
+          name: product.name,
+          qty: 1,
+          price: product.price,
+        },
+      ]
+    })
+  }, [])
+
+  const clearCart = React.useCallback(() => {
+    setCart([])
+  }, [])
+
+  const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0)
   const tax = subtotal * taxRate
   const total = subtotal + tax
+  const totalItems = cart.reduce((sum, item) => sum + item.qty, 0)
+  const cartIsEmpty = cart.length === 0
 
   return (
-    <div>
+    <div className="pb-44 md:pb-44">
       <PageHeading
         title="POS"
         description="Process orders quickly with a responsive product browser and cart."
@@ -82,28 +98,15 @@ export default function PosPage() {
         }
       />
 
-      <div className="mb-4 flex flex-wrap items-center gap-2">
-        <Button>
-          <Plus className="size-4" />
-          New Sale
-        </Button>
-        <Button variant="outline">
-          <CirclePause className="size-4" />
-          Hold Order
-        </Button>
-        <Button variant="outline">
-          <Trash2 className="size-4" />
-          Clear Cart
-        </Button>
-      </div>
-
       <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_360px]">
         <Card>
           <CardHeader className="gap-4">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
                 <CardTitle>Product Catalog</CardTitle>
-                <CardDescription>Tap a product to open the detail drawer.</CardDescription>
+                <CardDescription>
+                  Select a product to add it directly to the active cart.
+                </CardDescription>
               </div>
               <div className="flex items-center gap-2">
                 <Button
@@ -131,15 +134,21 @@ export default function PosPage() {
                 setActiveCategory(value as (typeof categories)[number])
               }
             >
-              <ScrollArea className="w-full whitespace-nowrap">
-                <TabsList variant="line" className="h-9 w-max min-w-full justify-start pr-6">
+              <div className="w-full overflow-x-auto pb-1 whitespace-nowrap [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                <TabsList
+                  className="h-10 w-max min-w-max justify-start gap-1 rounded-xl bg-muted/35 p-1"
+                >
                   {categories.map((category) => (
-                    <TabsTrigger key={category} value={category}>
+                    <TabsTrigger
+                      key={category}
+                      value={category}
+                      className="!flex-none rounded-lg px-3.5 text-sm data-active:bg-background data-active:text-foreground"
+                    >
                       {category}
                     </TabsTrigger>
                   ))}
                 </TabsList>
-              </ScrollArea>
+              </div>
             </Tabs>
           </CardHeader>
 
@@ -174,12 +183,17 @@ export default function PosPage() {
                   <Card
                     key={product.id}
                     size="sm"
-                    className="cursor-pointer"
-                    onClick={() => setSelectedProduct(product)}
+                    className="group cursor-pointer transition-transform duration-200 hover:scale-[1.02]"
+                    onClick={() => addToCart(product)}
                   >
                     <CardContent className="space-y-3">
-                      <div className="bg-muted flex h-10 w-10 items-center justify-center rounded-md">
-                        <product.icon className="size-5" />
+                      <div className="flex items-start justify-between">
+                        <div className="bg-muted flex h-10 w-10 items-center justify-center rounded-md">
+                          <product.icon className="size-5" />
+                        </div>
+                        <div className="bg-foreground text-background inline-flex size-7 items-center justify-center rounded-md border border-foreground/70 transition-all group-hover:scale-105 group-hover:shadow-sm">
+                          <Plus className="size-4" />
+                        </div>
                       </div>
                       <div>
                         <h3 className="line-clamp-1 text-sm font-medium">{product.name}</h3>
@@ -190,12 +204,6 @@ export default function PosPage() {
                         <span className="text-sm font-semibold">${product.price.toFixed(2)}</span>
                       </div>
                     </CardContent>
-                    <CardFooter>
-                      <Button size="sm" className="w-full">
-                        <Plus className="size-4" />
-                        Add
-                      </Button>
-                    </CardFooter>
                   </Card>
                 ))}
               </div>
@@ -205,8 +213,8 @@ export default function PosPage() {
                   <Card
                     key={product.id}
                     size="sm"
-                    className="cursor-pointer"
-                    onClick={() => setSelectedProduct(product)}
+                    className="group cursor-pointer transition-transform duration-200 hover:scale-[1.01]"
+                    onClick={() => addToCart(product)}
                   >
                     <CardContent className="flex flex-wrap items-center gap-3">
                       <div className="bg-muted flex h-10 w-10 items-center justify-center rounded-md">
@@ -218,10 +226,9 @@ export default function PosPage() {
                       </div>
                       <Badge variant="secondary">{product.category}</Badge>
                       <p className="w-20 text-sm font-semibold">${product.price.toFixed(2)}</p>
-                      <Button size="sm">
+                      <div className="bg-foreground text-background inline-flex size-7 items-center justify-center rounded-md border border-foreground/70 transition-all group-hover:scale-105 group-hover:shadow-sm">
                         <Plus className="size-4" />
-                        Add
-                      </Button>
+                      </div>
                     </CardContent>
                   </Card>
                 ))}
@@ -230,32 +237,42 @@ export default function PosPage() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="hidden xl:flex xl:flex-col">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <ShoppingCart className="size-4" />
               Cart Panel
             </CardTitle>
-            <CardDescription>{cartItems.length} mock line items</CardDescription>
+            <CardDescription>
+              {cart.length} line items · {totalItems} total quantity
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <ScrollArea className="h-64 rounded-md border">
-              <div className="space-y-2 p-3">
-                {cartItems.map((item) => (
-                  <div
-                    key={item.id}
-                    className="bg-muted/40 flex items-center justify-between rounded-md border p-2"
-                  >
-                    <div>
-                      <p className="text-sm font-medium">{item.name}</p>
-                      <p className="text-muted-foreground text-xs">Qty {item.qty}</p>
+              {cartIsEmpty ? (
+                <div className="flex h-full min-h-48 items-center justify-center p-3">
+                  <p className="text-muted-foreground text-sm">
+                    Cart is empty. Add items from the catalog to begin a sale.
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-2 p-3">
+                  {cart.map((item) => (
+                    <div
+                      key={item.id}
+                      className="bg-muted/40 flex items-center justify-between rounded-md border p-2"
+                    >
+                      <div>
+                        <p className="text-sm font-medium">{item.name}</p>
+                        <p className="text-muted-foreground text-xs">Qty {item.qty}</p>
+                      </div>
+                      <p className="text-sm font-semibold">
+                        ${(item.qty * item.price).toFixed(2)}
+                      </p>
                     </div>
-                    <p className="text-sm font-semibold">
-                      ${(item.qty * item.price).toFixed(2)}
-                    </p>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </ScrollArea>
 
             <div className="space-y-2 text-sm">
@@ -274,72 +291,12 @@ export default function PosPage() {
             </div>
           </CardContent>
           <CardFooter className="flex-col gap-2">
-            <Button className="w-full" onClick={() => setReceiptOpen(true)}>
-              <ReceiptText className="size-4" />
-              Receipt Preview
-            </Button>
-            <Button variant="outline" className="w-full">
-              Checkout
-              <ArrowRight className="size-4" />
-            </Button>
+            <p className="text-muted-foreground w-full text-center text-xs">
+              Checkout controls are available in the floating dock below.
+            </p>
           </CardFooter>
         </Card>
       </div>
-
-      <Sheet
-        open={Boolean(selectedProduct)}
-        onOpenChange={(isOpen) => {
-          if (!isOpen) {
-            setSelectedProduct(null)
-          }
-        }}
-      >
-        <SheetContent side="right" className="!shadow-xs">
-          {selectedProduct ? (
-            <>
-              <SheetHeader>
-                <SheetTitle className="flex items-center gap-2">
-                  <selectedProduct.icon className="size-4" />
-                  {selectedProduct.name}
-                </SheetTitle>
-                <SheetDescription>{selectedProduct.description}</SheetDescription>
-              </SheetHeader>
-              <div className="grid gap-4 px-4">
-                <Card size="sm">
-                  <CardContent className="grid gap-2">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">Price</span>
-                      <span className="font-medium">${selectedProduct.price.toFixed(2)}</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">Stock</span>
-                      <span className="font-medium">{selectedProduct.stock}</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">Prep Time</span>
-                      <span className="font-medium">{selectedProduct.prepTime}</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">Rating</span>
-                      <span className="font-medium">{selectedProduct.rating}/5</span>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-              <SheetFooter>
-                <Button variant="outline" className="w-full">
-                  <PackageSearch className="size-4" />
-                  View Inventory
-                </Button>
-                <Button className="w-full">
-                  <Plus className="size-4" />
-                  Add to Cart
-                </Button>
-              </SheetFooter>
-            </>
-          ) : null}
-        </SheetContent>
-      </Sheet>
 
       <Dialog open={receiptOpen} onOpenChange={setReceiptOpen}>
         <DialogContent className="sm:max-w-md">
@@ -357,16 +314,22 @@ export default function PosPage() {
               <p className="text-muted-foreground text-xs">Order #POS-4582</p>
             </div>
 
-            <div className="space-y-1">
-              {cartItems.map((item) => (
-                <div key={item.id} className="flex justify-between gap-2">
-                  <span>
-                    {item.qty} x {item.name}
-                  </span>
-                  <span>${(item.qty * item.price).toFixed(2)}</span>
-                </div>
-              ))}
-            </div>
+            {cartIsEmpty ? (
+              <p className="text-muted-foreground text-center text-xs">
+                No items in cart yet.
+              </p>
+            ) : (
+              <div className="space-y-1">
+                {cart.map((item) => (
+                  <div key={item.id} className="flex justify-between gap-2">
+                    <span>
+                      {item.qty} x {item.name}
+                    </span>
+                    <span>${(item.qty * item.price).toFixed(2)}</span>
+                  </div>
+                ))}
+              </div>
+            )}
 
             <div className="space-y-1 border-t pt-2">
               <div className="flex justify-between text-xs">
@@ -385,13 +348,23 @@ export default function PosPage() {
           </div>
 
           <DialogFooter showCloseButton>
-            <Button>
+            <Button disabled={cartIsEmpty}>
               <ReceiptText className="size-4" />
               Print Mock Receipt
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <PosFloatingDock
+        totalItems={totalItems}
+        subtotal={subtotal}
+        tax={tax}
+        total={total}
+        cartLines={cart}
+        onClearCart={clearCart}
+        onCheckout={() => setReceiptOpen(true)}
+      />
     </div>
   )
 }
