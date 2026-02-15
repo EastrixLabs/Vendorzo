@@ -2,15 +2,7 @@
 
 import * as React from "react"
 import { toast } from "sonner"
-import {
-  FileText,
-  Grid2x2,
-  List,
-  PackageX,
-  Plus,
-  ReceiptText,
-  ShoppingCart,
-} from "lucide-react"
+import { Grid2x2, List, PackageX, Plus, ShoppingCart } from "lucide-react"
 
 import { PosFloatingDock } from "@/components/pos/pos-floating-dock"
 import { PageHeading } from "@/components/pos/page-heading"
@@ -27,14 +19,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
+import ReceiptDialog from "@/components/pos/receipt-dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -363,71 +348,21 @@ export default function PosPage() {
         </Card>
       </div>
 
-      <Dialog
+      <ReceiptDialog
         open={receiptOpen}
-        onOpenChange={(open) => {
+        onOpenChange={(open: boolean) => {
           setReceiptOpen(open)
           if (!open) {
             setLastReceipt(null)
           }
         }}
-      >
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <FileText className="size-4" />
-              Receipt Preview
-            </DialogTitle>
-            <DialogDescription>Mock print layout for POS checkout.</DialogDescription>
-          </DialogHeader>
-
-          <div className="space-y-3 rounded-md border p-4 text-sm">
-            <div className="text-center">
-              <p className="font-semibold">Vendorzo Coffee Bar</p>
-              <p className="text-muted-foreground text-xs">Order #POS-4582</p>
-            </div>
-
-            {receiptIsEmpty ? (
-              <p className="text-muted-foreground text-center text-xs">
-                No items in cart yet.
-              </p>
-            ) : (
-              <div className="space-y-1">
-                {receiptLines.map((item) => (
-                  <div key={item.id} className="flex justify-between gap-2">
-                    <span>
-                      {item.qty} x {item.name}
-                    </span>
-                    <span>${(item.qty * item.price).toFixed(2)}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            <div className="space-y-1 border-t pt-2">
-              <div className="flex justify-between text-xs">
-                <span>Subtotal</span>
-                <span>${receiptSubtotal.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between text-xs">
-                <span>Tax</span>
-                <span>${receiptTax.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between font-semibold">
-                <span>Total</span>
-                <span>${receiptTotal.toFixed(2)}</span>
-              </div>
-            </div>
-          </div>
-
-          <DialogFooter showCloseButton>
-            <Button disabled={receiptIsEmpty || checkoutLoading}>
-              <ReceiptText className="size-4" />
-              Print Mock Receipt
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+        lines={receiptLines}
+        subtotal={receiptSubtotal}
+        tax={receiptTax}
+        total={receiptTotal}
+        loading={checkoutLoading}
+        onPrint={() => toast.success("Mock receipt printed")}
+      />
 
       <PosFloatingDock
         totalItems={totalItems}
