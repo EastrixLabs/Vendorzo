@@ -1,134 +1,206 @@
-"use client";
+"use client"
 
+import { usePathname } from "next/navigation"
+import { useRouter } from "next/navigation"
+import { CreditCard, LogOut, Settings, UserCircle } from "lucide-react"
+import { Brand } from "@/components/brand"
+
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
 import {
-  Home,
-  LayoutGrid,
-  Package,
-  Receipt,
-  BarChart3,
-  Settings,
-  LogOut,
-} from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
   SidebarSeparator,
-  useSidebar,
-} from "@/components/ui/sidebar";
-import { cn } from "@/lib/utils";
-
-const navItems = [
-  { icon: Home, label: "Dashboard", href: "/dashboard" },
-  { icon: LayoutGrid, label: "POS", href: "/pos" },
-  { icon: Package, label: "Products", href: "/products" },
-  { icon: Receipt, label: "Orders", href: "/orders" },
-  { icon: BarChart3, label: "Analytics", href: "/analytics" },
-  { icon: Settings, label: "Settings", href: "/settings" },
-];
+  SidebarTrigger,
+} from "@/components/ui/sidebar"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+import { sidebarItems } from "@/components/pos/mock-data"
 
 export function AppSidebar() {
-  const { state } = useSidebar();
-  const pathname = usePathname();
-  const isCollapsed = state === "collapsed";
-
-  const isActive = (href: string) => {
-    if (href === "/") return pathname === href;
-    return pathname === href || pathname.startsWith(`${href}/`);
-  };
+  const pathname = usePathname()
+  const router = useRouter()
 
   return (
-    <Sidebar collapsible="icon">
-      {/* Header with Logo */}
-      <SidebarHeader className="px-2 py-6 group-data-[collapsible=icon]:px-2 group-data-[collapsible=icon]:py-4">
-        <div className="flex w-full items-center gap-2 group-data-[collapsible=icon]:justify-center">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground font-black text-xl shadow-xs shadow-primary/20">
-            V
+    <Sidebar collapsible="icon" className="border-r">
+      <SidebarHeader className="pt-3 pb-1 group-data-[collapsible=icon]:pt-3 group-data-[collapsible=icon]:pb-1">
+        <div className="group-data-[collapsible=icon]:items-center flex flex-col gap-1">
+          <div className="group-data-[collapsible=icon]:justify-center flex items-center gap-2">
+            <SidebarMenu className="flex-1">
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  size="lg"
+                  tooltip="Vendorzo POS"
+                  onClick={() => router.push("/dashboard")}
+                  className="h-12 gap-2 group-data-[collapsible=icon]:mx-auto group-data-[collapsible=icon]:!size-12 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:gap-0 group-data-[collapsible=icon]:!px-0"
+                >
+                  <Brand className="size-7" alt="Vendorzo" />
+                  <span className="group-data-[collapsible=icon]:hidden font-extrabold">
+                    Vendorzo
+                  </span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+            <SidebarTrigger className="group-data-[collapsible=icon]:hidden shrink-0 size-12 [&_svg]:size-7" />
           </div>
-          {!isCollapsed && (
-            <div className="flex flex-col">
-              <span className="font-bold text-lg leading-none tracking-tight">Vendorzo</span>
-              <span className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Modern POS</span>
-            </div>
-          )}
+
+          <SidebarTrigger className="hidden group-data-[collapsible=icon]:mx-auto group-data-[collapsible=icon]:inline-flex size-12 [&_svg]:size-7" />
         </div>
       </SidebarHeader>
 
-      {/* Navigation */}
-      <SidebarContent className="px-2 group-data-[collapsible=icon]:px-2">
-        <SidebarSeparator className="mb-2 self-center" />
-        <SidebarGroup>
+      <SidebarContent className="group-data-[collapsible=icon]:items-center">
+        <SidebarGroup className="pt-0">
           <SidebarGroupContent>
-            <SidebarMenu className="gap-2 group-data-[collapsible=icon]:items-center">
-              {navItems.map((item) => {
-                const active = isActive(item.href);
+            <SidebarGroupLabel className="group-data-[collapsible=icon]:hidden">
+              Main Menu
+            </SidebarGroupLabel>
+            <SidebarSeparator className="my-1 group-data-[collapsible=icon]:mx-auto group-data-[collapsible=icon]:w-8" />
+
+            <SidebarMenu className="group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:gap-2">
+              {sidebarItems.map((item) => {
+                const isActive =
+                  pathname === item.href || pathname.startsWith(`${item.href}/`)
+
                 return (
-                  <SidebarMenuItem key={item.label}>
+                  <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton
-                      render={<Link href={item.href} title={item.label} />}
-                      isActive={active}
-                      className={cn(
-                        "transition-all duration-200 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:[&>span]:hidden",
-                        active
-                          ? "bg-primary text-primary-foreground shadow-xs shadow-primary/10 hover:bg-primary hover:text-primary-foreground"
-                          : "hover:bg-sidebar-accent/50"
-                      )}
+                      isActive={isActive}
+                      tooltip={item.title}
+                      onClick={() => router.push(item.href)}
+                      className="h-12 group-data-[collapsible=icon]:mx-auto group-data-[collapsible=icon]:!size-12 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:gap-0 group-data-[collapsible=icon]:!px-0"
                     >
-                      <item.icon className={cn("size-5", active ? "stroke-[2.5px]" : "stroke-[1.5px]")} />
-                      <span className="font-medium">{item.label}</span>
+                      <item.icon className="size-7" />
+                      <span className="group-data-[collapsible=icon]:hidden">
+                        {item.title}
+                      </span>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
-                );
+                )
               })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
 
-      {/* Footer with User */}
-      <SidebarFooter className="p-2 group-data-[collapsible=icon]:p-2">
-        <SidebarSeparator className="mb-2 self-center" />
-        <SidebarMenu className="group-data-[collapsible=icon]:items-center">
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              tooltip={isCollapsed ? "John Doe - Cashier" : undefined}
-              className="h-auto py-2 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
-            >
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-violet-500 text-white text-xs font-bold shadow-xs">
-                JD
-              </div>
-              <div className={cn(
-                "flex flex-col items-start ml-1",
-                isCollapsed && "hidden"
-              )}>
-                <span className="text-sm font-bold leading-none">John Doe</span>
-                <span className="text-xs text-muted-foreground mt-1">Cashier</span>
-              </div>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              tooltip={isCollapsed ? "Sign Out" : undefined}
-              className="text-destructive hover:bg-destructive/10 hover:text-destructive mt-1 transition-colors group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:[&>span]:hidden"
-            >
-              <LogOut className="size-5" />
-              <span className="font-medium">Sign Out</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
+      <SidebarFooter>
+        <div className="space-y-2 group-data-[collapsible=icon]:hidden">
+          <DropdownMenu>
+            <Tooltip>
+              <TooltipTrigger render={<span className="block w-full" />}>
+                <DropdownMenuTrigger
+                  render={
+                    <Button
+                      variant="ghost"
+                      className="h-11 w-full justify-start px-2"
+                      aria-label="Open account menu"
+                    />
+                  }
+                >
+                  <Avatar size="sm">
+                    <AvatarFallback>KC</AvatarFallback>
+                  </Avatar>
+                  <div className="flex min-w-0 flex-col text-left">
+                    <span className="truncate text-sm font-medium">Kurt</span>
+                    <span className="text-muted-foreground truncate text-xs">Store Admin</span>
+                  </div>
+                </DropdownMenuTrigger>
+              </TooltipTrigger>
+              <TooltipContent side="top">Account &amp; settings</TooltipContent>
+            </Tooltip>
+            <DropdownMenuContent align="end" className="w-52 !shadow-xs">
+              <DropdownMenuGroup>
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => router.push("/profile")}>
+                  <UserCircle className="size-4" />
+                  Profile
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <CreditCard className="size-4" />
+                  Billing
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push("/settings")}>
+                  <Settings className="size-4" />
+                  Settings
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem variant="destructive">
+                <LogOut className="size-4" />
+                Logout
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
 
-      {/* Rail for toggling */}
+        <div className="hidden group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center">
+          <DropdownMenu>
+            <Tooltip>
+              <TooltipTrigger render={<span className="inline-flex" />}>
+                <DropdownMenuTrigger
+                  render={
+                    <Button
+                      variant="ghost"
+                      className="size-12 rounded-xl p-0"
+                      aria-label="Open account menu"
+                    />
+                  }
+                >
+                  <Avatar>
+                    <AvatarFallback>KC</AvatarFallback>
+                  </Avatar>
+                </DropdownMenuTrigger>
+              </TooltipTrigger>
+              <TooltipContent side="right">Account &amp; settings</TooltipContent>
+            </Tooltip>
+            <DropdownMenuContent align="end" className="w-52 !shadow-xs">
+              <DropdownMenuGroup>
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => router.push("/profile")}>
+                  <UserCircle className="size-4" />
+                  Profile
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <CreditCard className="size-4" />
+                  Billing
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push("/settings")}>
+                  <Settings className="size-4" />
+                  Settings
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem variant="destructive">
+                <LogOut className="size-4" />
+                Logout
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
-  );
+  )
 }

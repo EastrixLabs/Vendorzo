@@ -1,5 +1,5 @@
-import PosPage from "./pos/page";
+import { redirect } from "next/navigation"
 
-export default function Page() {
-  return <PosPage />;
+export default function HomePage() {
+  redirect("/dashboard")
 }
