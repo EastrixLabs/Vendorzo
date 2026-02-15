@@ -6,7 +6,6 @@ import {
   ChartBar,
   CreditCard,
   Ellipsis,
-  LogOut,
   Settings,
   ShoppingCart,
   LayoutDashboard,
@@ -69,7 +68,6 @@ export function MobileNav() {
     { title: "Profile", icon: UserCircle, href: "/profile" },
     { title: "Billing", icon: CreditCard },
     { title: "Settings", icon: Settings, href: "/settings" },
-    { title: "Logout", icon: LogOut, variant: "destructive" },
   ]
 
   const isMoreActive =
@@ -229,7 +227,7 @@ export function MobileNav() {
                   "h-12 justify-start gap-2 rounded-2xl",
                   item.variant === "destructive" && "shadow-none"
                 )}
-                onClick={() => {
+                onClick={async () => {
                   setMoreOpen(false)
                   if (item.href) {
                     router.push(item.href)

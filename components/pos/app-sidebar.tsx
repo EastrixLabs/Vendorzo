@@ -1,9 +1,12 @@
 "use client"
 
+import * as React from "react"
 import { usePathname } from "next/navigation"
 import { useRouter } from "next/navigation"
-import { CreditCard, LogOut, Settings, UserCircle } from "lucide-react"
+import { CreditCard, Settings, UserCircle } from "lucide-react"
 import { Brand } from "@/components/brand"
+import { fetchProfile } from "@/lib/supabase/queries"
+import type { DbProfile } from "@/lib/supabase/types"
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -41,6 +44,25 @@ import { sidebarItems } from "@/components/pos/mock-data"
 export function AppSidebar() {
   const pathname = usePathname()
   const router = useRouter()
+  const [profile, setProfile] = React.useState<DbProfile | null>(null)
+  const [email, setEmail] = React.useState("")
+
+  React.useEffect(() => {
+    fetchProfile().then((result) => {
+      if (result) {
+        setProfile(result.profile)
+        setEmail(result.email)
+      }
+    })
+  }, [])
+
+  const initials = profile?.full_name
+    ? profile.full_name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2)
+    : "??"
+  const displayName = profile?.full_name || "User"
+  const displayRole = profile?.role
+    ? profile.role.charAt(0).toUpperCase() + profile.role.slice(1)
+    : "Staff"
 
   return (
     <Sidebar collapsible="icon" className="border-r">
@@ -118,11 +140,11 @@ export function AppSidebar() {
                   }
                 >
                   <Avatar size="sm">
-                    <AvatarFallback>KC</AvatarFallback>
+                    <AvatarFallback>{initials}</AvatarFallback>
                   </Avatar>
                   <div className="flex min-w-0 flex-col text-left">
-                    <span className="truncate text-sm font-medium">Kurt</span>
-                    <span className="text-muted-foreground truncate text-xs">Store Admin</span>
+                    <span className="truncate text-sm font-medium">{displayName}</span>
+                    <span className="text-muted-foreground truncate text-xs">{displayRole}</span>
                   </div>
                 </DropdownMenuTrigger>
               </TooltipTrigger>
@@ -145,11 +167,6 @@ export function AppSidebar() {
                   Settings
                 </DropdownMenuItem>
               </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem variant="destructive">
-                <LogOut className="size-4" />
-                Logout
-              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -168,7 +185,7 @@ export function AppSidebar() {
                   }
                 >
                   <Avatar>
-                    <AvatarFallback>KC</AvatarFallback>
+                    <AvatarFallback>{initials}</AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
               </TooltipTrigger>
@@ -191,11 +208,6 @@ export function AppSidebar() {
                   Settings
                 </DropdownMenuItem>
               </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem variant="destructive">
-                <LogOut className="size-4" />
-                Logout
-              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
