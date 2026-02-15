@@ -13,7 +13,9 @@ import {
 
 import { PosFloatingDock } from "@/components/pos/pos-floating-dock"
 import { PageHeading } from "@/components/pos/page-heading"
-import { cartItems, categories, products, type Product } from "@/components/pos/mock-data"
+import { categories } from "@/components/pos/mock-data"
+import { fetchProducts, createOrder } from "@/lib/supabase/queries"
+import { toProduct, type Product } from "@/lib/supabase/types"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -44,9 +46,18 @@ export default function PosPage() {
   const [activeCategory, setActiveCategory] =
     React.useState<(typeof categories)[number]>("All")
   const [viewMode, setViewMode] = React.useState<"grid" | "list">("grid")
-  const [showLoading, setShowLoading] = React.useState(false)
-  const [cart, setCart] = React.useState(() => cartItems.map((item) => ({ ...item })))
+  const [isLoading, setIsLoading] = React.useState(true)
+  const [products, setProducts] = React.useState<Product[]>([])
+  const [cart, setCart] = React.useState<{ id: string; name: string; qty: number; price: number }[]>([])
   const [receiptOpen, setReceiptOpen] = React.useState(false)
+  const [checkoutLoading, setCheckoutLoading] = React.useState(false)
+
+  React.useEffect(() => {
+    fetchProducts()
+      .then((rows) => setProducts(rows.map(toProduct)))
+      .catch(console.error)
+      .finally(() => setIsLoading(false))
+  }, [])
 
   const filteredProducts =
     activeCategory === "All"
@@ -84,18 +95,29 @@ export default function PosPage() {
   const totalItems = cart.reduce((sum, item) => sum + item.qty, 0)
   const cartIsEmpty = cart.length === 0
 
+  const handleCheckout = React.useCallback(async () => {
+    if (cart.length === 0) return
+    setCheckoutLoading(true)
+    try {
+      await createOrder(cart, "Card")
+      setCart([])
+      setReceiptOpen(true)
+      // Refresh products to get updated stock
+      const rows = await fetchProducts()
+      setProducts(rows.map(toProduct))
+    } catch (err) {
+      console.error("Checkout failed:", err)
+    } finally {
+      setCheckoutLoading(false)
+    }
+  }, [cart])
+
   return (
     <div className="pb-44 md:pb-44">
       <PageHeading
         title="POS"
         description="Process orders quickly with a responsive product browser and cart."
         icon={ShoppingCart}
-        actions={
-          <div className="flex items-center gap-2">
-            <Switch checked={showLoading} onCheckedChange={setShowLoading} />
-            <Label className="text-sm">Loading state</Label>
-          </div>
-        }
       />
 
       <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_360px]">
@@ -153,7 +175,7 @@ export default function PosPage() {
           </CardHeader>
 
           <CardContent>
-            {showLoading ? (
+            {isLoading ? (
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
                 {Array.from({ length: 10 }).map((_, index) => (
                   <Card key={`product-skeleton-${index}`} size="sm">
@@ -172,8 +194,7 @@ export default function PosPage() {
                   <PackageX className="text-muted-foreground size-9" />
                   <h3 className="text-base font-medium">No products in {activeCategory}</h3>
                   <p className="text-muted-foreground max-w-sm text-sm">
-                    This category has no assigned items in mock data yet. Add products
-                    later when backend wiring starts.
+                    No products found in this category.
                   </p>
                 </CardContent>
               </Card>
@@ -363,7 +384,7 @@ export default function PosPage() {
         total={total}
         cartLines={cart}
         onClearCart={clearCart}
-        onCheckout={() => setReceiptOpen(true)}
+        onCheckout={handleCheckout}
       />
     </div>
   )

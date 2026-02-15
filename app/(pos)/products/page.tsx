@@ -4,7 +4,9 @@ import * as React from "react"
 import { type ColumnDef } from "@tanstack/react-table"
 import { Boxes, PackageSearch, PackageX } from "lucide-react"
 
-import { categories, products, type Product } from "@/components/pos/mock-data"
+import { categories } from "@/components/pos/mock-data"
+import { fetchProducts } from "@/lib/supabase/queries"
+import { toProduct, type Product } from "@/lib/supabase/types"
 import { PageHeading } from "@/components/pos/page-heading"
 import { Badge } from "@/components/ui/badge"
 import {
@@ -61,29 +63,31 @@ const columns: ColumnDef<Product>[] = [
 ]
 
 export default function ProductsPage() {
-  const [showLoading, setShowLoading] = React.useState(false)
+  const [isLoading, setIsLoading] = React.useState(true)
+  const [products, setProducts] = React.useState<Product[]>([])
+
+  React.useEffect(() => {
+    fetchProducts()
+      .then((rows) => setProducts(rows.map(toProduct)))
+      .catch(console.error)
+      .finally(() => setIsLoading(false))
+  }, [])
 
   return (
     <div>
       <PageHeading
         title="Products"
-        description="Inventory list with stock and pricing mock data."
+        description="Inventory list with stock and pricing."
         icon={Boxes}
-        actions={
-          <div className="flex items-center gap-2">
-            <Switch checked={showLoading} onCheckedChange={setShowLoading} />
-            <Label>Loading</Label>
-          </div>
-        }
       />
 
       <Card>
         <CardHeader>
           <CardTitle>Inventory Table</CardTitle>
-          <CardDescription>Frontend-only preview for product records.</CardDescription>
+          <CardDescription>Product records from your database.</CardDescription>
         </CardHeader>
         <CardContent>
-          {showLoading ? (
+          {isLoading ? (
             <div className="space-y-3">
               {Array.from({ length: 7 }).map((_, index) => (
                 <Skeleton key={`products-table-skeleton-${index}`} className="h-10 w-full" />
@@ -119,8 +123,7 @@ export default function ProductsPage() {
         <CardContent className="flex items-start gap-3">
           <PackageSearch className="text-muted-foreground mt-0.5 size-4" />
           <p className="text-muted-foreground text-sm">
-            Product edit/create behavior is intentionally omitted for now. This page
-            is strictly UI scaffolding with mock records.
+            Products are loaded from your Supabase database.
           </p>
         </CardContent>
       </Card>

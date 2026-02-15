@@ -4,7 +4,8 @@ import * as React from "react"
 import { type ColumnDef } from "@tanstack/react-table"
 import { ClipboardList, FileX2 } from "lucide-react"
 
-import { orderHistory, type Order } from "@/components/pos/mock-data"
+import { fetchOrders } from "@/lib/supabase/queries"
+import { toOrder, type Order } from "@/lib/supabase/types"
 import { PageHeading } from "@/components/pos/page-heading"
 import { Badge } from "@/components/ui/badge"
 import {
@@ -74,7 +75,15 @@ const columns: ColumnDef<Order>[] = [
 ]
 
 export default function OrdersPage() {
-  const [showLoading, setShowLoading] = React.useState(false)
+  const [isLoading, setIsLoading] = React.useState(true)
+  const [orders, setOrders] = React.useState<Order[]>([])
+
+  React.useEffect(() => {
+    fetchOrders()
+      .then((rows) => setOrders(rows.map(toOrder)))
+      .catch(console.error)
+      .finally(() => setIsLoading(false))
+  }, [])
 
   return (
     <div>
@@ -82,40 +91,34 @@ export default function OrdersPage() {
         title="Orders"
         description="Order history table with statuses and payment channels."
         icon={ClipboardList}
-        actions={
-          <div className="flex items-center gap-2">
-            <Switch checked={showLoading} onCheckedChange={setShowLoading} />
-            <Label>Loading</Label>
-          </div>
-        }
       />
 
       <Card>
         <CardHeader>
           <CardTitle>Order History Table</CardTitle>
-          <CardDescription>Latest mock transactions from this store.</CardDescription>
+          <CardDescription>Transaction records from your store.</CardDescription>
         </CardHeader>
         <CardContent>
-          {showLoading ? (
+          {isLoading ? (
             <div className="space-y-3">
               {Array.from({ length: 8 }).map((_, index) => (
                 <Skeleton key={`orders-table-skeleton-${index}`} className="h-10 w-full" />
               ))}
             </div>
-          ) : orderHistory.length === 0 ? (
+          ) : orders.length === 0 ? (
             <Card className="border-dashed">
               <CardContent className="flex flex-col items-center gap-2 py-12 text-center">
                 <FileX2 className="text-muted-foreground size-9" />
                 <h3 className="text-base font-medium">No orders to display</h3>
                 <p className="text-muted-foreground text-sm">
-                  No entries exist for the selected status in this mock dataset.
+                  No orders have been placed yet.
                 </p>
               </CardContent>
             </Card>
           ) : (
             <DataTable
               columns={columns}
-              data={orderHistory}
+              data={orders}
               searchKey="customer"
               searchPlaceholder="Search customer..."
               filterKey="status"
