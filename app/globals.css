@@ -48,6 +48,7 @@
 }
 
 :root {
+  color-scheme: light;
   --background: oklch(1 0 0);
   --foreground: oklch(0.141 0.005 285.823);
   --card: oklch(1 0 0);
@@ -83,6 +84,7 @@
 }
 
 .dark {
+  color-scheme: dark;
   --background: oklch(0.141 0.005 285.823);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.21 0.006 285.885);
@@ -114,6 +116,64 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.552 0.016 285.938);
+}
+
+:root[data-contrast="more"] {
+  --foreground: oklch(0.1 0.005 285.823);
+  --secondary-foreground: oklch(0.12 0.01 285.885);
+  --muted-foreground: oklch(0.38 0.02 285.938);
+  --accent: oklch(0.94 0.002 286.375);
+  --accent-foreground: oklch(0.08 0.005 285.823);
+  --border: oklch(0.78 0.01 286.32);
+  --input: oklch(0.78 0.01 286.32);
+  --ring: oklch(0.46 0.03 286.067);
+  --sidebar-foreground: oklch(0.1 0.005 285.823);
+  --sidebar-accent: oklch(0.94 0.002 286.375);
+  --sidebar-accent-foreground: oklch(0.08 0.005 285.823);
+  --sidebar-border: oklch(0.78 0.01 286.32);
+  --sidebar-ring: oklch(0.46 0.03 286.067);
+}
+
+.dark[data-contrast="more"] {
+  --background: oklch(0.11 0.004 285.823);
+  --foreground: oklch(0.99 0 0);
+  --card: oklch(0.16 0.006 285.885);
+  --card-foreground: oklch(0.99 0 0);
+  --popover: oklch(0.16 0.006 285.885);
+  --popover-foreground: oklch(0.99 0 0);
+  --primary-foreground: oklch(0.16 0.006 285.885);
+  --secondary: oklch(0.23 0.008 286.033);
+  --secondary-foreground: oklch(0.99 0 0);
+  --muted: oklch(0.23 0.008 286.033);
+  --muted-foreground: oklch(0.84 0.01 285.938);
+  --accent: oklch(0.32 0.01 286.033);
+  --accent-foreground: oklch(0.99 0 0);
+  --border: oklch(1 0 0 / 22%);
+  --input: oklch(1 0 0 / 24%);
+  --ring: oklch(0.84 0.01 285.938);
+  --sidebar: oklch(0.16 0.006 285.885);
+  --sidebar-foreground: oklch(0.99 0 0);
+  --sidebar-primary: oklch(0.99 0 0);
+  --sidebar-primary-foreground: oklch(0.16 0.006 285.885);
+  --sidebar-accent: oklch(0.32 0.01 286.033);
+  --sidebar-accent-foreground: oklch(0.99 0 0);
+  --sidebar-border: oklch(1 0 0 / 22%);
+  --sidebar-ring: oklch(0.84 0.01 285.938);
+}
+
+html[data-motion="reduced"] {
+  scroll-behavior: auto;
+}
+
+html[data-motion="reduced"] *,
+html[data-motion="reduced"] *::before,
+html[data-motion="reduced"] *::after {
+  animation-delay: 0ms !important;
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  scroll-behavior: auto !important;
+  transition-delay: 0ms !important;
+  transition-duration: 0.01ms !important;
 }
 
 @layer base {
