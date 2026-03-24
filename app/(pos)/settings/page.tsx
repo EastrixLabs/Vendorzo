@@ -16,6 +16,35 @@ import {
 } from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
 import { Switch } from "@/components/ui/switch"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+
+const colorThemes = [
+  {
+    value: "neutral",
+    label: "Neutral",
+    swatchClassName: "bg-[oklch(0.21_0.006_285.885)]",
+  },
+  {
+    value: "ocean",
+    label: "Ocean",
+    swatchClassName: "bg-[oklch(0.56_0.17_248.53)]",
+  },
+  {
+    value: "amber",
+    label: "Amber",
+    swatchClassName: "bg-[oklch(0.68_0.18_66.2)]",
+  },
+  {
+    value: "rose",
+    label: "Rose",
+    swatchClassName: "bg-[oklch(0.62_0.21_8.9)]",
+  },
+  {
+    value: "emerald",
+    label: "Emerald",
+    swatchClassName: "bg-[oklch(0.6_0.15_164.8)]",
+  },
+] as const
 
 export default function SettingsPage() {
   const {
@@ -23,13 +52,15 @@ export default function SettingsPage() {
     setMotionPreference,
     contrastPreference,
     setContrastPreference,
+    colorTheme,
+    setColorTheme,
   } = useAppearancePreferences()
 
   return (
     <div>
       <PageHeading
         title="Settings"
-        description="Frontend-only configuration placeholders for the POS environment."
+        description="Manage appearance preferences and workspace defaults for Vendorzo POS."
         icon={Settings}
       />
 
@@ -46,7 +77,7 @@ export default function SettingsPage() {
             <div className="flex items-center justify-between rounded-md border p-3">
               <div>
                 <p className="text-sm font-medium">Theme mode</p>
-                <p className="text-muted-foreground text-xs">Light, dark, or follow your system preference</p>
+                <p className="text-muted-foreground text-xs">Switch between light and dark workspace themes.</p>
               </div>
               <ThemeToggle />
             </div>
@@ -57,6 +88,33 @@ export default function SettingsPage() {
               <p className="text-sm font-medium">Motion & contrast</p>
               <p className="text-muted-foreground text-xs">
                 Control interface motion and overall contrast across the app.
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <p className="text-sm font-medium">Color theme</p>
+              <Tabs
+                value={colorTheme}
+                onValueChange={(value) => setColorTheme(value as (typeof colorThemes)[number]["value"])}
+                className="w-full"
+              >
+                <div className="w-full overflow-x-auto">
+                  <TabsList className="h-11 min-w-max w-full p-1" aria-label="Color theme">
+                    {colorThemes.map((theme) => (
+                      <TabsTrigger
+                        key={theme.value}
+                        value={theme.value}
+                        className="rounded-lg px-3 data-[selected]:shadow-sm aria-selected:shadow-sm"
+                      >
+                        <span className={`size-2.5 shrink-0 rounded-full ${theme.swatchClassName}`} />
+                        <span>{theme.label}</span>
+                      </TabsTrigger>
+                    ))}
+                  </TabsList>
+                </div>
+              </Tabs>
+              <p className="text-muted-foreground text-xs">
+                Applies accent color to shared controls, hover states, active navigation, focus rings, and charts.
               </p>
             </div>
 
@@ -102,7 +160,7 @@ export default function SettingsPage() {
               <CreditCard className="size-4" />
               Checkout Preferences
             </CardTitle>
-            <CardDescription>Mock controls for transaction behavior.</CardDescription>
+            <CardDescription>Set default transaction behavior for the register.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
@@ -134,7 +192,7 @@ export default function SettingsPage() {
               <Bell className="size-4" />
               Alerts
             </CardTitle>
-            <CardDescription>Operational notifications and reminders.</CardDescription>
+            <CardDescription>Control the notifications shown during daily operations.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
             <div className="flex items-center justify-between rounded-md border p-3">
@@ -157,7 +215,7 @@ export default function SettingsPage() {
         <CardContent className="flex items-start gap-3">
           <ShieldCheck className="text-muted-foreground mt-0.5 size-4" />
           <p className="text-muted-foreground text-sm">
-            Appearance preferences now persist on this device. Other controls remain frontend-only placeholders.
+            Appearance preferences persist on this device and apply across the POS workspace.
           </p>
         </CardContent>
       </Card>

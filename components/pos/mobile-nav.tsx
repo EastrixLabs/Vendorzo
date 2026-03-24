@@ -73,7 +73,6 @@ export function MobileNav() {
   const isMoreActive =
     moreItems.some((item) => isRouteActive(pathname, item.href)) ||
     accountItems.some((item) => isRouteActive(pathname, item.href))
-
   return (
     <>
       {/* Bottom glass dock (mobile only) */}
@@ -222,7 +221,13 @@ export function MobileNav() {
             {accountItems.map((item) => (
               <Button
                 key={item.title}
-                variant={item.variant === "destructive" ? "destructive" : "outline"}
+                variant={
+                  item.variant === "destructive"
+                    ? "destructive"
+                    : isRouteActive(pathname, item.href)
+                      ? "secondary"
+                      : "outline"
+                }
                 className={cn(
                   "h-12 justify-start gap-2 rounded-2xl",
                   item.variant === "destructive" && "shadow-none"
@@ -239,6 +244,7 @@ export function MobileNav() {
                 {item.title}
               </Button>
             ))}
+
           </div>
 
         </DrawerContent>

@@ -5,6 +5,7 @@ import { ThemeProvider as NextThemesProvider } from "next-themes";
 
 type MotionPreference = "full" | "reduced";
 type ContrastPreference = "standard" | "more";
+type ColorTheme = "neutral" | "ocean" | "amber" | "rose" | "emerald";
 
 interface ThemeProviderProps {
   children: React.ReactNode;
@@ -15,20 +16,25 @@ interface AppearancePreferencesValue {
   setMotionPreference: React.Dispatch<React.SetStateAction<MotionPreference>>;
   contrastPreference: ContrastPreference;
   setContrastPreference: React.Dispatch<React.SetStateAction<ContrastPreference>>;
+  colorTheme: ColorTheme;
+  setColorTheme: React.Dispatch<React.SetStateAction<ColorTheme>>;
 }
 
 const MOTION_STORAGE_KEY = "vendorzo-motion-preference";
 const CONTRAST_STORAGE_KEY = "vendorzo-contrast-preference";
+const COLOR_THEME_STORAGE_KEY = "vendorzo-color-theme";
 
 const AppearancePreferencesContext = React.createContext<AppearancePreferencesValue | null>(null);
 
 function AppearancePreferencesProvider({ children }: ThemeProviderProps) {
   const [motionPreference, setMotionPreference] = React.useState<MotionPreference>("full");
   const [contrastPreference, setContrastPreference] = React.useState<ContrastPreference>("standard");
+  const [colorTheme, setColorTheme] = React.useState<ColorTheme>("neutral");
 
   React.useEffect(() => {
     const storedMotionPreference = window.localStorage.getItem(MOTION_STORAGE_KEY);
     const storedContrastPreference = window.localStorage.getItem(CONTRAST_STORAGE_KEY);
+    const storedColorTheme = window.localStorage.getItem(COLOR_THEME_STORAGE_KEY);
 
     if (storedMotionPreference === "full" || storedMotionPreference === "reduced") {
       setMotionPreference(storedMotionPreference);
@@ -36,6 +42,16 @@ function AppearancePreferencesProvider({ children }: ThemeProviderProps) {
 
     if (storedContrastPreference === "standard" || storedContrastPreference === "more") {
       setContrastPreference(storedContrastPreference);
+    }
+
+    if (
+      storedColorTheme === "neutral" ||
+      storedColorTheme === "ocean" ||
+      storedColorTheme === "amber" ||
+      storedColorTheme === "rose" ||
+      storedColorTheme === "emerald"
+    ) {
+      setColorTheme(storedColorTheme);
     }
   }, []);
 
@@ -48,16 +64,22 @@ function AppearancePreferencesProvider({ children }: ThemeProviderProps) {
   }, [contrastPreference]);
 
   React.useEffect(() => {
+    window.localStorage.setItem(COLOR_THEME_STORAGE_KEY, colorTheme);
+  }, [colorTheme]);
+
+  React.useEffect(() => {
     const root = document.documentElement;
 
     root.dataset.motion = motionPreference;
     root.dataset.contrast = contrastPreference;
+    root.dataset.colorTheme = colorTheme;
 
     return () => {
       delete root.dataset.motion;
       delete root.dataset.contrast;
+      delete root.dataset.colorTheme;
     };
-  }, [contrastPreference, motionPreference]);
+  }, [colorTheme, contrastPreference, motionPreference]);
 
   const value = React.useMemo<AppearancePreferencesValue>(
     () => ({
@@ -65,8 +87,10 @@ function AppearancePreferencesProvider({ children }: ThemeProviderProps) {
       setMotionPreference,
       contrastPreference,
       setContrastPreference,
+      colorTheme,
+      setColorTheme,
     }),
-    [contrastPreference, motionPreference]
+    [colorTheme, contrastPreference, motionPreference]
   );
 
   return (

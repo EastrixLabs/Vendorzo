@@ -1,17 +1,17 @@
 "use client"
 
-import { Monitor, Moon, Sun } from "lucide-react"
+import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export function ThemeToggle() {
-  const { theme, setTheme } = useTheme()
+  const { resolvedTheme, setTheme } = useTheme()
 
   return (
     <Tabs
-      value={theme ?? "system"}
-      onValueChange={(value) => setTheme(value as "light" | "dark" | "system")}
+      value={resolvedTheme === "dark" ? "dark" : "light"}
+      onValueChange={(value) => setTheme(value as "light" | "dark")}
       className="w-fit"
     >
       <TabsList className="h-10 p-1" aria-label="Theme mode">
@@ -22,10 +22,6 @@ export function ThemeToggle() {
         <TabsTrigger value="dark" className="size-8 px-0" aria-label="Dark theme">
           <Moon className="size-4" />
           <span className="sr-only">Dark</span>
-        </TabsTrigger>
-        <TabsTrigger value="system" className="size-8 px-0" aria-label="System theme">
-          <Monitor className="size-4" />
-          <span className="sr-only">System</span>
         </TabsTrigger>
       </TabsList>
     </Tabs>
