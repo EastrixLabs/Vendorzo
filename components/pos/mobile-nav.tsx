@@ -3,8 +3,8 @@
 import * as React from "react"
 import { usePathname, useRouter } from "next/navigation"
 import {
+  Building2,
   ChartBar,
-  CreditCard,
   Ellipsis,
   Settings,
   ShoppingCart,
@@ -12,6 +12,7 @@ import {
   Package,
   Receipt,
   UserCircle,
+  Users,
   X,
   type LucideIcon,
 } from "lucide-react"
@@ -66,13 +67,20 @@ export function MobileNav() {
     variant?: "default" | "destructive"
   }> = [
     { title: "Profile", icon: UserCircle, href: "/profile" },
-    { title: "Billing", icon: CreditCard },
     { title: "Settings", icon: Settings, href: "/settings" },
+  ]
+  const companyItems: NavItem[] = [
+    { title: "Manage Workspace", icon: Users, href: "/manage" },
+  ]
+  const eastrixItems: NavItem[] = [
+    { title: "About", icon: Building2, href: "/about" },
   ]
 
   const isMoreActive =
     moreItems.some((item) => isRouteActive(pathname, item.href)) ||
-    accountItems.some((item) => isRouteActive(pathname, item.href))
+    accountItems.some((item) => isRouteActive(pathname, item.href)) ||
+    companyItems.some((item) => isRouteActive(pathname, item.href)) ||
+    eastrixItems.some((item) => isRouteActive(pathname, item.href))
   return (
     <>
       {/* Bottom glass dock (mobile only) */}
@@ -180,8 +188,8 @@ export function MobileNav() {
         >
           <DrawerHeader className="pb-2 px-4">
             <div className="text-left">
-              <DrawerTitle>More</DrawerTitle>
-              <DrawerDescription>Extra pages and account actions.</DrawerDescription>
+              <DrawerTitle>Vendorzo</DrawerTitle>
+              <DrawerDescription>Eastrix Labs</DrawerDescription>
             </div>
 
             <div className="absolute right-4 top-4">
@@ -238,6 +246,44 @@ export function MobileNav() {
                     router.push(item.href)
                     return
                   }
+                }}
+              >
+                <item.icon className="size-4" />
+                {item.title}
+              </Button>
+            ))}
+
+            <div className="pt-2 text-xs font-medium text-muted-foreground">
+              Company
+            </div>
+
+            {companyItems.map((item) => (
+              <Button
+                key={item.title}
+                variant={isRouteActive(pathname, item.href) ? "secondary" : "outline"}
+                className="h-12 justify-start gap-2 rounded-2xl"
+                onClick={() => {
+                  setMoreOpen(false)
+                  if (item.href) router.push(item.href)
+                }}
+              >
+                <item.icon className="size-4" />
+                {item.title}
+              </Button>
+            ))}
+
+            <div className="pt-2 text-xs font-medium text-muted-foreground">
+              Eastrix Labs
+            </div>
+
+            {eastrixItems.map((item) => (
+              <Button
+                key={item.title}
+                variant={isRouteActive(pathname, item.href) ? "secondary" : "outline"}
+                className="h-12 justify-start gap-2 rounded-2xl"
+                onClick={() => {
+                  setMoreOpen(false)
+                  if (item.href) router.push(item.href)
                 }}
               >
                 <item.icon className="size-4" />
