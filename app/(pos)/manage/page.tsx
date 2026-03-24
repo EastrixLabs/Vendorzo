@@ -87,7 +87,14 @@ const workspaceMembers = [
     status: "Suspended",
     lastActive: "Yesterday",
   },
-] as const
+] satisfies Array<{
+  id: string
+  name: string
+  email: string
+  role: "Manager" | "Staff"
+  status: "Active" | "Invited" | "Suspended"
+  lastActive: string
+}>
 
 type WorkspaceMember = (typeof workspaceMembers)[number]
 
@@ -308,7 +315,14 @@ export default function ManagePage() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="invite-dialog-role">Role</Label>
-              <Select value={inviteRole} onValueChange={setInviteRole}>
+              <Select
+                value={inviteRole}
+                onValueChange={(value) => {
+                  if (value) {
+                    setInviteRole(value)
+                  }
+                }}
+              >
                 <SelectTrigger id="invite-dialog-role" className="w-full">
                   <span>{inviteRole}</span>
                 </SelectTrigger>
