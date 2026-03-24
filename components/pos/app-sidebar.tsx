@@ -3,7 +3,7 @@
 import * as React from "react"
 import { usePathname } from "next/navigation"
 import { useRouter } from "next/navigation"
-import { CreditCard, Settings, UserCircle } from "lucide-react"
+import { Building2, Settings, UserCircle, Users } from "lucide-react"
 import { Brand } from "@/components/brand"
 import { fetchProfile } from "@/lib/supabase/queries"
 import type { DbProfile } from "@/lib/supabase/types"
@@ -45,13 +45,11 @@ export function AppSidebar() {
   const pathname = usePathname()
   const router = useRouter()
   const [profile, setProfile] = React.useState<DbProfile | null>(null)
-  const [email, setEmail] = React.useState("")
 
   React.useEffect(() => {
     fetchProfile().then((result) => {
       if (result) {
         setProfile(result.profile)
-        setEmail(result.email)
       }
     })
   }, [])
@@ -63,7 +61,15 @@ export function AppSidebar() {
   const displayRole = profile?.role
     ? profile.role.charAt(0).toUpperCase() + profile.role.slice(1)
     : "Staff"
-  const isAccountSettingsActive = pathname === "/settings" || pathname.startsWith("/settings/") || pathname === "/profile" || pathname.startsWith("/profile/")
+  const isAccountSettingsActive =
+    pathname === "/settings" ||
+    pathname.startsWith("/settings/") ||
+    pathname === "/profile" ||
+    pathname.startsWith("/profile/") ||
+    pathname === "/manage" ||
+    pathname.startsWith("/manage/") ||
+    pathname === "/about" ||
+    pathname.startsWith("/about/")
 
   return (
     <Sidebar collapsible="icon" className="border-r">
@@ -135,7 +141,7 @@ export function AppSidebar() {
                   render={
                     <Button
                       variant={isAccountSettingsActive ? "secondary" : "ghost"}
-                      className="h-11 w-full justify-start px-2"
+                      className="h-11 w-full justify-start px-2 shadow-none aria-expanded:shadow-none"
                       aria-label="Open account menu"
                     />
                   }
@@ -159,13 +165,21 @@ export function AppSidebar() {
                   <UserCircle className="size-4" />
                   Profile
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <CreditCard className="size-4" />
-                  Billing
-                </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => router.push("/settings")}>
                   <Settings className="size-4" />
                   Settings
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuLabel>Company</DropdownMenuLabel>
+                <DropdownMenuItem onClick={() => router.push("/manage")}>
+                  <Users className="size-4" />
+                  Manage Workspace
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuLabel>Eastrix Labs</DropdownMenuLabel>
+                <DropdownMenuItem onClick={() => router.push("/about")}>
+                  <Building2 className="size-4" />
+                  About
                 </DropdownMenuItem>
               </DropdownMenuGroup>
             </DropdownMenuContent>
@@ -180,7 +194,7 @@ export function AppSidebar() {
                   render={
                     <Button
                       variant={isAccountSettingsActive ? "secondary" : "ghost"}
-                      className="size-12 rounded-xl p-0"
+                      className="size-12 rounded-xl p-0 shadow-none aria-expanded:shadow-none"
                       aria-label="Open account menu"
                     />
                   }
@@ -192,7 +206,7 @@ export function AppSidebar() {
               </TooltipTrigger>
               <TooltipContent side="right">Account &amp; settings</TooltipContent>
             </Tooltip>
-            <DropdownMenuContent align="end" className="w-52 !shadow-xs">
+            <DropdownMenuContent align="end" side="top" className="w-52 !shadow-xs">
               <DropdownMenuGroup>
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
@@ -200,13 +214,21 @@ export function AppSidebar() {
                   <UserCircle className="size-4" />
                   Profile
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <CreditCard className="size-4" />
-                  Billing
-                </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => router.push("/settings")}>
                   <Settings className="size-4" />
                   Settings
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuLabel>Company</DropdownMenuLabel>
+                <DropdownMenuItem onClick={() => router.push("/manage")}>
+                  <Users className="size-4" />
+                  Manage Workspace
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuLabel>Eastrix Labs</DropdownMenuLabel>
+                <DropdownMenuItem onClick={() => router.push("/about")}>
+                  <Building2 className="size-4" />
+                  About
                 </DropdownMenuItem>
               </DropdownMenuGroup>
             </DropdownMenuContent>

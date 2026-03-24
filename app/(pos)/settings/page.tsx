@@ -1,19 +1,12 @@
 "use client"
 
-import { Bell, CreditCard, Paintbrush, Settings, ShieldCheck } from "lucide-react"
+import { Paintbrush, Settings, ShieldCheck } from "lucide-react"
 
 import { PageHeading } from "@/components/pos/page-heading"
 import { ThemeToggle } from "@/components/pos/theme-toggle"
 import { useAppearancePreferences } from "@/components/theme-provider"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
 import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -60,11 +53,11 @@ export default function SettingsPage() {
     <div>
       <PageHeading
         title="Settings"
-        description="Manage appearance preferences and workspace defaults for Vendorzo POS."
+        description="Customize how the Vendorzo workspace looks across this device."
         icon={Settings}
       />
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid gap-4">
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -150,62 +143,6 @@ export default function SettingsPage() {
                   aria-label="Increase contrast"
                 />
               </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <CreditCard className="size-4" />
-              Checkout Preferences
-            </CardTitle>
-            <CardDescription>Set default transaction behavior for the register.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <p className="text-sm font-medium">Default payment method</p>
-              <Select defaultValue="card">
-                <SelectTrigger className="w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent className="shadow-xs!">
-                  <SelectItem value="card">Card</SelectItem>
-                  <SelectItem value="cash">Cash</SelectItem>
-                  <SelectItem value="wallet">Wallet</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="flex items-center justify-between rounded-md border p-3">
-              <div>
-                <p className="text-sm font-medium">Auto-print receipts</p>
-                <p className="text-muted-foreground text-xs">Enabled for every checkout</p>
-              </div>
-              <Switch checked />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Bell className="size-4" />
-              Alerts
-            </CardTitle>
-            <CardDescription>Control the notifications shown during daily operations.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex items-center justify-between rounded-md border p-3">
-              <p className="text-sm font-medium">Low stock alerts</p>
-              <Switch checked />
-            </div>
-            <div className="flex items-center justify-between rounded-md border p-3">
-              <p className="text-sm font-medium">Order status popups</p>
-              <Switch checked />
-            </div>
-            <div className="flex items-center justify-between rounded-md border p-3">
-              <p className="text-sm font-medium">Daily summary email</p>
-              <Switch />
             </div>
           </CardContent>
         </Card>

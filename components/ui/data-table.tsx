@@ -25,11 +25,19 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
 } from "@/components/ui/select"
 import {
   Table,
@@ -43,6 +51,14 @@ import {
 type FilterOption = {
   label: string
   value: string
+}
+
+function toTitleCase(value: string) {
+  return value
+    .split(" ")
+    .filter(Boolean)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ")
 }
 
 type DataTableProps<TData, TValue> = {
@@ -130,6 +146,27 @@ export function DataTable<TData, TValue>({
 
   const searchColumn = searchKey ? table.getColumn(searchKey) : undefined
   const filterColumn = filterKey ? table.getColumn(filterKey) : undefined
+  const filterValue = (filterColumn?.getFilterValue() as string) ?? ""
+  const filterDisplayValue = filterValue
+    ? filterOptions.find((option) => option.value === filterValue)?.label ?? toTitleCase(filterValue)
+    : `All ${filterLabel}`
+  const pageCount = table.getPageCount()
+  const currentPage = table.getState().pagination.pageIndex
+  const pageNumbers = React.useMemo(() => {
+    if (pageCount <= 5) {
+      return Array.from({ length: pageCount }, (_, index) => index)
+    }
+
+    if (currentPage <= 2) {
+      return [0, 1, 2, 3, pageCount - 1]
+    }
+
+    if (currentPage >= pageCount - 3) {
+      return [0, pageCount - 4, pageCount - 3, pageCount - 2, pageCount - 1]
+    }
+
+    return [0, currentPage - 1, currentPage, currentPage + 1, pageCount - 1]
+  }, [currentPage, pageCount])
 
   return (
     <div className="space-y-4">
@@ -150,16 +187,16 @@ export function DataTable<TData, TValue>({
 
         {filterColumn && filterOptions.length ? (
           <Select
-            value={(filterColumn.getFilterValue() as string) ?? "all"}
+            value={filterValue || "__all__"}
             onValueChange={(value) =>
-              filterColumn.setFilterValue(value === "all" ? "" : value)
+              filterColumn.setFilterValue(value === "__all__" ? "" : value)
             }
           >
             <SelectTrigger className="w-44">
-              <SelectValue placeholder={filterLabel} />
+              <span className="truncate">{filterDisplayValue}</span>
             </SelectTrigger>
             <SelectContent className="!shadow-xs">
-              <SelectItem value="all">All {filterLabel}</SelectItem>
+              <SelectItem value="__all__">All {filterLabel}</SelectItem>
               {filterOptions.map((option) => (
                 <SelectItem key={option.value} value={option.value}>
                   {option.label}
@@ -213,24 +250,63 @@ export function DataTable<TData, TValue>({
           {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
 
-        <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
-        </div>
+        {pageCount > 0 ? (
+          <Pagination className="mx-0 w-auto justify-end">
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  href="#"
+                  text="Previous"
+                  className={!table.getCanPreviousPage() ? "pointer-events-none opacity-50" : undefined}
+                  onClick={(event) => {
+                    event.preventDefault()
+                    table.previousPage()
+                  }}
+                />
+              </PaginationItem>
+
+              {pageNumbers.map((pageNumber, index) => {
+                const previousPageNumber = pageNumbers[index - 1]
+                const shouldShowEllipsis =
+                  previousPageNumber !== undefined && pageNumber - previousPageNumber > 1
+
+                return (
+                  <React.Fragment key={pageNumber}>
+                    {shouldShowEllipsis ? (
+                      <PaginationItem>
+                        <PaginationEllipsis />
+                      </PaginationItem>
+                    ) : null}
+                    <PaginationItem>
+                      <PaginationLink
+                        href="#"
+                        isActive={currentPage === pageNumber}
+                        onClick={(event) => {
+                          event.preventDefault()
+                          table.setPageIndex(pageNumber)
+                        }}
+                      >
+                        {pageNumber + 1}
+                      </PaginationLink>
+                    </PaginationItem>
+                  </React.Fragment>
+                )
+              })}
+
+              <PaginationItem>
+                <PaginationNext
+                  href="#"
+                  text="Next"
+                  className={!table.getCanNextPage() ? "pointer-events-none opacity-50" : undefined}
+                  onClick={(event) => {
+                    event.preventDefault()
+                    table.nextPage()
+                  }}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        ) : null}
       </div>
     </div>
   )
