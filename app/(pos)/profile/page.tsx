@@ -4,6 +4,7 @@ import * as React from "react"
 import { Building2, Smartphone, Store, UserCircle2 } from "lucide-react"
 
 import { storeIdentity } from "@/lib/business-config"
+import { PageFooter } from "@/components/pos/page-footer"
 import { fetchProfile } from "@/lib/supabase/queries"
 import type { DbProfile } from "@/lib/supabase/types"
 import { PageHeading } from "@/components/pos/page-heading"
@@ -214,6 +215,8 @@ export default function ProfilePage() {
           </div>
         </div>
       )}
+
+      <PageFooter />
     </div>
   )
 }

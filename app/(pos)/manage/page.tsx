@@ -5,6 +5,7 @@ import { type ColumnDef } from "@tanstack/react-table"
 import { Bell, MailPlus, Store, Users } from "lucide-react"
 
 import { storeIdentity } from "@/lib/business-config"
+import { PageFooter } from "@/components/pos/page-footer"
 import { PageHeading } from "@/components/pos/page-heading"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -131,7 +132,7 @@ export default function ManagePage() {
   const [inviteDialogOpen, setInviteDialogOpen] = React.useState(false)
   const [inviteEmail, setInviteEmail] = React.useState("")
   const [inviteRole, setInviteRole] = React.useState("Staff")
-  const [storeCurrency, setStoreCurrency] = React.useState(storeIdentity.currency)
+  const [storeCurrency, setStoreCurrency] = React.useState<string>(storeIdentity.currency)
   const currencyOptions = typeof Intl.supportedValuesOf === "function"
     ? Intl.supportedValuesOf("currency").sort((a, b) => a.localeCompare(b))
     : [...fallbackCurrencies]
@@ -162,7 +163,14 @@ export default function ManagePage() {
 
               <div className="space-y-2">
                 <Label htmlFor="store-currency">Currency</Label>
-                <Select value={storeCurrency} onValueChange={setStoreCurrency}>
+                <Select
+                  value={storeCurrency}
+                  onValueChange={(value) => {
+                    if (value) {
+                      setStoreCurrency(value)
+                    }
+                  }}
+                >
                   <SelectTrigger id="store-currency" className="w-full">
                     <span className="flex min-w-0 items-center gap-2">
                       <span>{storeCurrency}</span>
@@ -323,6 +331,8 @@ export default function ManagePage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <PageFooter />
     </div>
   )
 }

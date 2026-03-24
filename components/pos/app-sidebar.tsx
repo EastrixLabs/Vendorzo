@@ -85,9 +85,12 @@ export function AppSidebar() {
                   className="h-12 gap-2 group-data-[collapsible=icon]:mx-auto group-data-[collapsible=icon]:!size-12 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:gap-0 group-data-[collapsible=icon]:!px-0"
                 >
                   <Brand className="size-7" alt="Vendorzo" />
-                  <span className="group-data-[collapsible=icon]:hidden font-extrabold">
-                    Vendorzo
-                  </span>
+                  <div className="group-data-[collapsible=icon]:hidden flex min-w-0 flex-col text-left leading-none">
+                    <span className="font-extrabold">Vendorzo</span>
+                    <span className="text-muted-foreground mt-1 text-[11px] font-medium">
+                      Eastrix Labs
+                    </span>
+                  </div>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>

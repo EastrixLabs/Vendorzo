@@ -3,6 +3,7 @@
 import { Paintbrush, Settings, ShieldCheck } from "lucide-react"
 
 import { PageHeading } from "@/components/pos/page-heading"
+import { PageFooter } from "@/components/pos/page-footer"
 import { ThemeToggle } from "@/components/pos/theme-toggle"
 import { useAppearancePreferences } from "@/components/theme-provider"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -156,6 +157,8 @@ export default function SettingsPage() {
           </p>
         </CardContent>
       </Card>
+
+      <PageFooter />
     </div>
   )
 }

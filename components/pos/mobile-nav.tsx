@@ -188,8 +188,8 @@ export function MobileNav() {
         >
           <DrawerHeader className="pb-2 px-4">
             <div className="text-left">
-              <DrawerTitle>More</DrawerTitle>
-              <DrawerDescription>Extra pages and account actions.</DrawerDescription>
+              <DrawerTitle>Vendorzo</DrawerTitle>
+              <DrawerDescription>Eastrix Labs</DrawerDescription>
             </div>
 
             <div className="absolute right-4 top-4">
