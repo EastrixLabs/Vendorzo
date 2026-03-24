@@ -63,6 +63,7 @@ export function AppSidebar() {
   const displayRole = profile?.role
     ? profile.role.charAt(0).toUpperCase() + profile.role.slice(1)
     : "Staff"
+  const isAccountSettingsActive = pathname === "/settings" || pathname.startsWith("/settings/") || pathname === "/profile" || pathname.startsWith("/profile/")
 
   return (
     <Sidebar collapsible="icon" className="border-r">
@@ -133,7 +134,7 @@ export function AppSidebar() {
                 <DropdownMenuTrigger
                   render={
                     <Button
-                      variant="ghost"
+                      variant={isAccountSettingsActive ? "secondary" : "ghost"}
                       className="h-11 w-full justify-start px-2"
                       aria-label="Open account menu"
                     />
@@ -178,7 +179,7 @@ export function AppSidebar() {
                 <DropdownMenuTrigger
                   render={
                     <Button
-                      variant="ghost"
+                      variant={isAccountSettingsActive ? "secondary" : "ghost"}
                       className="size-12 rounded-xl p-0"
                       aria-label="Open account menu"
                     />
