@@ -38,8 +38,8 @@ export default function AboutPage() {
     }
 
     const intervalId = window.setInterval(() => {
-      setRefreshRotation((current) => (current + 24) % 360)
-    }, 16)
+      setRefreshRotation((current) => (current + 30) % 360)
+    }, 24)
 
     return () => window.clearInterval(intervalId)
   }, [isCheckingUpdates])
@@ -171,7 +171,7 @@ export default function AboutPage() {
                 <span>{isCheckingUpdates ? "Checking for Updates..." : "Check for Updates"}</span>
                 <span className="flex items-center gap-2 text-xs text-muted-foreground">
                   <RefreshCw
-                    className="size-3.5 transition-transform"
+                    className="size-3.5"
                     style={{ transform: `rotate(${refreshRotation}deg)` }}
                   />
                   {isCheckingUpdates ? "Please wait" : "You're Up to Date"}
