@@ -312,6 +312,67 @@ html[data-motion="reduced"] *::after {
   transition-duration: 0.01ms !important;
 }
 
+@keyframes vendorzo-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes vendorzo-fade-scale {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes vendorzo-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -8px, 0);
+  }
+}
+
+@keyframes vendorzo-marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-vendorzo-fade-up {
+  animation: vendorzo-fade-up 700ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-vendorzo-fade-scale {
+  animation: vendorzo-fade-scale 700ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-vendorzo-drift {
+  animation: vendorzo-drift 10s ease-in-out infinite;
+}
+
+.animate-vendorzo-marquee {
+  animation: vendorzo-marquee 60s linear infinite;
+}
+
+.animate-vendorzo-marquee-reverse {
+  animation: vendorzo-marquee 60s linear infinite reverse;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

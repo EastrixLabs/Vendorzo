@@ -81,7 +81,7 @@ export function AppSidebar() {
                 <SidebarMenuButton
                   size="lg"
                   tooltip="Vendorzo POS"
-                  onClick={() => router.push("/dashboard")}
+                  onClick={() => router.push("/pos")}
                   className="h-12 gap-2 group-data-[collapsible=icon]:mx-auto group-data-[collapsible=icon]:!size-12 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:gap-0 group-data-[collapsible=icon]:!px-0"
                 >
                   <Brand className="size-7" alt="Vendorzo" />
