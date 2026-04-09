@@ -1,71 +1,64 @@
 "use client"
 
-import { ArrowRight, CheckCircle2, ShieldCheck, Sparkles } from "lucide-react"
+import { ArrowRight, Sparkles } from "lucide-react"
 import { useRouter } from "next/navigation"
 
-import { trustedBrands } from "@/components/landing/content"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { GLSLHills } from "@/components/ui/glsl-hills"
 
 export function HeroSection() {
   const router = useRouter()
 
   return (
-    <section className="relative overflow-hidden border-b bg-background">
-      {/* Abstract Grid Gradient Background */}
-      <div className="absolute inset-0 -z-10 h-full w-full bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
-      
-      {/* Ambient glow */}
-      <div className="bg-primary/15 animate-vendorzo-drift absolute top-0 left-1/2 -z-10 h-[500px] w-[800px] -translate-x-1/2 rounded-[100%] blur-[80px] motion-reduce:animate-none" />
+    <section className="relative flex min-h-[90vh] w-full flex-col items-center justify-center overflow-hidden border-b bg-background">
+      {/* 3D Background */}
+      <div className="absolute inset-0 opacity-50 z-0">
+        <GLSLHills />
+      </div>
 
-      <div className="mx-auto flex w-full max-w-6xl flex-col items-center mx-4 py-20 text-center sm:px-6 md:py-32 lg:px-8">
+      <div className="space-y-8 z-10 text-center mx-auto max-w-6xl px-6 lg:px-8">
         <Badge
           variant="outline"
-          className="animate-vendorzo-fade-scale bg-background/50 inline-flex items-center gap-1.5 px-3 py-1 backdrop-blur-sm"
+          className="animate-vendorzo-fade-scale bg-background/50 inline-flex items-center gap-1.5 px-3 py-1 backdrop-blur-sm shadow-xs border-border/50"
           style={{ animationDelay: "60ms" }}
         >
-          <Sparkles className="size-3.5" />
-          Safer onboarding, faster checkout
+          <Sparkles className="size-3.5 text-primary" />
+          <span className="opacity-90">Safer onboarding, faster checkout</span>
         </Badge>
 
-        <div className="mt-8 space-y-6">
-          <h1
-            className="animate-vendorzo-fade-up text-balance text-4xl leading-[1.1] font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl"
-            style={{ animationDelay: "120ms" }}
-          >
-            Run your store from one <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/60">clean workspace</span>.
-          </h1>
-          <p
-            className="text-muted-foreground mx-auto max-w-2xl animate-vendorzo-fade-up text-base sm:text-lg md:text-xl"
-            style={{ animationDelay: "180ms" }}
-          >
-            A clean storefront entry that keeps checkout and pricing easy to find.
-          </p>
-        </div>
+        <h1
+          className="animate-vendorzo-fade-up font-semibold text-6xl sm:text-7xl lg:text-8xl tracking-tight leading-[1.1] text-foreground whitespace-pre-wrap"
+          style={{ animationDelay: "120ms" }}
+        >
+          <span className="italic font-thin text-5xl sm:text-6xl lg:text-7xl opacity-80 block mb-2 text-muted-foreground">Operations That Run <br className="hidden sm:block" /></span>
+          Smooth Like Butter
+        </h1>
+
+        <p
+          className="text-muted-foreground/80 mx-auto max-w-2xl animate-vendorzo-fade-up text-lg sm:text-xl font-medium"
+          style={{ animationDelay: "180ms" }}
+        >
+          A clean storefront entry that keeps checkout and pricing easy to find. <br className="hidden sm:block" /> We craft robust point-of-sale experiences so you can scale faster.
+        </p>
 
         <div
           className="mt-10 flex flex-wrap items-center justify-center gap-4 animate-vendorzo-fade-up"
           style={{ animationDelay: "240ms" }}
         >
-          <Button size="lg" className="h-12 rounded-full px-8 text-base" onClick={() => router.push("/pos")}>
-            Open /pos
-            <ArrowRight className="size-4" />
+          <Button size="lg" className="h-14 rounded-full px-8 text-base shadow-xs" onClick={() => router.push("/pos")}>
+            Enter /pos Workspace
+            <ArrowRight className="size-4 ml-2" />
           </Button>
-          <Button size="lg" variant="outline" className="h-12 rounded-full bg-background/50 px-8 text-base backdrop-blur-sm" onClick={() => router.push("/pricing")}>
+          <Button size="lg" variant="outline" className="h-14 rounded-full bg-background/50 px-8 text-base backdrop-blur-sm shadow-xs border-border/50 hover:bg-muted/50" onClick={() => router.push("/pricing")}>
             View pricing
           </Button>
         </div>
+      </div>
 
-        <div
-          className="mt-16 flex flex-wrap items-center justify-center gap-4 animate-vendorzo-fade-up opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
-          style={{ animationDelay: "300ms" }}
-        >
-          {trustedBrands.map((brand) => (
-            <Badge key={brand} variant="outline" className="text-xs bg-background/50 backdrop-blur-sm">
-              {brand}
-            </Badge>
-          ))}
-        </div>
+      {/* Embedded Blur Bar at the bottom of the hero for seamless transition */}
+      <div className="absolute bottom-0 left-0 h-24 w-full z-10 border-t border-border/30 bg-background/30 backdrop-blur-md overflow-hidden [mask-image:linear-gradient(to_top,black,transparent_100%)]">
+        {/* Marquee text removed as requested */}
       </div>
     </section>
   )

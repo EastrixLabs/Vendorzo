@@ -1,5 +1,4 @@
 import { FeaturesGrid } from "@/components/landing/features-grid"
-import { FlowSection } from "@/components/landing/flow-section"
 import { HeroSection } from "@/components/landing/hero-section"
 import { LandingFooter } from "@/components/landing/landing-footer"
 import { LandingHeader } from "@/components/landing/landing-header"
@@ -15,7 +14,6 @@ export default function HomePage() {
       <HeroSection />
       <TrustedBrandsMarquee />
       <FeaturesGrid />
-      <FlowSection />
       <PricingPreview />
       <FAQSection />
       <ContactSection />

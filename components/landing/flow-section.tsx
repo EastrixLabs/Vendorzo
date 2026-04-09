@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, Terminal } from "lucide-react"
 import { useRouter } from "next/navigation"
 
 import { workflowSteps } from "@/components/landing/content"
@@ -18,47 +18,54 @@ export function FlowSection() {
   const router = useRouter()
 
   return (
-    <section className="border-y bg-muted/20">
-      <div className="mx-auto w-full max-w-6xl mx-4 py-14 sm:px-6 md:py-20 lg:px-8">
-        <div className="mb-8 space-y-3 animate-vendorzo-fade-up">
-          <Badge variant="secondary">Product flow</Badge>
-          <h2 className="max-w-2xl text-2xl font-semibold sm:text-3xl">
-            A simple SaaS journey from login to dashboard.
+    <section className="bg-background py-24 sm:py-32">
+      <div className="mx-auto w-full max-w-6xl px-6">
+        <div className="mb-16 space-y-4 animate-vendorzo-fade-up text-center md:text-left flex flex-col md:items-start items-center">
+          <Badge variant="outline" className="px-4 py-1.5 text-xs tracking-widest uppercase font-semibold text-primary/70 border-primary/20 bg-primary/5 shadow-xs">
+            Product flow
+          </Badge>
+          <h2 className="max-w-2xl text-4xl font-bold tracking-tight sm:text-5xl leading-[1.1]">
+            A seamless journey from <span className="text-primary italic">login</span> to dashboard.
           </h2>
-          <p className="text-muted-foreground max-w-3xl text-sm sm:text-base">
+          <p className="text-muted-foreground/90 max-w-2xl text-lg mt-2">
             Keep the product path obvious, lightweight, and easy to extend when backend auth is ready.
           </p>
         </div>
 
-        <div className="grid gap-4 lg:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {workflowSteps.map((step, index) => (
             <Card
               key={step.title}
-              size="sm"
-              className="h-full animate-vendorzo-fade-up"
+              className="h-full animate-vendorzo-fade-up group border-border/50 shadow-xs hover:border-primary/20 transition-all duration-300 flex flex-col"
               style={{ animationDelay: `${index * 90 + 120}ms` }}
             >
-              <CardHeader>
-                <Badge variant="outline" className="w-fit">
-                  Step {index + 1}
-                </Badge>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <span className="bg-muted inline-flex size-8 items-center justify-center rounded-md border">
-                    <step.icon className="text-primary size-4" />
+              <CardHeader className="flex-1">
+                <div className="flex justify-between items-start mb-4">
+                  <span className="inline-flex size-10 items-center justify-center rounded-lg bg-muted/40 shadow-xs border border-border/50 text-foreground transition-transform duration-300 group-hover:scale-110 group-hover:bg-primary/5 group-hover:text-primary">
+                    <step.icon className="size-4" />
                   </span>
+                  <Badge variant="secondary" className="font-mono text-[10px] uppercase shadow-xs">
+                    0{index + 1}
+                  </Badge>
+                </div>
+                <CardTitle className="text-lg font-semibold tracking-tight">
                   {step.title}
                 </CardTitle>
-                <CardDescription>{step.description}</CardDescription>
+                <CardDescription className="text-sm mt-2 leading-relaxed">
+                  {step.description}
+                </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="mt-auto pt-6">
                 <Button
                   variant="outline"
-                  size="sm"
-                  className="w-full"
+                  className="w-full justify-between hover:bg-primary/5 hover:text-primary transition-colors border-border/50 shadow-xs h-12"
                   onClick={() => router.push(step.route)}
                 >
-                  Open {step.route}
-                  <ArrowRight className="size-4" />
+                  <span className="flex items-center gap-2">
+                    <Terminal className="size-3 text-muted-foreground" />
+                    {step.route}
+                  </span>
+                  <ArrowRight className="size-4 opacity-50 group-hover:opacity-100 transition-opacity" />
                 </Button>
               </CardContent>
             </Card>

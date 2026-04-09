@@ -2,6 +2,7 @@
 
 import { Badge } from "@/components/ui/badge"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import { HelpCircle } from "lucide-react"
 
 const faqs = [
   {
@@ -33,26 +34,34 @@ const faqs = [
 
 export function FAQSection() {
   return (
-    <section className="mx-auto w-full max-w-6xl mx-4 py-14 sm:px-6 md:py-20 lg:px-8">
-      <div className="mb-8 text-center animate-vendorzo-fade-up">
-        <Badge variant="secondary" className="mb-3">
-          FAQ
+    <section className="mx-auto w-full max-w-6xl px-6 lg:px-8 py-24 sm:py-32">
+      <div className="mb-16 flex flex-col items-center text-center animate-vendorzo-fade-up">
+        <Badge variant="outline" className="px-4 py-1.5 text-xs tracking-widest uppercase font-semibold text-primary/70 border-primary/20 bg-primary/5 shadow-xs mb-6 gap-2">
+          <HelpCircle className="size-3.5" />
+          Support
         </Badge>
-        <h2 className="text-3xl font-bold tracking-tight">Common questions</h2>
+        <h2 className="text-4xl font-bold tracking-tight sm:text-5xl leading-[1.1]">
+          Common <span className="text-primary italic font-thin">questions</span>
+        </h2>
+        <p className="text-muted-foreground/90 max-w-2xl text-lg mt-4">
+          Everything you need to know about setting up and running Vendorzo for your business.
+        </p>
       </div>
 
-      <Accordion className="w-full animate-vendorzo-fade-up" style={{ animationDelay: "120ms" }}>
-        {faqs.map((faq, index) => (
-          <AccordionItem key={index} value={`item-${index}`}>
-            <AccordionTrigger className="text-left text-base font-semibold">
-              {faq.question}
-            </AccordionTrigger>
-            <AccordionContent className="text-muted-foreground leading-relaxed">
-              {faq.answer}
-            </AccordionContent>
-          </AccordionItem>
-        ))}
-      </Accordion>
+      <div className="rounded-[2rem] border border-border/50 bg-muted/10 p-4 sm:p-8 shadow-xs animate-vendorzo-fade-up" style={{ animationDelay: "120ms" }}>
+        <Accordion className="w-full">
+          {faqs.map((faq, index) => (
+            <AccordionItem key={index} value={`item-${index}`} className="border-b border-border/30 last:border-0 px-2 py-1">
+              <AccordionTrigger className="text-left text-lg font-semibold hover:text-primary transition-colors hover:no-underline">
+                {faq.question}
+              </AccordionTrigger>
+              <AccordionContent className="text-muted-foreground text-base leading-relaxed pb-6 pr-6">
+                {faq.answer}
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      </div>
     </section>
   )
 }
