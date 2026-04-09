@@ -30,7 +30,7 @@ export function LandingHeader({ activePage = "home" }: LandingHeaderProps) {
           aria-label="Go to Vendorzo home"
         >
           <Brand className="size-8" alt="Vendorzo logo" />
-          <div className="hidden text-left leading-none sm:block">
+          <div className="text-left leading-none">
             <p className="text-sm font-semibold">Vendorzo</p>
             <p className="text-muted-foreground text-[10px] uppercase tracking-wider font-medium">by Eastrix Labs</p>
           </div>
@@ -58,7 +58,7 @@ export function LandingHeader({ activePage = "home" }: LandingHeaderProps) {
           >
             Log in
           </Button>
-          <Button size="sm" onClick={() => router.push("/pos")}>
+          <Button size="sm" onClick={() => router.push("/pos")} className="hidden sm:flex">
             Book a demo
             <ArrowUpRight className="size-4" />
           </Button>
