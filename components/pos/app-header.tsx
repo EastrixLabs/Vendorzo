@@ -12,10 +12,18 @@ import {
   InputGroupInput,
   InputGroupText,
 } from "@/components/ui/input-group"
+import { SidebarTrigger } from "@/components/ui/sidebar"
+import { Separator } from "@/components/ui/separator"
+
 export function AppHeader() {
   return (
-    <header className="bg-background/95 supports-backdrop-filter:backdrop-blur-xs sticky top-0 z-20 border-b">
-      <div className="flex h-14 items-center gap-3 px-4 md:px-6">
+    <header className="bg-background/95 supports-backdrop-filter:backdrop-blur-xs sticky top-0 z-20 h-14 w-full">
+      <div className="flex h-full items-center gap-4 px-4">
+        <div className="flex items-center gap-2">
+          <SidebarTrigger className="-ml-1" />
+          <div className="h-6 w-px bg-border/60" />
+        </div>
+
         <InputGroup className="max-w-xl">
           <InputGroupAddon>
             <InputGroupText>
@@ -31,6 +39,7 @@ export function AppHeader() {
           </Button>
         </div>
       </div>
+      <Separator className="absolute bottom-0 left-0 bg-border/50" />
     </header>
   )
 }

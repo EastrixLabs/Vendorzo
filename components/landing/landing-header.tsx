@@ -22,7 +22,7 @@ export function LandingHeader({ activePage = "home" }: LandingHeaderProps) {
 
   return (
     <header className="sticky top-4 z-50 w-full px-4">
-      <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-3 rounded-full border border-border/60 bg-background/60 px-4 py-3 shadow-[0_14px_40px_-24px_rgba(0,0,0,0.45)] backdrop-blur-xl supports-[backdrop-filter]:bg-background/60 sm:px-5">
+      <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-3 rounded-full border border-border/60 bg-background/60 px-6 py-3 shadow-[0_14px_40px_-24px_rgba(0,0,0,0.45)] backdrop-blur-xl supports-[backdrop-filter]:bg-background/60 lg:px-8">
         <button
           type="button"
           onClick={() => router.push("/")}

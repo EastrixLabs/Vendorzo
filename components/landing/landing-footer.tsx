@@ -51,9 +51,9 @@ export function LandingFooter() {
                   target={social.href.startsWith("mailto:") ? undefined : "_blank"}
                   rel={social.href.startsWith("mailto:") ? undefined : "noreferrer"}
                   aria-label={social.label}
-                  className="text-muted-foreground hover:text-foreground inline-flex size-11 items-center justify-center rounded-2xl border border-border/50 transition-all hover:bg-muted/80 shadow-xs active:scale-95"
+                  className="text-muted-foreground hover:text-foreground inline-flex size-8 items-center justify-center rounded-2xl border border-border/50 transition-all hover:bg-muted/80 shadow-xs active:scale-95"
                 >
-                  <social.icon className="size-5" />
+                  <social.icon className="size-4" />
                 </a>
               ))}
             </div>

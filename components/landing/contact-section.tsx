@@ -10,9 +10,8 @@ import { Badge } from "@/components/ui/badge"
 
 export function ContactSection() {
   return (
-    <section className="relative overflow-hidden py-24 sm:py-32">
-      <div className="mx-auto max-w-6xl px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-x-16 gap-y-16 lg:grid-cols-2 text-center lg:text-left">
+    <section className="mx-auto w-full max-w-6xl px-6 lg:px-8 py-24 sm:py-32 relative overflow-hidden">
+      <div className="grid grid-cols-1 gap-x-16 gap-y-16 lg:grid-cols-2 text-center lg:text-left">
           {/* Left Column: Content */}
           <div className="flex flex-col justify-center items-center lg:items-start">
             <Badge variant="outline" className="w-fit mb-6 px-4 py-1.5 border-primary/20 bg-primary/5 text-primary gap-2 transition-colors hover:bg-primary/10">
@@ -119,7 +118,6 @@ export function ContactSection() {
             </div>
           </div>
         </div>
-      </div>
     </section>
   )
 }
