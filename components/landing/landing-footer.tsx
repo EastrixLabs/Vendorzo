@@ -31,9 +31,12 @@ export function LandingFooter() {
           <div className="flex flex-col items-center md:items-start gap-4">
             <div className="flex items-center gap-3">
               <Brand className="size-8" alt="Vendorzo logo" />
-              <span className="text-xl font-bold tracking-tight">Vendorzo</span>
+              <div className="text-left leading-tight">
+                <p className="text-[17px] font-bold tracking-tight">Vendorzo</p>
+                <p className="text-muted-foreground text-[10px] uppercase tracking-[0.2em] font-bold">by Eastrix Labs</p>
+              </div>
             </div>
-            <p className="text-muted-foreground text-sm max-w-xs leading-relaxed">
+            <p className="text-muted-foreground text-sm max-w-xs leading-relaxed font-medium mt-1">
               SaaS-style retail operations and point-of-sale experiences designed for speed and clarity.
             </p>
           </div>
@@ -48,7 +51,7 @@ export function LandingFooter() {
                   target={social.href.startsWith("mailto:") ? undefined : "_blank"}
                   rel={social.href.startsWith("mailto:") ? undefined : "noreferrer"}
                   aria-label={social.label}
-                  className="text-muted-foreground hover:text-foreground inline-flex size-8 items-center justify-center rounded-md border border-border/50 transition-all hover:bg-muted/80 shadow-xs active:scale-95"
+                  className="text-muted-foreground hover:text-foreground inline-flex size-8 items-center justify-center rounded-md border border-border/50 transition-all hover:bg-muted/80 shadow-xs active:scale-95 bg-background/50"
                 >
                   <social.icon className="size-4" />
                 </a>

@@ -3,7 +3,6 @@ import {
   Boxes,
   CreditCard,
   LayoutDashboard,
-  ReceiptText,
   ScanLine,
   ShieldCheck,
   Smartphone,

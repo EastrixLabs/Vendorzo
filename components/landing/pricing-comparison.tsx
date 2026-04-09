@@ -88,11 +88,11 @@ export function PricingComparison() {
           <Tabs
             value={billingCycle}
             onValueChange={(value) => setBillingCycle(value as BillingCycle)}
-            className="shadow-xs rounded-xl p-1 bg-muted/20 border border-border/50 h-12 flex items-center"
+            className="w-full sm:w-auto shadow-xs rounded-xl p-1 bg-muted/20 border border-border/50 h-12 flex items-center"
           >
-            <TabsList className="bg-transparent h-full p-0">
-              <TabsTrigger value="monthly" className="h-full rounded-lg px-6 data-[state=active]:bg-background data-[state=active]:shadow-xs transition-all">Monthly</TabsTrigger>
-              <TabsTrigger value="yearly" className="h-full rounded-lg px-6 data-[state=active]:bg-background data-[state=active]:shadow-xs transition-all">Yearly</TabsTrigger>
+            <TabsList className="bg-transparent h-full p-0 w-full flex items-center">
+              <TabsTrigger value="monthly" className="h-full rounded-lg px-6 data-[state=active]:bg-background data-[state=active]:shadow-xs transition-all flex-1 sm:flex-initial">Monthly</TabsTrigger>
+              <TabsTrigger value="yearly" className="h-full rounded-lg px-6 data-[state=active]:bg-background data-[state=active]:shadow-xs transition-all flex-1 sm:flex-initial">Yearly</TabsTrigger>
             </TabsList>
           </Tabs>
         </div>
