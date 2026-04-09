@@ -11,7 +11,7 @@ export function HeroSection() {
   const router = useRouter()
 
   return (
-    <section className="relative flex min-h-[90vh] w-full flex-col items-center justify-center overflow-hidden border-b bg-background">
+    <section className="relative flex min-h-[90vh] w-full flex-col items-center justify-center overflow-hidden bg-background">
       {/* 3D Background */}
       <div className="absolute inset-0 opacity-50 z-0">
         <GLSLHills />
@@ -56,10 +56,8 @@ export function HeroSection() {
         </div>
       </div>
 
-      {/* Embedded Blur Bar at the bottom of the hero for seamless transition */}
-      <div className="absolute bottom-0 left-0 h-24 w-full z-10 border-t border-border/30 bg-background/30 backdrop-blur-md overflow-hidden [mask-image:linear-gradient(to_top,black,transparent_100%)]">
-        {/* Marquee text removed as requested */}
-      </div>
+      {/* Modern Section Fade */}
+      <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-background via-background/40 to-transparent pointer-events-none z-20" />
     </section>
   )
 }

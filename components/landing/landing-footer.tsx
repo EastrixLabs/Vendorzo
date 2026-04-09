@@ -6,17 +6,17 @@ import { ThemeToggle } from "@/components/pos/theme-toggle"
 const socialLinks = [
   {
     label: "LinkedIn",
-    href: "https://www.linkedin.com",
+    href: "https://www.linkedin.com/company/eastrix-labs/",
     icon: Linkedin,
   },
   {
     label: "GitHub",
-    href: "https://github.com",
+    href: "https://github.com/EastrixLabs",
     icon: Github,
   },
   {
     label: "Email",
-    href: "mailto:hello@vendorzo.com",
+    href: "mailto:eastrixlabs@gmail.com",
     icon: Mail,
   },
 ] as const
@@ -38,11 +38,8 @@ export function LandingFooter() {
             </p>
           </div>
 
-          <div className="flex flex-col items-center md:items-end gap-6">
-            <div className="flex items-center gap-3">
-              <span className="text-sm font-medium text-muted-foreground mr-2">Theme</span>
-              <ThemeToggle />
-            </div>
+          <div className="flex flex-wrap items-center justify-center md:justify-end gap-6">
+            <ThemeToggle />
             <div className="flex items-center gap-3">
               {socialLinks.map((social) => (
                 <a
@@ -51,7 +48,7 @@ export function LandingFooter() {
                   target={social.href.startsWith("mailto:") ? undefined : "_blank"}
                   rel={social.href.startsWith("mailto:") ? undefined : "noreferrer"}
                   aria-label={social.label}
-                  className="text-muted-foreground hover:text-foreground inline-flex size-8 items-center justify-center rounded-2xl border border-border/50 transition-all hover:bg-muted/80 shadow-xs active:scale-95"
+                  className="text-muted-foreground hover:text-foreground inline-flex size-8 items-center justify-center rounded-md border border-border/50 transition-all hover:bg-muted/80 shadow-xs active:scale-95"
                 >
                   <social.icon className="size-4" />
                 </a>
@@ -63,8 +60,8 @@ export function LandingFooter() {
         <div className="mt-12 flex flex-col items-center gap-6 border-t border-border/30 pt-8 sm:flex-row sm:justify-between text-sm text-muted-foreground">
           <p>© {year} <span className="text-foreground font-medium">Vendorzo</span> by Eastrix Labs. All rights reserved.</p>
           <div className="flex items-center gap-8">
-            <a href="#" className="hover:text-foreground transition-colors font-medium">Terms</a>
-            <a href="#" className="hover:text-foreground transition-colors font-medium">Privacy</a>
+            <a href="#" className="hover:text-foreground transition-colors font-medium">Terms of Service</a>
+            <a href="#" className="hover:text-foreground transition-colors font-medium">Privacy Policy</a>
           </div>
         </div>
       </div>
