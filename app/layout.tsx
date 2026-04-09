@@ -24,7 +24,6 @@ export const metadata: Metadata = {
   description: "Vendorzo POS by Eastrix Labs for modern point-of-sale operations.",
   applicationName: "Vendorzo",
   manifest: "/manifest.webmanifest",
-  themeColor: "#151518",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
@@ -38,6 +37,12 @@ export const metadata: Metadata = {
     apple: [{ url: "/icons/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
     shortcut: ["/favicon.ico"],
   },
+}
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#151518",
 }
 
 export default function RootLayout({
