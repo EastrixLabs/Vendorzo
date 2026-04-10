@@ -1,6 +1,6 @@
-# Vendorzo
+![Vendorzo](/public/OpenGraph.webp)
 
-POS
+💳 Modern POS system with a built-in smart terminal enabling fast, cashless payments via QR PH, InstaPay, and other digital rails
 
 ## ☁️ Deploy your own
 
