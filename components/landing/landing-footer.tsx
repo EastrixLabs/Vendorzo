@@ -72,8 +72,8 @@ export function LandingFooter() {
         <div className="mt-12 flex flex-col items-center gap-6 border-t border-border/30 pt-8 sm:flex-row sm:justify-between text-sm text-muted-foreground">
           <p>© {year} <span className="text-foreground font-medium">Vendorzo</span> by Eastrix Labs. All rights reserved.</p>
           <div className="flex items-center gap-8">
-            <a href="#" className="hover:text-foreground transition-colors font-medium">Terms of Service</a>
-            <a href="#" className="hover:text-foreground transition-colors font-medium">Privacy Policy</a>
+            <a href="/legal/terms" className="hover:text-foreground transition-colors font-medium">Terms of Service</a>
+            <a href="/legal/privacy" className="hover:text-foreground transition-colors font-medium">Privacy Policy</a>
           </div>
         </div>
       </div>

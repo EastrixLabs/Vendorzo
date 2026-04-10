@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card"
 
 export default function LoginPage() {
   return (
-    <main className="min-h-svh bg-background relative flex flex-col items-center">
+    <main className="min-h-screen bg-background text-foreground relative flex flex-col items-center">
       <div className="w-full max-w-6xl flex justify-start px-6 pt-6 z-20 absolute top-0">
         <Link
           href="/"
@@ -20,9 +20,9 @@ export default function LoginPage() {
         </Link>
       </div>
 
-      <section className="min-h-svh w-full max-w-6xl relative flex flex-col justify-center items-center px-6 py-20">
+      <section className="min-h-screen w-full max-w-6xl relative flex flex-col justify-center items-center px-6 py-20">
         <div className="relative z-10 w-full max-w-md animate-vendorzo-fade-up">
-          <Card className="w-full border-border/50 bg-muted/10 shadow-xs py-8">
+          <Card className="w-full border-border/40 bg-card/95 shadow-sm py-8">
             <CardHeader className="flex flex-col items-center text-center gap-6 px-8 pb-0">
               <div className="flex flex-col items-center gap-3">
                 <Brand size={40} />

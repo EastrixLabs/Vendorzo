@@ -1,16 +1,52 @@
 "use client"
 
 import { ArrowRight, Mail, MessageSquare, Sparkles } from "lucide-react"
+import { FormEvent, useState } from "react"
+import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Field, FieldContent, FieldDescription, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { motion } from "framer-motion"
 
+const SUPPORT_EMAIL = "eastrixlabs@gmail.com"
+
 export function ContactSection() {
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [message, setMessage] = useState("")
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const canSubmit = name.trim().length > 0 && email.trim().length > 0 && message.trim().length > 0
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    if (!canSubmit || isSubmitting) return
+
+    setIsSubmitting(true)
+
+    const subject = `Vendorzo inquiry from ${name}`
+    const body = `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
+    const mailtoUrl = `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+
+    const toastId = toast.loading("Opening your email client...")
+    window.location.href = mailtoUrl
+
+    toast.success("Email client opened", {
+      id: toastId,
+      description: "A draft to eastrixlabs@gmail.com is ready for review.",
+    })
+
+    setIsSubmitting(false)
+    setName("")
+    setEmail("")
+    setMessage("")
+  }
+
   return (
     <section className="mx-auto w-full max-w-6xl px-6 lg:px-8 py-24 sm:py-32 relative overflow-hidden">
       <div className="grid grid-cols-1 gap-x-16 gap-y-16 lg:grid-cols-2 text-center lg:text-left">
@@ -40,7 +76,11 @@ export function ContactSection() {
               </div>
               <div className="text-left">
                 <h3 className="font-semibold text-foreground underline decoration-primary/30 underline-offset-4 transition-colors group-hover:text-primary">Direct Email</h3>
-                <p className="mt-1 text-sm text-muted-foreground">eastrixlabs@gmail.com</p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  <a href="mailto:eastrixlabs@gmail.com" className="underline hover:text-foreground transition-colors">
+                    eastrixlabs@gmail.com
+                  </a>
+                </p>
               </div>
             </div>
             <div className="group flex items-start gap-4 cursor-default">
@@ -72,8 +112,8 @@ export function ContactSection() {
                 </CardDescription>
               </div>
             </CardHeader>
-            <CardContent className="px-6 pb-8 sm:px-8">
-              <form className="space-y-8">
+            <CardContent className="px-6 pb-6 sm:px-8">
+              <form className="space-y-8" onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2">
                   <Field>
                     <FieldLabel className="text-sm font-semibold uppercase tracking-wider text-muted-foreground/80">
@@ -81,21 +121,27 @@ export function ContactSection() {
                     </FieldLabel>
                     <FieldContent>
                       <Input
+                        value={name}
+                        onChange={(event) => setName(event.target.value)}
                         type="text"
                         placeholder="Jean-Luc Picard"
                         className="bg-muted/30 border-none h-12 focus-visible:ring-1 focus-visible:ring-primary/40 transition-all duration-300"
+                        required
                       />
                     </FieldContent>
                   </Field>
                   <Field>
                     <FieldLabel className="text-sm font-semibold uppercase tracking-wider text-muted-foreground/80">
-                      Business URL
+                      Email address
                     </FieldLabel>
                     <FieldContent>
                       <Input
-                        type="url"
-                        placeholder="enterprise-ships.com"
+                        value={email}
+                        onChange={(event) => setEmail(event.target.value)}
+                        type="email"
+                        placeholder="captain@starfleet.gov"
                         className="bg-muted/30 border-none h-12 focus-visible:ring-1 focus-visible:ring-primary/40 transition-all duration-300"
+                        required
                       />
                     </FieldContent>
                   </Field>
@@ -103,42 +149,33 @@ export function ContactSection() {
 
                 <Field>
                   <FieldLabel className="text-sm font-semibold uppercase tracking-wider text-muted-foreground/80">
-                    Email address
-                  </FieldLabel>
-                  <FieldContent>
-                    <Input
-                      type="email"
-                      placeholder="captain@starfleet.gov"
-                      className="bg-muted/30 border-none h-12 focus-visible:ring-1 focus-visible:ring-primary/40 transition-all duration-300"
-                    />
-                    <FieldDescription className="text-xs">
-                      We'll respond to this email within 24 hours.
-                    </FieldDescription>
-                  </FieldContent>
-                </Field>
-
-                <Field>
-                  <FieldLabel className="text-sm font-semibold uppercase tracking-wider text-muted-foreground/80">
                     How can we help?
                   </FieldLabel>
                   <FieldContent>
                     <Textarea
+                      value={message}
+                      onChange={(event) => setMessage(event.target.value)}
                       placeholder="Tell us about your team and what you're looking for in a POS..."
                       className="bg-muted/30 border-none min-h-[120px] focus-visible:ring-1 focus-visible:ring-primary/40 transition-all duration-300 resize-none"
+                      required
                     />
                   </FieldContent>
                 </Field>
 
-                <Button size="lg" className="w-full rounded-2xl h-12 text-base font-semibold transition-all duration-300 group">
-                  Send Message
+                <Button
+                  type="submit"
+                  size="lg"
+                  className="w-full rounded-2xl h-12 text-base font-semibold transition-all duration-300 group"
+                  disabled={!canSubmit || isSubmitting}
+                >
+                  {isSubmitting ? "Opening email client..." : "Send Message"}
                   <ArrowRight className="ml-2 size-4 transition-transform group-hover:translate-x-1" />
                 </Button>
-
-                <p className="text-center text-xs text-muted-foreground mt-4">
-                  By submitting this form, you agree to our <span className="underline cursor-pointer hover:text-foreground">Privacy Policy</span>.
-                </p>
               </form>
             </CardContent>
+            <CardFooter className="px-6 pb-6 sm:px-8">
+              <p className="text-sm text-muted-foreground">We'll respond to this email within 24 hours.</p>
+            </CardFooter>
           </Card>
         </motion.div>
       </div>

@@ -58,7 +58,11 @@ export function LandingHeader({ activePage = "home" }: LandingHeaderProps) {
           >
             Log in
           </Button>
-          <Button size="sm" onClick={() => router.push("/pos")} className="hidden sm:flex">
+          <Button
+            size="sm"
+            onClick={() => window.open("https://calendly.com/eastrixlabs/el-vendorzo-demo", "_blank")}
+            className="hidden sm:flex"
+          >
             Book a demo
             <ArrowUpRight className="size-4" />
           </Button>

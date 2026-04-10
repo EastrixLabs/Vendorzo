@@ -46,11 +46,15 @@ export function HeroSection() {
           className="mt-10 flex flex-wrap items-center justify-center gap-4 animate-vendorzo-fade-up"
           style={{ animationDelay: "240ms" }}
         >
-          <Button size="lg" className="h-14 rounded-full px-8 text-base shadow-xs" onClick={() => router.push("/pos")}>
+          <Button
+            size="lg"
+            className="h-12 rounded-full px-8 text-base shadow-xs"
+            onClick={() => window.open("https://calendly.com/eastrixlabs/el-vendorzo-demo", "_blank")}
+          >
             Book a demo
             <ArrowUpRight className="size-5 ml-2" />
           </Button>
-          <Button size="lg" variant="outline" className="h-14 rounded-full bg-background/50 px-8 text-base backdrop-blur-sm shadow-xs border-border/50 hover:bg-muted/50" onClick={() => router.push("/pricing")}>
+          <Button size="lg" variant="outline" className="h-12 rounded-full bg-background/50 px-8 text-base backdrop-blur-sm shadow-xs border-border/50 hover:bg-muted/50" onClick={() => router.push("/pricing")}>
             View pricing
           </Button>
         </div>

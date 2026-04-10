@@ -1,24 +1,29 @@
-This is free and unencumbered software released into the public domain.
+# Proprietary License - Eastrix Labs
 
-Anyone is free to copy, modify, publish, use, compile, sell, or
-distribute this software, either in source code form or as a compiled
-binary, for any purpose, commercial or non-commercial, and by any
-means.
+Copyright (c) 2024-2026 Eastrix Labs. All rights reserved.
 
-In jurisdictions that recognize copyright laws, the author or authors
-of this software dedicate any and all copyright interest in the
-software to the public domain. We make this dedication for the benefit
-of the public at large and to the detriment of our heirs and
-successors. We intend this dedication to be an overt act of
-relinquishment in perpetuity of all present and future rights to this
-software under copyright law.
+## Vendorzo POS SaaS Software License
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
+This software and its associated documentation (the "Software") are the property of Eastrix Labs. This Software is licensed, not sold.
 
-For more information, please refer to <https://unlicense.org>
+### 1. Ownership
+The Software is owned and operated by Eastrix Labs. All title and intellectual property rights in and to the Software are owned by Eastrix Labs.
+
+### 2. Grant of License
+Subject to the terms and conditions of the Service Agreement, Eastrix Labs grants the user a non-exclusive, non-transferable license to access and use the Vendorzo POS SaaS platform solely for its intended business operations.
+
+### 3. Restrictions
+The user shall not:
+- Copy, modify, or create derivative works of the Software.
+- Reverse engineer, decompile, or disassemble the Software.
+- Sell, rent, lease, sublicense, or distribute the Software to any third party.
+- Use the Software for any purpose other than as a Point of Sale system as intended by Eastrix Labs.
+
+### 4. Termination
+This license is effective until terminated. Your rights under this license will terminate automatically without notice from Eastrix Labs if you fail to comply with any term(s) of this license.
+
+### 5. Disclaimer of Warranty
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL EASTRIX LABS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+For inquiries, please contact legal@eastrix.com
