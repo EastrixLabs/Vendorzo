@@ -42,13 +42,13 @@ export function LoginForm() {
   }
 
   return (
-    <div className="relative w-full overflow-hidden rounded-[2rem] border border-border/50 bg-muted/10 p-1 shadow-xs">
+    <div className="relative w-full overflow-hidden">
       <div
         className="flex transition-transform duration-500 ease-in-out"
         style={{ transform: method === "magic" ? "translateX(0%)" : "translateX(-100%)" }}
       >
         {/* Magic Link Section */}
-        <div className="w-full shrink-0 p-6 sm:p-8">
+        <div className="w-full shrink-0 px-8">
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div className="space-y-2">
               <Label htmlFor="magic-email" className="text-muted-foreground ml-1">Email Address</Label>
@@ -93,7 +93,7 @@ export function LoginForm() {
         </div>
 
         {/* Password Section */}
-        <div className="w-full shrink-0 p-6 sm:p-8">
+        <div className="w-full shrink-0 px-8">
           <form className="space-y-5" onSubmit={handleSubmit}>
             <div className="space-y-2">
               <Label htmlFor="password-email" className="text-muted-foreground ml-1">Email</Label>

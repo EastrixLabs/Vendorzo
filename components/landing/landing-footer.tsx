@@ -1,4 +1,7 @@
+"use client"
+
 import { Github, Linkedin, Mail } from "lucide-react"
+import { motion } from "framer-motion"
 
 import { Brand } from "@/components/brand"
 import { ThemeToggle } from "@/components/pos/theme-toggle"
@@ -25,7 +28,13 @@ export function LandingFooter() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="border-t animate-vendorzo-fade-up bg-background/50 backdrop-blur-sm" style={{ animationDelay: "120ms" }}>
+    <motion.footer
+      initial={{ opacity: 0, y: 10 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+      className="border-t bg-background/50 backdrop-blur-sm"
+    >
       <div className="mx-auto w-full max-w-6xl px-6 lg:px-8 py-12">
         <div className="flex flex-col items-center justify-between gap-10 md:flex-row md:items-start text-center md:text-left">
           <div className="flex flex-col items-center md:items-start gap-4">
@@ -68,6 +77,6 @@ export function LandingFooter() {
           </div>
         </div>
       </div>
-    </footer>
+    </motion.footer>
   )
 }

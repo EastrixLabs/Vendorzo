@@ -22,6 +22,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { motion } from "framer-motion"
 
 function formatPlanPrice(plan: PricingPlan, cycle: BillingCycle) {
   const price = cycle === "monthly" ? plan.monthlyPrice : plan.yearlyPrice
@@ -71,7 +72,13 @@ export function PricingComparison() {
 
   return (
     <section className="mx-auto w-full max-w-6xl px-6 lg:px-8 py-24 sm:py-32">
-      <div className="mb-16 space-y-4 animate-vendorzo-fade-up text-center md:text-left flex flex-col md:items-start items-center">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        className="mb-16 space-y-4 text-center md:text-left flex flex-col md:items-start items-center"
+      >
         <Badge variant="outline" className="px-4 py-1.5 text-xs tracking-widest uppercase font-semibold text-primary/70 border-primary/20 bg-primary/5 shadow-xs">
           Deep Dive
         </Badge>
@@ -96,9 +103,15 @@ export function PricingComparison() {
             </TabsList>
           </Tabs>
         </div>
-      </div>
+      </motion.div>
 
-      <div className="rounded-[2.5rem] border border-border/50 bg-muted/5 p-4 shadow-xs overflow-hidden animate-vendorzo-fade-up" style={{ animationDelay: "120ms" }}>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+        className="rounded-[2.5rem] border border-border/50 bg-muted/5 p-4 shadow-xs overflow-hidden"
+      >
         <div className="overflow-x-auto rounded-[2rem] bg-background border border-border/50">
           <Table>
             <TableHeader>
@@ -145,7 +158,7 @@ export function PricingComparison() {
             </TableBody>
           </Table>
         </div>
-      </div>
+      </motion.div>
     </section>
   )
 }

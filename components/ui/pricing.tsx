@@ -51,7 +51,13 @@ export function PricingSection({
       )}
       {...props}
     >
-      <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between w-full gap-8 animate-vendorzo-fade-up">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        className="mb-16 flex flex-col md:flex-row md:items-end justify-between w-full gap-8"
+      >
         <div className="space-y-4 text-center md:text-left flex flex-col md:items-start items-center">
           <Badge
             variant="outline"
@@ -77,11 +83,16 @@ export function PricingSection({
             <TabsTrigger value="yearly" className="h-full rounded-lg px-6 data-[state=active]:bg-background data-[state=active]:shadow-xs transition-all flex-1 sm:flex-initial">Yearly</TabsTrigger>
           </TabsList>
         </Tabs>
-      </div>
+      </motion.div>
 
       <div className="mx-auto grid w-full grid-cols-1 gap-6 md:grid-cols-3">
-        {plans.map((plan) => (
-          <PricingCard plan={plan} key={plan.name} frequency={frequency} />
+        {plans.map((plan, index) => (
+          <PricingCard
+            plan={plan}
+            key={plan.name}
+            frequency={frequency}
+            index={index}
+          />
         ))}
       </div>
     </section>
@@ -91,16 +102,27 @@ export function PricingSection({
 type PricingCardProps = React.ComponentProps<'div'> & {
   plan: Plan
   frequency?: FREQUENCY
+  index?: number
 }
 
 export function PricingCard({
   plan,
   className,
   frequency = frequencies[0],
+  index = 0,
   ...props
 }: PricingCardProps) {
+  const MotionDiv = motion.div as any
   return (
-    <div
+    <MotionDiv
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{
+        duration: 0.6,
+        delay: index * 0.1,
+        ease: [0.16, 1, 0.3, 1]
+      }}
       className={cn(
         'relative flex w-full flex-col overflow-hidden rounded-[1.25rem] border bg-background shadow-sm',
         className,
@@ -200,7 +222,7 @@ export function PricingCard({
           <Link href={plan.btn.href}>{plan.btn.text}</Link>
         </Button>
       </div>
-    </div>
+    </MotionDiv>
   )
 }
 

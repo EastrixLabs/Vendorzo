@@ -3,6 +3,7 @@
 import { Badge } from "@/components/ui/badge"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { HelpCircle } from "lucide-react"
+import { motion } from "framer-motion"
 
 const faqs = [
   {
@@ -35,7 +36,13 @@ const faqs = [
 export function FAQSection() {
   return (
     <section className="mx-auto w-full max-w-6xl px-6 lg:px-8 py-24 sm:py-32">
-      <div className="mb-16 flex flex-col items-center text-center animate-vendorzo-fade-up">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        className="mb-16 flex flex-col items-center text-center"
+      >
         <Badge variant="outline" className="px-4 py-1.5 text-xs tracking-widest uppercase font-semibold text-primary/70 border-primary/20 bg-primary/5 shadow-xs mb-6 gap-2">
           <HelpCircle className="size-3.5" />
           Support
@@ -46,9 +53,15 @@ export function FAQSection() {
         <p className="text-muted-foreground/90 max-w-2xl text-lg mt-4">
           Everything you need to know about setting up and running Vendorzo for your business.
         </p>
-      </div>
+      </motion.div>
 
-      <div className="rounded-[2rem] border border-border/50 bg-muted/10 p-4 sm:p-8 shadow-xs animate-vendorzo-fade-up" style={{ animationDelay: "120ms" }}>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+        className="rounded-[2rem] border border-border/50 bg-muted/10 p-4 sm:p-8 shadow-xs"
+      >
         <Accordion className="w-full">
           {faqs.map((faq, index) => (
             <AccordionItem key={index} value={`item-${index}`} className="border-b border-border/30 last:border-0 px-2 py-1">
@@ -61,7 +74,7 @@ export function FAQSection() {
             </AccordionItem>
           ))}
         </Accordion>
-      </div>
+      </motion.div>
     </section>
   )
 }
