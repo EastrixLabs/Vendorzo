@@ -19,6 +19,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Separator } from "@/components/ui/separator"
 import {
   Sidebar,
   SidebarContent,
@@ -32,7 +33,6 @@ import {
   SidebarMenuItem,
   SidebarRail,
   SidebarSeparator,
-  SidebarTrigger,
 } from "@/components/ui/sidebar"
 import {
   Tooltip,
@@ -73,41 +73,36 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon" className="border-r">
-      <SidebarHeader className="pt-3 pb-1 group-data-[collapsible=icon]:pt-3 group-data-[collapsible=icon]:pb-1">
-        <div className="group-data-[collapsible=icon]:items-center flex flex-col gap-1">
-          <div className="group-data-[collapsible=icon]:justify-center flex items-center gap-2">
-            <SidebarMenu className="flex-1">
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  size="lg"
-                  tooltip="Vendorzo POS"
-                  onClick={() => router.push("/dashboard")}
-                  className="h-12 gap-2 group-data-[collapsible=icon]:mx-auto group-data-[collapsible=icon]:!size-12 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:gap-0 group-data-[collapsible=icon]:!px-0"
-                >
-                  <Brand className="size-7" alt="Vendorzo" />
-                  <div className="group-data-[collapsible=icon]:hidden flex min-w-0 flex-col text-left leading-none">
-                    <span className="font-extrabold">Vendorzo</span>
-                    <span className="text-muted-foreground mt-1 text-[11px] font-medium">
-                      Eastrix Labs
-                    </span>
-                  </div>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-            <SidebarTrigger className="group-data-[collapsible=icon]:hidden shrink-0 size-12 [&_svg]:size-7" />
-          </div>
-
-          <SidebarTrigger className="hidden group-data-[collapsible=icon]:mx-auto group-data-[collapsible=icon]:inline-flex size-12 [&_svg]:size-7" />
-        </div>
+      <SidebarHeader className="h-14 p-0 relative overflow-hidden">
+        <SidebarMenu className="h-full">
+          <SidebarMenuItem className="h-full">
+            <SidebarMenuButton
+              size="lg"
+              tooltip="Vendorzo POS"
+              onClick={() => router.push("/pos")}
+              className="h-full w-full rounded-none px-4 group-data-[collapsible=icon]:!size-full group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:gap-0"
+            >
+              <div className="flex shrink-0 items-center justify-center">
+                <Brand size={32} />
+              </div>
+              <div className="group-data-[collapsible=icon]:hidden flex min-w-0 flex-col text-left leading-none ml-3">
+                <span className="text-sm font-semibold tracking-tight">Vendorzo</span>
+                <span className="text-muted-foreground mt-0.5 text-[10px] uppercase tracking-wider font-medium">
+                  by Eastrix Labs
+                </span>
+              </div>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+        <Separator className="absolute bottom-0 left-0 bg-border/50" />
       </SidebarHeader>
 
       <SidebarContent className="group-data-[collapsible=icon]:items-center">
-        <SidebarGroup className="pt-0">
+        <SidebarGroup className="pt-4">
           <SidebarGroupContent>
             <SidebarGroupLabel className="group-data-[collapsible=icon]:hidden">
               Main Menu
             </SidebarGroupLabel>
-            <SidebarSeparator className="my-1 group-data-[collapsible=icon]:mx-auto group-data-[collapsible=icon]:w-8" />
 
             <SidebarMenu className="group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:gap-2">
               {sidebarItems.map((item) => {

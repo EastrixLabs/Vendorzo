@@ -1,11 +1,10 @@
-import { FeaturesGrid } from "@/components/landing/features-grid"
-import { HeroSection } from "@/components/landing/hero-section"
 import { LandingFooter } from "@/components/landing/landing-footer"
 import { LandingHeader } from "@/components/landing/landing-header"
-import { TrustedBrandsMarquee } from "@/components/landing/trusted-brands-marquee"
 import { FAQSection } from "@/components/landing/faq-section"
 import { ContactSection } from "@/components/landing/contact-section"
 import { PricingSection, type Plan } from "@/components/ui/pricing"
+
+import { PricingComparison } from "@/components/landing/pricing-comparison"
 
 const PRICING_PLANS: Plan[] = [
   {
@@ -68,14 +67,16 @@ const PRICING_PLANS: Plan[] = [
   },
 ]
 
-export default function HomePage() {
+export default function PricingPage() {
   return (
     <main className="min-h-screen bg-background">
-      <LandingHeader activePage="home" />
-      <HeroSection />
-      <TrustedBrandsMarquee />
-      <FeaturesGrid />
-      <PricingSection plans={PRICING_PLANS} />
+      <LandingHeader activePage="pricing" />
+
+      <PricingSection
+        plans={PRICING_PLANS}
+      />
+
+      <PricingComparison />
       <FAQSection />
       <ContactSection />
       <LandingFooter />
