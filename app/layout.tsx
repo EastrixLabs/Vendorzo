@@ -1,23 +1,10 @@
 import type { Metadata } from "next"
-import { Geist, Geist_Mono, Manrope } from "next/font/google"
 
 import { PwaRegister } from "@/components/pwa-register"
 import { Toaster } from "@/components/ui/sonner"
 import { ThemeProvider } from "@/components/theme-provider"
 
 import "./globals.css"
-
-const manrope = Manrope({ subsets: ["latin"], variable: "--font-sans" })
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-})
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-})
 
 export const metadata: Metadata = {
   title: "Vendorzo POS",
@@ -42,7 +29,7 @@ export const metadata: Metadata = {
 export const viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#151518",
+  themeColor: "#f9f6f1",
 }
 
 export default function RootLayout({
@@ -51,8 +38,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={manrope.variable} suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+    <html lang="en" suppressHydrationWarning>
+      <body className="antialiased">
         <ThemeProvider>
           <PwaRegister />
           {children}

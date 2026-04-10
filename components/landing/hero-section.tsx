@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowRight, Sparkles } from "lucide-react"
+import { ArrowUpRight, Sparkles } from "lucide-react"
 import { useRouter } from "next/navigation"
 
 import { Badge } from "@/components/ui/badge"
@@ -47,8 +47,8 @@ export function HeroSection() {
           style={{ animationDelay: "240ms" }}
         >
           <Button size="lg" className="h-14 rounded-full px-8 text-base shadow-xs" onClick={() => router.push("/pos")}>
-            Enter /pos Workspace
-            <ArrowRight className="size-4 ml-2" />
+            Book a demo
+            <ArrowUpRight className="size-5 ml-2" />
           </Button>
           <Button size="lg" variant="outline" className="h-14 rounded-full bg-background/50 px-8 text-base backdrop-blur-sm shadow-xs border-border/50 hover:bg-muted/50" onClick={() => router.push("/pricing")}>
             View pricing

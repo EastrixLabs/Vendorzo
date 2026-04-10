@@ -12,42 +12,12 @@ import { Separator } from "@/components/ui/separator"
 import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-const colorThemes = [
-  {
-    value: "neutral",
-    label: "Neutral",
-    swatchClassName: "bg-[oklch(0.21_0.006_285.885)]",
-  },
-  {
-    value: "ocean",
-    label: "Ocean",
-    swatchClassName: "bg-[oklch(0.56_0.17_248.53)]",
-  },
-  {
-    value: "amber",
-    label: "Amber",
-    swatchClassName: "bg-[oklch(0.68_0.18_66.2)]",
-  },
-  {
-    value: "rose",
-    label: "Rose",
-    swatchClassName: "bg-[oklch(0.62_0.21_8.9)]",
-  },
-  {
-    value: "emerald",
-    label: "Emerald",
-    swatchClassName: "bg-[oklch(0.6_0.15_164.8)]",
-  },
-] as const
-
 export default function SettingsPage() {
   const {
     motionPreference,
     setMotionPreference,
     contrastPreference,
     setContrastPreference,
-    colorTheme,
-    setColorTheme,
   } = useAppearancePreferences()
 
   return (
@@ -82,33 +52,6 @@ export default function SettingsPage() {
               <p className="text-sm font-medium">Motion & contrast</p>
               <p className="text-muted-foreground text-xs">
                 Control interface motion and overall contrast across the app.
-              </p>
-            </div>
-
-            <div className="space-y-2">
-              <p className="text-sm font-medium">Color theme</p>
-              <Tabs
-                value={colorTheme}
-                onValueChange={(value) => setColorTheme(value as (typeof colorThemes)[number]["value"])}
-                className="w-full"
-              >
-                <div className="w-full overflow-x-auto">
-                  <TabsList className="h-11 min-w-max w-full p-1" aria-label="Color theme">
-                    {colorThemes.map((theme) => (
-                      <TabsTrigger
-                        key={theme.value}
-                        value={theme.value}
-                        className="rounded-lg px-3 data-[selected]:shadow-sm aria-selected:shadow-sm"
-                      >
-                        <span className={`size-2.5 shrink-0 rounded-full ${theme.swatchClassName}`} />
-                        <span>{theme.label}</span>
-                      </TabsTrigger>
-                    ))}
-                  </TabsList>
-                </div>
-              </Tabs>
-              <p className="text-muted-foreground text-xs">
-                Applies accent color to shared controls, hover states, active navigation, focus rings, and charts.
               </p>
             </div>
 

@@ -13,7 +13,7 @@ export default function LoginPage() {
           href="/"
           className="group flex items-center gap-3 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
         >
-          <div className="flex size-9 items-center justify-center bg-background shadow-xs transition-transform group-hover:-translate-x-1">
+          <div className="flex size-9 items-center justify-center bg-background transition-transform group-hover:-translate-x-1">
             <ChevronLeft className="size-4" />
           </div>
           <span>Go back</span>
@@ -33,9 +33,9 @@ export default function LoginPage() {
               </div>
 
               <div className="text-center space-y-2">
-                <h1 className="text-4xl font-bold tracking-tight leading-tight flex items-baseline justify-center gap-3">
-                  <span className="italic font-thin text-3xl text-muted-foreground">Welcome</span>
-                  <span>Back</span>
+                <h1 className="text-3xl font-bold tracking-tight leading-tight flex items-center justify-center gap-2">
+                  <span className="italic font-light text-muted-foreground">Welcome</span>
+                  <span>back</span>
                 </h1>
                 <p className="text-muted-foreground text-sm font-medium">
                   Access your retail workspace.
