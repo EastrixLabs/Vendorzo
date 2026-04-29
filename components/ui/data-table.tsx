@@ -317,7 +317,13 @@ export function DataTableRowAction({
   items,
 }: {
   label?: string
-  items: Array<{ label: string; onClick?: () => void; destructive?: boolean }>
+  items: Array<{
+    label: string
+    onClick?: () => void
+    destructive?: boolean
+    disabled?: boolean
+    description?: string
+  }>
 }) {
   return (
     <DropdownMenu>
@@ -332,8 +338,14 @@ export function DataTableRowAction({
             key={item.label}
             onClick={item.onClick}
             variant={item.destructive ? "destructive" : "default"}
+            disabled={item.disabled}
           >
-            {item.label}
+            <span className="flex flex-col gap-0.5">
+              <span>{item.label}</span>
+              {item.description ? (
+                <span className="text-muted-foreground text-xs">{item.description}</span>
+              ) : null}
+            </span>
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

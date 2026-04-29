@@ -7,7 +7,7 @@ import { Grid2x2, List, PackageX, Plus, ShoppingCart } from "lucide-react"
 import { PosFloatingDock } from "@/components/pos/pos-floating-dock"
 import { PageHeading } from "@/components/pos/page-heading"
 import { categories } from "@/components/pos/mock-data"
-import { fetchProducts, createOrder } from "@/lib/supabase/queries"
+import { createOrder, fetchOrderReceipt, fetchProducts } from "@/lib/supabase/queries"
 import { toProduct, type Product } from "@/lib/supabase/types"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -19,7 +19,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import ReceiptDialog from "@/components/pos/receipt-dialog"
+import ReceiptDialog, {
+  createReceiptPayloadFromOrderReceipt,
+  type ReceiptPayload,
+} from "@/components/pos/receipt-dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -52,12 +55,7 @@ export default function PosPage() {
   const [cart, setCart] = React.useState<{ id: string; name: string; qty: number; price: number }[]>([])
   const [receiptOpen, setReceiptOpen] = React.useState(false)
   const [checkoutLoading, setCheckoutLoading] = React.useState(false)
-  const [lastReceipt, setLastReceipt] = React.useState<{
-    lines: { id: string; name: string; qty: number; price: number }[]
-    subtotal: number
-    tax: number
-    total: number
-  } | null>(null)
+  const [lastReceipt, setLastReceipt] = React.useState<ReceiptPayload | null>(null)
 
   React.useEffect(() => {
     fetchProducts()
@@ -105,19 +103,14 @@ export default function PosPage() {
   const handleCheckout = React.useCallback(async () => {
     if (cart.length === 0) return
 
-    const receiptSnapshot = {
-      lines: [...cart],
-      subtotal,
-      tax,
-      total,
-    }
-
-    setLastReceipt(receiptSnapshot)
-    setReceiptOpen(true)
     setCheckoutLoading(true)
 
     try {
-      await createOrder(cart, "Card")
+      const savedOrder = await createOrder(cart, "Card")
+      const orderReceipt = await fetchOrderReceipt(savedOrder.id)
+
+      setLastReceipt(createReceiptPayloadFromOrderReceipt(orderReceipt))
+      setReceiptOpen(true)
       setCart([])
 
       // Refresh products to get updated stock
@@ -133,13 +126,7 @@ export default function PosPage() {
     } finally {
       setCheckoutLoading(false)
     }
-  }, [cart, subtotal, tax, total])
-
-  const receiptLines = lastReceipt?.lines ?? cart
-  const receiptSubtotal = lastReceipt?.subtotal ?? subtotal
-  const receiptTax = lastReceipt?.tax ?? tax
-  const receiptTotal = lastReceipt?.total ?? total
-  const receiptIsEmpty = receiptLines.length === 0
+  }, [cart])
 
   return (
     <div className="pb-44 md:pb-44">
@@ -356,12 +343,9 @@ export default function PosPage() {
             setLastReceipt(null)
           }
         }}
-        lines={receiptLines}
-        subtotal={receiptSubtotal}
-        tax={receiptTax}
-        total={receiptTotal}
+        receipt={lastReceipt}
         loading={checkoutLoading}
-        onPrint={() => toast.success("Mock receipt printed")}
+        onPrint={() => window.print()}
       />
 
       <PosFloatingDock
