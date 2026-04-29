@@ -246,3 +246,60 @@ html[data-motion="reduced"] *::after {
     @apply bg-background text-foreground;
   }
 }
+
+@media print {
+  @page {
+    margin: 0;
+    size: 80mm 300mm;
+  }
+
+  html,
+  body {
+    width: 80mm !important;
+    min-width: 80mm !important;
+    max-width: 80mm !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    color: #141413 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    overflow: visible !important;
+  }
+
+  html > body {
+    background: #ffffff !important;
+  }
+
+  body::before,
+  body::after {
+    display: none !important;
+  }
+
+  body * {
+    visibility: hidden !important;
+  }
+
+  [data-receipt-print-root],
+  [data-receipt-print-root] * {
+    visibility: visible !important;
+  }
+
+  [data-receipt-print-root] {
+    position: static !important;
+    top: auto !important;
+    left: auto !important;
+    width: 72mm !important;
+    min-width: 72mm !important;
+    max-width: 72mm !important;
+    transform: none !important;
+    margin: 4mm auto 0 auto !important;
+    padding: 5mm !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    color: #141413 !important;
+    background: #ffffff !important;
+  }
+}

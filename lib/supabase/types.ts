@@ -48,6 +48,10 @@ export type DbOrderItem = {
   unit_price: number
 }
 
+export type DbOrderReceipt = DbOrder & {
+  order_items: DbOrderItem[]
+}
+
 export type DbProfile = {
   id: string
   full_name: string
@@ -86,7 +90,9 @@ export type Product = {
 }
 
 export type Order = {
+  dbId: string
   id: string
+  orderNumber: number
   customer: string
   items: number
   payment: "Card" | "Cash" | "Wallet"
@@ -113,7 +119,9 @@ export function toProduct(row: DbProduct): Product {
 export function toOrder(row: DbOrder): Order {
   const date = new Date(row.created_at)
   return {
+    dbId: row.id,
     id: `ORD-${row.order_number}`,
+    orderNumber: row.order_number,
     customer: row.customer,
     items: row.items,
     payment: row.payment,

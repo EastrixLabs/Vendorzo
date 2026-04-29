@@ -1,6 +1,8 @@
 "use client"
 
 import { FileText, ReceiptText } from "lucide-react"
+
+import type { DbOrder, DbOrderItem, DbOrderReceipt } from "@/lib/supabase/types"
 import {
   Dialog,
   DialogContent,
@@ -11,85 +13,277 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 
+export type ReceiptStoreInfo = {
+  name: string
+  branch: string
+  address: string
+}
+
 export type ReceiptLine = {
   id: string
   name: string
   qty: number
-  price: number
+  unitPrice: number
+  lineTotal: number
+}
+
+export type ReceiptPayload = {
+  store: ReceiptStoreInfo
+  order: {
+    receiptNumber: string
+    timestamp: string
+    cashier: string
+    paymentMethod: DbOrder["payment"]
+    status: DbOrder["status"]
+  }
+  lines: ReceiptLine[]
+  totals: {
+    subtotal: number
+    tax: number
+    total: number
+  }
+  fallbackNote?: string
 }
 
 type ReceiptDialogProps = {
   open: boolean
   onOpenChange: (open: boolean) => void
-  lines: ReceiptLine[]
-  subtotal: number
-  tax: number
-  total: number
+  receipt: ReceiptPayload | null
   loading?: boolean
   onPrint?: () => void
-  orderNumber?: string
+}
+
+const defaultStoreInfo: ReceiptStoreInfo = {
+  name: "Vendorzo Coffee Bar",
+  branch: "Main Branch",
+  address: "Store address placeholder",
+}
+
+function formatCurrency(value: number) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(value)
+}
+
+function formatReceiptNumber(orderNumber: number) {
+  return `RCPT-${String(orderNumber).padStart(6, "0")}`
+}
+
+function formatReceiptTimestamp(value: string) {
+  return new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(new Date(value))
+}
+
+function toReceiptLine(item: DbOrderItem): ReceiptLine {
+  return {
+    id: item.id,
+    name: item.product_name,
+    qty: item.quantity,
+    unitPrice: item.unit_price,
+    lineTotal: item.quantity * item.unit_price,
+  }
+}
+
+export function createReceiptPayload(
+  order: DbOrder,
+  orderItems: DbOrderItem[],
+  options: {
+    cashier?: string
+    store?: ReceiptStoreInfo
+  } = {}
+): ReceiptPayload {
+  const lines = orderItems.map(toReceiptLine)
+
+  return {
+    store: options.store ?? defaultStoreInfo,
+    order: {
+      receiptNumber: formatReceiptNumber(order.order_number),
+      timestamp: formatReceiptTimestamp(order.created_at),
+      cashier: options.cashier ?? "Staff",
+      paymentMethod: order.payment,
+      status: order.status,
+    },
+    lines,
+    totals: {
+      subtotal: order.subtotal,
+      tax: order.tax,
+      total: order.total,
+    },
+    fallbackNote:
+      lines.length === 0
+        ? "Line items are unavailable for this order. Totals are shown from the saved order record."
+        : undefined,
+  }
+}
+
+export function createReceiptPayloadFromOrderReceipt(
+  orderReceipt: DbOrderReceipt,
+  options?: {
+    cashier?: string
+    store?: ReceiptStoreInfo
+  }
+): ReceiptPayload {
+  return createReceiptPayload(orderReceipt, orderReceipt.order_items ?? [], options)
+}
+
+const receiptColors = {
+  bg: "#ffffff",
+  text: "#141413",
+  muted: "#6b6257",
+  divider: "#e8e6dc",
+  accent: "#d97757",
+}
+
+function ReceiptRenderer({ receipt }: { receipt: ReceiptPayload }) {
+  return (
+    <div
+      data-receipt-print-root
+      className="mx-auto w-full max-w-[72mm] rounded-lg border px-5 py-6 font-mono text-[12px] leading-relaxed shadow-sm"
+      style={{
+        backgroundColor: receiptColors.bg,
+        color: receiptColors.text,
+        borderColor: receiptColors.divider,
+      }}
+    >
+      <div className="space-y-1 text-center">
+        <p
+          className="font-sans text-sm font-bold tracking-widest uppercase"
+          style={{ color: receiptColors.accent }}
+        >
+          {receipt.store.name}
+        </p>
+        <p style={{ color: receiptColors.muted }}>{receipt.store.branch}</p>
+        <p style={{ color: receiptColors.muted }}>{receipt.store.address}</p>
+      </div>
+
+      <div
+        className="my-3 border-t border-dashed"
+        style={{ borderColor: receiptColors.divider }}
+      />
+
+      <div className="space-y-1">
+        <div className="flex justify-between gap-3">
+          <span style={{ color: receiptColors.muted }}>Receipt</span>
+          <span className="font-semibold">{receipt.order.receiptNumber}</span>
+        </div>
+        <div className="flex justify-between gap-3">
+          <span style={{ color: receiptColors.muted }}>Date</span>
+          <span className="text-right">{receipt.order.timestamp}</span>
+        </div>
+        <div className="flex justify-between gap-3">
+          <span style={{ color: receiptColors.muted }}>Cashier</span>
+          <span>{receipt.order.cashier}</span>
+        </div>
+        <div className="flex justify-between gap-3">
+          <span style={{ color: receiptColors.muted }}>Payment</span>
+          <span>{receipt.order.paymentMethod}</span>
+        </div>
+        <div className="flex justify-between gap-3">
+          <span style={{ color: receiptColors.muted }}>Status</span>
+          <span>{receipt.order.status}</span>
+        </div>
+      </div>
+
+      <div
+        className="my-3 border-t border-dashed"
+        style={{ borderColor: receiptColors.divider }}
+      />
+
+      {receipt.lines.length === 0 ? (
+        <p
+          className="text-center italic"
+          style={{ color: receiptColors.muted }}
+        >
+          {receipt.fallbackNote}
+        </p>
+      ) : (
+        <div className="space-y-2">
+          {receipt.lines.map((item) => (
+            <div key={item.id} className="space-y-0.5">
+              <div className="flex justify-between gap-3">
+                <span className="font-medium">{item.name}</span>
+                <span>{formatCurrency(item.lineTotal)}</span>
+              </div>
+              <div
+                className="flex justify-between gap-3"
+                style={{ color: receiptColors.muted }}
+              >
+                <span>
+                  {item.qty} x {formatCurrency(item.unitPrice)}
+                </span>
+                <span />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div
+        className="my-3 border-t border-dashed"
+        style={{ borderColor: receiptColors.divider }}
+      />
+
+      <div className="space-y-1">
+        <div className="flex justify-between gap-3">
+          <span style={{ color: receiptColors.muted }}>Subtotal</span>
+          <span>{formatCurrency(receipt.totals.subtotal)}</span>
+        </div>
+        <div className="flex justify-between gap-3">
+          <span style={{ color: receiptColors.muted }}>Tax</span>
+          <span>{formatCurrency(receipt.totals.tax)}</span>
+        </div>
+        <div
+          className="mt-2 flex justify-between gap-3 border-t border-dashed pt-2 text-sm font-bold"
+          style={{ borderColor: receiptColors.divider }}
+        >
+          <span>Total</span>
+          <span>{formatCurrency(receipt.totals.total)}</span>
+        </div>
+      </div>
+
+      <p
+        className="mt-4 text-center text-[11px]"
+        style={{ color: receiptColors.muted }}
+      >
+        Thank you for shopping with Vendorzo.
+      </p>
+    </div>
+  )
 }
 
 export function ReceiptDialog({
   open,
   onOpenChange,
-  lines,
-  subtotal,
-  tax,
-  total,
+  receipt,
   loading = false,
   onPrint,
-  orderNumber = "POS-4582",
 }: ReceiptDialogProps) {
-  const isEmpty = lines.length === 0
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <FileText className="size-5" />
-            Receipt Preview
+            Receipt
           </DialogTitle>
-          <DialogDescription>Mock print layout for POS checkout</DialogDescription>
+          <DialogDescription>
+            Review the saved order receipt or send it to the browser print dialog.
+          </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-3 rounded-md border p-4 text-sm">
-          <div className="text-center">
-            <p className="font-semibold">Vendorzo Coffee Bar</p>
-            <p className="text-muted-foreground text-xs">Order #{orderNumber}</p>
+        {receipt ? (
+          <ReceiptRenderer receipt={receipt} />
+        ) : (
+          <div className="rounded-lg border border-dashed p-6 text-center text-sm text-muted-foreground">
+            {loading ? "Loading receipt..." : "No receipt selected."}
           </div>
-
-          {isEmpty ? (
-            <p className="text-muted-foreground text-center text-xs">No items in receipt.</p>
-          ) : (
-            <div className="space-y-1">
-              {lines.map((item) => (
-                <div key={item.id} className="flex justify-between gap-2">
-                  <span>
-                    {item.qty} x {item.name}
-                  </span>
-                  <span>${(item.qty * item.price).toFixed(2)}</span>
-                </div>
-              ))}
-            </div>
-          )}
-
-          <div className="space-y-1 border-t pt-2">
-            <div className="flex justify-between text-xs">
-              <span>Subtotal</span>
-              <span>${subtotal.toFixed(2)}</span>
-            </div>
-            <div className="flex justify-between text-xs">
-              <span>Tax</span>
-              <span>${tax.toFixed(2)}</span>
-            </div>
-            <div className="flex justify-between font-semibold">
-              <span>Total</span>
-              <span>${total.toFixed(2)}</span>
-            </div>
-          </div>
-        </div>
+        )}
 
         <DialogFooter>
           <div className="w-full grid grid-cols-2 gap-2">
@@ -104,10 +298,10 @@ export function ReceiptDialog({
             <Button
               className="w-full"
               onClick={() => onPrint?.()}
-              disabled={isEmpty || loading}
+              disabled={!receipt || loading}
             >
               <ReceiptText className="size-4" />
-              {loading ? "Processing..." : "Print Mock Receipt"}
+              {loading ? "Loading..." : "Print Receipt"}
             </Button>
           </div>
         </DialogFooter>

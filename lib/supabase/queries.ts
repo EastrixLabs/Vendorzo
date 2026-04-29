@@ -1,5 +1,11 @@
 import { createClient } from "@/lib/supabase/client"
-import type { DbProduct, DbOrder, DbOrderItem, DbProfile } from "@/lib/supabase/types"
+import type {
+  DbProduct,
+  DbOrder,
+  DbOrderItem,
+  DbOrderReceipt,
+  DbProfile,
+} from "@/lib/supabase/types"
 
 function supabase() {
   return createClient()
@@ -69,6 +75,17 @@ export async function fetchOrderItems(orderId: string) {
 
   if (error) throw error
   return data as DbOrderItem[]
+}
+
+export async function fetchOrderReceipt(orderId: string): Promise<DbOrderReceipt> {
+  const { data, error } = await supabase()
+    .from("orders")
+    .select("*, order_items(*)")
+    .eq("id", orderId)
+    .single()
+
+  if (error) throw error
+  return data as DbOrderReceipt
 }
 
 export type CartLine = {
